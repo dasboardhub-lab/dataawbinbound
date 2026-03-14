@@ -10,8 +10,6 @@
     
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -74,6 +72,7 @@
         .fresh-table td { padding: 12px 16px; border-bottom: 1px solid #cbd5e1; color: #334155; vertical-align: top; }
         .valign-middle { vertical-align: middle !important; }
         .fresh-table tr:hover td { background-color: #F1F5F9; }
+        .group-col { background-color: #FFFFFF; border-right: 1px solid #cbd5e1; }
         
         /* Animations & Utilities */
         @keyframes slideDown { from { transform: translate(-50%, -150%); opacity: 0; } to { transform: translate(-50%, 20px); opacity: 1; } }
@@ -84,7 +83,7 @@
         .input-label { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; margin-left: 2px; }
         .sticky-filter-wrapper { position: sticky; top: 72px; z-index: 30; background-color: #F8FAFC; margin-left: -1rem; margin-right: -1rem; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); }
         
-        /* --- CUSTOM SVG LOADER (User Request) --- */
+        /* --- CUSTOM SVG LOADER --- */
         .loader {
             --path: #2f3545;
             --dot: #E81C65; /* Warna magenta */
@@ -385,7 +384,7 @@
             <div class="fresh-card overflow-hidden flex flex-col">
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
-                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                        <span class="bg-[#E81C65]/10 p-1.5 rounded-lg text-[#E81C65]"><i class="fa-solid fa-clock-rotate-left"></i></span>
                         SLA by EDD Status (Destinasi)
                     </h3>
                 </div>
@@ -400,7 +399,7 @@
             <div class="fresh-card overflow-hidden flex flex-col mb-10">
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
-                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600"><i class="fa-solid fa-list-ul"></i></span>
+                        <span class="bg-[#3ECF8E]/10 p-1.5 rounded-lg text-[#3ECF8E]"><i class="fa-solid fa-list-ul"></i></span>
                         Detail Data AWB
                     </h3>
                     <div class="flex items-center gap-3">
@@ -420,7 +419,7 @@
                                 <th class="text-left group-col">No Container (MB)</th>
                                 <th class="text-center group-col bg-slate-50">Tgl Inbound</th>
                                 <th class="text-center group-col bg-slate-50">Jam</th>
-                                <th class="text-center group-col bg-emerald-50/50 text-emerald-800">Target EDD</th>
+                                <th class="text-center group-col bg-[#3ECF8E]/20 text-emerald-800">Target EDD</th>
                                 <th class="text-left group-col">Origin</th>
                                 <th class="text-left group-col">Destinasi</th>
                                 <th class="text-left group-col">Layanan</th>
@@ -450,7 +449,7 @@
         try {
             supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
         } catch(e) {
-            console.warn("Supabase tidak valid. Berjalan di Mode Offline/Memory untuk Demo.");
+            console.warn("Supabase tidak valid.");
         }
 
         // --- GLOBAL VARIABLES ---
@@ -542,7 +541,7 @@
                     .from('awb_data')
                     .select('*', { count: 'exact', head: true });
                 
-                if (countError) throw countError;
+                if (countError && countError.code !== 'PGRST205') throw countError;
                 let totalData = count || 0;
 
                 let allData = [];
@@ -552,7 +551,7 @@
 
                 while (isFetching) {
                     loadText.textContent = "Mengunduh Data AWB...";
-                    subText.textContent = "Memproses jutaan baris data secara instan";
+                    subText.textContent = "Memproses baris data secara instan";
                     if (pbText) pbText.textContent = "Mengunduh data dari server...";
                     
                     let pct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 0;
@@ -595,11 +594,37 @@
                 connIcon.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
                 overlay.classList.add('hidden');
             } catch (err) {
-                console.error(err);
+                console.error("Supabase Error:", err);
                 overlay.classList.add('hidden');
-                window.showToast("Koneksi Supabase Gagal.", "error");
-                statusText.textContent = "Offline Mode";
+                
+                const initialState = document.getElementById('initialState');
+                initialState.classList.remove('hidden');
+                
+                let errorMsg = "Koneksi Supabase Gagal.";
+                if (err.message && err.message.includes("Failed to fetch")) {
+                    errorMsg = "Gagal terhubung ke server (Failed to fetch).";
+                }
+                window.showToast(errorMsg, "error");
+                
+                statusText.textContent = "Connection Error";
                 connIcon.className = "w-1.5 h-1.5 rounded-full bg-rose-500";
+                
+                initialState.innerHTML = `
+                    <div class="w-24 h-24 bg-rose-50 rounded-3xl flex items-center justify-center border-2 border-dashed border-rose-200 shadow-xl shadow-rose-100 mx-auto mb-6">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 animate-pulse"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800">Koneksi Database Gagal</h2>
+                    <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center text-rose-600">${errorMsg}</p>
+                    <div class="mt-5 p-5 bg-white border border-slate-200 rounded-xl text-xs text-slate-600 max-w-md shadow-sm">
+                        <p class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Kemungkinan Penyebab:</p>
+                        <ol class="list-decimal text-left pl-4 space-y-2">
+                            <li>Project Supabase Anda sedang <b>Paused</b> karena tidak aktif. Buka Dashboard Supabase lalu klik "Restore".</li>
+                            <li>Koneksi internet diblokir oleh ekstensi browser (AdBlock/VPN).</li>
+                            <li>Tabel 'awb_data' belum dibuat di SQL Editor.</li>
+                        </ol>
+                    </div>
+                    <button onclick="window.location.reload()" class="mt-6 px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 shadow-lg transition"><i class="fa-solid fa-arrows-rotate mr-2"></i> Muat Ulang</button>
+                `;
             }
         };
 
@@ -637,7 +662,7 @@
                 });
             });
 
-            // Populate Filter Dropdowns (FIXED O(N^2) LAG/STUCK ISSUE)
+            // Populate Filter Dropdowns
             const destSelect = document.getElementById('filterDest');
             let destOptions = '<option value="ALL">Semua Destinasi</option>';
             [...destSet].sort().forEach(d => { destOptions += `<option value="${d}">${d}</option>`; });
@@ -718,6 +743,7 @@
             window.updateDashboard();
         };
 
+        // --- DASHBOARD UPDATER ---
         window.updateDashboard = function() {
             const data = window.filteredData;
             const total = data.length;
@@ -875,7 +901,7 @@
             document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
         };
 
-        // --- UPLOAD CSV KE SUPABASE BATCH DENGAN PROGRESS BAR ---
+        // --- UPLOAD CSV KE SUPABASE ---
         window.uploadToSupabase = function(file) {
             const overlay = document.getElementById('loadingOverlay');
             const textEl = document.getElementById('loadingText');
@@ -990,7 +1016,11 @@
                     } catch (err) {
                         console.error(err);
                         overlay.classList.add('hidden');
-                        window.showToast("Error saat mengunggah data ke Supabase.", "error");
+                        let errMsg = "Error saat mengunggah data ke Supabase.";
+                        if (err.message && err.message.includes("Failed to fetch")) {
+                            errMsg = "Upload gagal (Failed to fetch). Pastikan Supabase Anda tidak Paused.";
+                        }
+                        window.showToast(errMsg, "error");
                     }
                     
                     document.getElementById('csvAwbFile').value = '';
