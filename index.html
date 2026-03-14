@@ -272,6 +272,12 @@
                                 </select>
                             </div>
                             <div class="w-32">
+                                <span class="input-label">Staging</span>
+                                <select id="filterStaging" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
+                                    <option value="ALL">Semua Staging</option>
+                                </select>
+                            </div>
+                            <div class="w-32">
                                 <span class="input-label">Layanan</span>
                                 <select id="filterService" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Layanan</option>
@@ -850,6 +856,7 @@
             const destSet = new Set();
             const orgSet = new Set();
             const svcSet = new Set();
+            const destStagingSet = new Set();
             
             dataFromDb.forEach(row => {
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
@@ -872,6 +879,7 @@
                 destSet.add(dest);
                 orgSet.add(org);
                 svcSet.add(svc);
+                destStagingSet.add(destStaging);
 
                 window.rawData.push({
                     _id: row.id || row._id,
@@ -884,10 +892,13 @@
 
             const populateDropdown = (id, set) => {
                 const sel = document.getElementById(id);
-                sel.innerHTML = '<option value="ALL">SEMUA</option>';
-                [...set].sort().forEach(val => { sel.innerHTML += `<option value="${val}">${val}</option>`; });
+                if (sel) {
+                    sel.innerHTML = '<option value="ALL">SEMUA</option>';
+                    [...set].sort().forEach(val => { sel.innerHTML += `<option value="${val}">${val}</option>`; });
+                }
             };
             populateDropdown('filterDest', destSet);
+            populateDropdown('filterStaging', destStagingSet);
             populateDropdown('filterOrigin', orgSet);
             populateDropdown('filterService', svcSet);
 
@@ -917,6 +928,7 @@
         window.resetFilters = function() {
             document.getElementById('globalSearch').value = '';
             document.getElementById('filterDest').value = 'ALL';
+            document.getElementById('filterStaging').value = 'ALL';
             document.getElementById('filterOrigin').value = 'ALL';
             document.getElementById('filterService').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
@@ -934,6 +946,7 @@
         window.applyFilters = function() {
             const search = document.getElementById('globalSearch').value.toUpperCase();
             const destFilter = document.getElementById('filterDest').value;
+            const stagingFilter = document.getElementById('filterStaging').value;
             const originFilter = document.getElementById('filterOrigin').value;
             const serviceFilter = document.getElementById('filterService').value;
             const statFilter = document.getElementById('filterStatus').value;
@@ -952,6 +965,7 @@
                 }
                 if (!dateOk) return false;
                 if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
+                if (stagingFilter !== 'ALL' && d._destStaging !== stagingFilter) return false;
                 if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
                 if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
                 if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
