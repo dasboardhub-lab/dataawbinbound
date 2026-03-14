@@ -126,6 +126,57 @@
     <!-- TOAST -->
     <div id="toast-container" class="fixed top-0 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm"></div>
 
+    <!-- MODAL PREVIEW UPLOAD -->
+    <div id="previewModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[360px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="previewModalContent">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 shadow-sm">
+                    <i class="fa-solid fa-file-csv text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">Analisis Data Selesai</h3>
+                <p class="text-xs text-slate-500 mt-1">Laporan pra-unggah (Pengecekan Duplikat)</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold text-slate-600">Data Baru (Siap Disimpan):</span>
+                    <span class="text-sm font-black text-emerald-600" id="previewNewCount">0</span>
+                </div>
+                <div class="flex justify-between items-center border-t border-slate-200 pt-3">
+                    <span class="text-xs font-bold text-slate-500">Duplikat (Diabaikan):</span>
+                    <span class="text-sm font-black text-rose-500" id="previewDupCount">0</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="window.closePreviewModal()" class="py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="window.confirmUpload()" class="py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 shadow-lg transition-colors">Proses Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SUCCESS UPLOAD -->
+    <div id="successModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="successModalContent">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm" id="successModalIcon">
+                    <i class="fa-solid fa-check-double text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800" id="successModalTitle">Upload Selesai!</h3>
+                <p class="text-xs text-slate-500 mt-1">Rincian pemrosesan data ke database</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold text-slate-600">Berhasil Disimpan:</span>
+                    <span class="text-sm font-black text-emerald-600" id="finalSuccessCount">0</span>
+                </div>
+                <div class="flex justify-between items-center border-t border-slate-200 pt-3">
+                    <span class="text-xs font-bold text-slate-500">Gagal Tersimpan:</span>
+                    <span class="text-sm font-black text-rose-500" id="finalFailCount">0</span>
+                </div>
+            </div>
+            <button onclick="window.closeSuccessModal()" class="w-full py-3 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 shadow-lg transition-colors">Tutup Dasbor Berjalan</button>
+        </div>
+    </div>
+
     <!-- MODAL HAPUS DATA -->
     <div id="deleteModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
@@ -495,6 +546,60 @@
             document.getElementById('passwordModalContent').classList.remove('scale-100');
             document.getElementById('passwordModalContent').classList.add('scale-95');
             setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
+        };
+
+        // --- SISTEM MODAL PREVIEW & SUCCESS (UPLOAD) ---
+        window.openPreviewModal = function(newCount, dupCount) {
+            document.getElementById('previewModal').classList.remove('hidden');
+            document.getElementById('previewNewCount').textContent = formatNumber(newCount);
+            document.getElementById('previewDupCount').textContent = formatNumber(dupCount);
+            setTimeout(() => {
+                document.getElementById('previewModal').classList.remove('opacity-0');
+                document.getElementById('previewModalContent').classList.remove('scale-95');
+                document.getElementById('previewModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closePreviewModal = function() {
+            document.getElementById('previewModal').classList.add('opacity-0');
+            document.getElementById('previewModalContent').classList.remove('scale-100');
+            document.getElementById('previewModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('previewModal').classList.add('hidden'), 300);
+            document.getElementById('csvAwbFile').value = ''; 
+        };
+
+        window.openSuccessModal = function(successCount, failCount) {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('finalSuccessCount').textContent = formatNumber(successCount);
+            document.getElementById('finalFailCount').textContent = formatNumber(failCount);
+            
+            const iconBox = document.getElementById('successModalIcon');
+            if (failCount > 0 && successCount === 0) {
+                iconBox.className = "w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-rose-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Upload Gagal";
+            } else if (failCount > 0) {
+                iconBox.className = "w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Selesai Sebagian";
+            } else {
+                iconBox.className = "w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-check-double text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Upload Selesai!";
+            }
+
+            setTimeout(() => {
+                document.getElementById('successModal').classList.remove('opacity-0');
+                document.getElementById('successModalContent').classList.remove('scale-95');
+                document.getElementById('successModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeSuccessModal = function() {
+            document.getElementById('successModal').classList.add('opacity-0');
+            document.getElementById('successModalContent').classList.remove('scale-100');
+            document.getElementById('successModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('successModal').classList.add('hidden'), 300);
         };
 
         window.submitPassword = function() {
@@ -913,7 +1018,10 @@
 
             let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
-            if (validDates.length > 0) maxDate = new Date(Math.max.apply(null, validDates));
+            if (validDates.length > 0) {
+                const maxTime = validDates.reduce((max, d) => Math.max(max, d.getTime()), validDates[0].getTime());
+                maxDate = new Date(maxTime);
+            }
             
             // Setel rentang default ke 2 minggu terakhir dari hari ini
             const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
@@ -934,7 +1042,8 @@
             document.getElementById('filterStatus').value = 'ALL';
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
             if (validDates.length > 0) {
-                const maxDate = new Date(Math.max.apply(null, validDates));
+                const maxTime = validDates.reduce((max, d) => Math.max(max, d.getTime()), validDates[0].getTime());
+                const maxDate = new Date(maxTime);
                 const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
                 document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
                 document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
@@ -1253,10 +1362,13 @@
             window.showToast("Mendownload CSV...", "success");
         };
 
+        // VARIABEL GLOBAL UNTUK MENAMPUNG DATA SEMENTARA
+        window.pendingUploadData = [];
+
         window.uploadToSupabase = function(file) {
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Membaca CSV Lokal...";
+            document.getElementById('loadingText').textContent = "Menganalisis CSV Lokal...";
 
             if(!supabaseClient) {
                 overlay.classList.add('hidden');
@@ -1266,7 +1378,7 @@
 
             Papa.parse(file, {
                 header: true, skipEmptyLines: true,
-                complete: async function(results) {
+                complete: function(results) {
                     const rows = results.data;
                     const parsedData = [];
                     
@@ -1323,10 +1435,10 @@
                         const destStr = String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase();
                         const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || 'N/A').trim().toUpperCase();
                         
-                        // Normalisasi REG menjadi REGULER saat Upload
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
                         if (svcInput === 'REG') svcInput = 'REGULER';
                         
+                        // Buat ID spesifik transaksi: AWB + Tgl + Jam + Lokasi (Agar riwayat perjalanan AWB tidak saling timpa)
                         let rowId = `${awbStr}_${containerStr}_${dateStr}_${timeStr}_${destStr}`.replace(/[^a-zA-Z0-9]/g, '_');
 
                         parsedData.push({
@@ -1338,73 +1450,111 @@
                             expect_delivery_tm: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
                             Origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase(),
                             Destinasi: destStr,
-                            destination_staging: destStagingStr, // Menyimpan kolom baru ke Supabase
+                            destination_staging: destStagingStr,
                             Service: svcInput,
                             Vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase()
                         });
                     }
 
+                    // CEK DUPLIKAT TERHADAP DATA YANG SUDAH ADA
                     const existingIds = new Set(); window.rawData.forEach(d => existingIds.add(d._id));
-                    const uniqueMap = new Map(); let skipCount = 0, updateCount = 0;
+                    const uniqueMap = new Map(); 
+                    let skipCount = 0;
+                    
                     parsedData.forEach(row => {
                         if (existingIds.has(row.id)) {
                             skipCount++; 
                         } else if (!uniqueMap.has(row.id)) { 
                             uniqueMap.set(row.id, row); 
                         } else { 
-                            skipCount++; 
+                            skipCount++; // Duplikat dalam internal file itu sendiri
                         }
                     });
                     
-                    const finalData = Array.from(uniqueMap.values());
-                    if (finalData.length === 0) { overlay.classList.add('hidden'); window.showToast(`Semua data sudah ada di database. (Melewati ${formatNumber(skipCount)} duplikat identik)`, "info"); document.getElementById('csvAwbFile').value = ''; return; }
-
-                    document.getElementById('fetchProgressContainer').classList.remove('hidden');
-                    const CHUNK_SIZE = 500; 
-                    let successCount = 0;
+                    window.pendingUploadData = Array.from(uniqueMap.values());
                     
-                    try {
-                        for (let i = 0; i < finalData.length; i += CHUNK_SIZE) {
-                            const chunk = finalData.slice(i, i + CHUNK_SIZE);
-                            let pct = Math.min(Math.round((i / finalData.length) * 100), 100);
-                            document.getElementById('fetchProgressBar').style.width = `${pct}%`;
-                            document.getElementById('fetchProgressPct').textContent = `${pct}%`;
-                            document.getElementById('loadingText').textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
+                    overlay.classList.add('hidden');
 
-                            let upsertSuccess = false;
-                            let lastErr = null;
-                            
-                            for(let attempt=1; attempt<=3; attempt++) {
-                                try {
-                                    const { error } = await supabaseClient.from('awb_data').upsert(chunk, { onConflict: 'id' });
-                                    if (error) throw error;
-                                    upsertSuccess = true;
-                                    break;
-                                } catch(err) {
-                                    lastErr = err;
-                                    await new Promise(r => setTimeout(r, 1500 * attempt));
-                                }
-                            }
-
-                            if(!upsertSuccess) throw lastErr;
-
-                            successCount += chunk.length;
-                            await new Promise(r => setTimeout(r, 250));
-                        }
-                        
-                        document.getElementById('fetchProgressBar').style.width = `100%`; document.getElementById('fetchProgressPct').textContent = `100%`;
-                        await new Promise(r => setTimeout(r, 400));
-
-                        overlay.classList.add('hidden');
-                        window.showToast(`Update Berhasil! ${formatNumber(successCount)} Baris Kegiatan Tersimpan.`, "success");
-                        window.fetchDataFromSupabase();
-                    } catch (err) {
-                        console.error("Upload Error:", err);
-                        overlay.classList.add('hidden');
-                        window.showToast("Gagal mengunggah beberapa data. Silakan cek koneksi.", "error");
+                    if (window.pendingUploadData.length === 0 && skipCount > 0) {
+                        window.showToast("Tidak ada data baru. Semua data duplikat.", "info");
+                        document.getElementById('csvAwbFile').value = '';
+                    } else {
+                        // TAMPILKAN MODAL KONFIRMASI (PREVIEW)
+                        window.openPreviewModal(window.pendingUploadData.length, skipCount);
                     }
                 }
             });
+        };
+
+        window.confirmUpload = async function() {
+            window.closePreviewModal();
+
+            if (window.pendingUploadData.length === 0) return;
+
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbPct = document.getElementById('fetchProgressPct');
+            const pbText = document.getElementById('fetchProgressDetail');
+
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            
+            const CHUNK_SIZE = 500; 
+            let successCount = 0;
+            let failCount = 0;
+            const totalToUpload = window.pendingUploadData.length;
+            
+            try {
+                for (let i = 0; i < window.pendingUploadData.length; i += CHUNK_SIZE) {
+                    const chunk = window.pendingUploadData.slice(i, i + CHUNK_SIZE);
+                    
+                    let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
+                    pbBar.style.width = `${pct}%`;
+                    pbPct.textContent = `${pct}%`;
+                    document.getElementById('loadingText').textContent = `Menyimpan ke Cloud...`;
+                    pbText.textContent = `Batch ${Math.ceil(i/CHUNK_SIZE)+1} dari ${Math.ceil(totalToUpload/CHUNK_SIZE)}`;
+
+                    let upsertSuccess = false;
+                    for(let attempt=1; attempt<=3; attempt++) {
+                        try {
+                            const { error } = await supabaseClient.from('awb_data').upsert(chunk, { onConflict: 'id' });
+                            if (error) throw error;
+                            upsertSuccess = true;
+                            break;
+                        } catch(err) {
+                            await new Promise(r => setTimeout(r, 1500 * attempt));
+                        }
+                    }
+
+                    if(upsertSuccess) {
+                        successCount += chunk.length;
+                    } else {
+                        failCount += chunk.length;
+                    }
+                    
+                    await new Promise(r => setTimeout(r, 200)); // Jeda stabilisasi
+                }
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+
+                overlay.classList.add('hidden');
+                document.getElementById('csvAwbFile').value = ''; 
+                
+                // TAMPILKAN HASIL AKHIR (SUCCESS MODAL)
+                window.openSuccessModal(successCount, failCount);
+
+                // REFRESH DATA DI BACKGROUND
+                if (successCount > 0) {
+                    window.fetchDataFromSupabase();
+                }
+
+            } catch (err) {
+                console.error("Upload Execute Error:", err);
+                overlay.classList.add('hidden');
+                window.showToast("Terjadi interupsi jaringan fatal.", "error");
+            }
         };
 
         document.getElementById('csvAwbFile').addEventListener('change', (e) => { if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]); });
