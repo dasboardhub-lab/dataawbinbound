@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWB Tracking Dashboard | Supabase</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23E81C65' d='M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM192 256l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0-96l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z'/></svg>">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles - Tema Magenta/Pink khas AWB */
+        body { 
+            background-color: #F8FAFC; 
+            color: #334155; 
+            font-size: 13px; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#E2E8F0 1px, transparent 1px); 
+            background-size: 24px 24px; 
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* Card Styles */
+        .fresh-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            border-radius: 20px; 
+            border: 1px solid #FFFFFF; 
+            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.15); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .fresh-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -5px rgba(148, 163, 184, 0.2); }
+
+        /* Inputs */
+        .fresh-input { 
+            background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; 
+            padding: 8px 12px; font-size: 12px; font-weight: 500; color: #334155; 
+            outline: none; transition: all 0.2s; 
+        }
+        .fresh-input:focus { background: #FFFFFF; border-color: #E81C65; box-shadow: 0 0 0 3px rgba(232, 28, 101, 0.15); }
+
+        /* Buttons */
+        .btn-magenta { 
+            background: linear-gradient(135deg, #E81C65 0%, #C01451 100%); 
+            color: white; padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 12px; 
+            transition: all 0.3s; box-shadow: 0 4px 12px rgba(232, 28, 101, 0.25); border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .btn-magenta:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(232, 28, 101, 0.35); filter: brightness(1.1); }
+        
+        .btn-header-icon {
+            padding: 0 !important; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
+        }
+        .btn-header-icon:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+        /* Table */
+        .fresh-table th { 
+            text-transform: uppercase; font-size: 10px; font-weight: 700; color: #64748B; 
+            letter-spacing: 0.05em; padding: 14px 16px; background: #F8FAFC; border-bottom: 2px solid #94a3b8; 
+        }
+        .fresh-table td { padding: 12px 16px; border-bottom: 1px solid #cbd5e1; color: #334155; vertical-align: top; }
+        .valign-middle { vertical-align: middle !important; }
+        .fresh-table tr:hover td { background-color: #F1F5F9; }
+        
+        /* Animations & Utilities */
+        @keyframes slideDown { from { transform: translate(-50%, -150%); opacity: 0; } to { transform: translate(-50%, 20px); opacity: 1; } }
+        .toast-animate { animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+        @keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .input-label { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; margin-left: 2px; }
+        .sticky-filter-wrapper { position: sticky; top: 72px; z-index: 30; background-color: #F8FAFC; margin-left: -1rem; margin-right: -1rem; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); }
+        
+        /* --- CUSTOM SVG LOADER (User Request) --- */
+        .loader {
+            --path: #2f3545;
+            --dot: #E81C65; /* Warna magenta */
+            --duration: 3s;
+            width: 44px;
+            height: 44px;
+            position: relative;
+            display: inline-block;
+            margin: 0 16px;
+        }
+
+        .loader:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            position: absolute;
+            display: block;
+            background: var(--dot);
+            top: 37px;
+            left: 19px;
+            transform: translate(-18px, -18px);
+            animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader svg rect,
+        .loader svg polygon,
+        .loader svg circle {
+            fill: none;
+            stroke: var(--path);
+            stroke-width: 10px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        .loader svg polygon {
+            stroke-dasharray: 145 76 145 76;
+            stroke-dashoffset: 0;
+            animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg rect {
+            stroke-dasharray: 192 64 192 64;
+            stroke-dashoffset: 0;
+            animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg circle {
+            stroke-dasharray: 150 50 150 50;
+            stroke-dashoffset: 75;
+            animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader.triangle { width: 48px; }
+        .loader.triangle:before {
+            left: 21px;
+            transform: translate(-10px, -18px);
+            animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        @keyframes pathTriangle { 33% { stroke-dashoffset: 74; } 66% { stroke-dashoffset: 147; } 100% { stroke-dashoffset: 221; } }
+        @keyframes dotTriangle { 33% { transform: translate(0, 0); } 66% { transform: translate(10px, -18px); } 100% { transform: translate(-10px, -18px); } }
+        @keyframes pathRect { 25% { stroke-dashoffset: 64; } 50% { stroke-dashoffset: 128; } 75% { stroke-dashoffset: 192; } 100% { stroke-dashoffset: 256; } }
+        @keyframes dotRect { 25% { transform: translate(0, 0); } 50% { transform: translate(18px, -18px); } 75% { transform: translate(0, -36px); } 100% { transform: translate(-18px, -18px); } }
+        @keyframes pathCircle { 25% { stroke-dashoffset: 125; } 50% { stroke-dashoffset: 175; } 75% { stroke-dashoffset: 225; } 100% { stroke-dashoffset: 275; } }
+        
+        /* --- AESTHETIC PROGRESS BAR --- */
+        @keyframes shimmer { 0% { transform: skewX(-20deg) translateX(-150%); } 100% { transform: skewX(-20deg) translateX(250%); } }
+        .progress-glow { box-shadow: 0 0 12px rgba(232, 28, 101, 0.5); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-pink-100 selection:text-pink-700">
+
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        
+        <!-- Custom SVG Animation Loaders -->
+        <div class="flex justify-center items-center mb-6">
+            <div class="loader">
+                <svg viewBox="0 0 80 80">
+                    <rect x="8" y="8" width="64" height="64"></rect>
+                </svg>
+            </div>
+            <div class="loader triangle">
+                <svg viewBox="0 0 86 80">
+                    <polygon points="43 8 79 72 7 72"></polygon>
+                </svg>
+            </div>
+            <div class="loader">
+                <svg viewBox="0 0 80 80">
+                    <circle id="test" cx="40" cy="40" r="32"></circle>
+                </svg>
+            </div>
+        </div>
+
+        <h3 class="text-slate-800 font-extrabold text-xl tracking-wide" id="loadingText">Processing Data...</h3>
+        <p class="text-slate-500 text-sm mt-1 font-medium" id="loadingSubText">Menghubungkan ke Supabase</p>
+
+        <!-- Aesthetic Progress Bar -->
+        <div id="fetchProgressContainer" class="hidden w-80 mt-6 flex flex-col items-center animate-fade-in-up">
+            <div class="w-full bg-slate-200/80 rounded-full h-3 overflow-hidden shadow-inner relative border border-slate-300/50">
+                <div id="fetchProgressBar" class="bg-gradient-to-r from-[#E81C65] to-[#C01451] h-full rounded-full transition-all duration-500 ease-out w-0 relative overflow-hidden progress-glow">
+                    <div class="absolute inset-0 bg-white/30" style="animation: shimmer 1.5s infinite linear; width: 40%;"></div>
+                </div>
+            </div>
+            <div class="flex justify-between w-full mt-2 px-1">
+                <span id="fetchProgressDetail" class="text-[11px] font-mono text-slate-500 font-bold tracking-wider">Memproses data...</span>
+                <span id="fetchProgressPct" class="text-[11px] font-black text-[#E81C65]">0%</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast-container" class="fixed top-0 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm"></div>
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm h-[72px]">
+        <div class="max-w-[1600px] mx-auto px-6 h-full flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-tr from-[#3ECF8E] to-[#24B47E] rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                    <i class="fa-solid fa-database text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-800 tracking-tight leading-none">AWB<span class="text-[#3ECF8E]">Tracker</span></h1>
+                    <div class="flex items-center gap-1.5 mt-1">
+                        <span id="connectionStatus" class="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse"></span>
+                        <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider" id="statusText">Connecting...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex flex-col items-end">
+                    <span class="text-[11px] font-bold text-slate-700" id="currentDateDisplay">-</span>
+                    <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Powered by Supabase</span>
+                </div>
+                <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
+                
+                <div class="flex items-center gap-2">
+                    <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
+                        <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
+                    </button>
+                    <button onclick="window.fetchDataFromSupabase()" class="bg-white border border-slate-200 text-slate-500 btn-header-icon hover:bg-slate-50" title="Refresh Data">
+                        <i class="fa-solid fa-arrows-rotate text-[15px]"></i>
+                    </button>
+                </div>
+                <input type="file" id="csvAwbFile" accept=".csv" class="hidden">
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow w-full max-w-[1600px] mx-auto px-4 py-4">
+        
+        <!-- INITIAL EMPTY STATE -->
+        <div id="initialState" class="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in-up">
+            <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center border-2 border-dashed border-emerald-200 shadow-xl shadow-emerald-50 mx-auto mb-6">
+                <i class="fa-solid fa-server text-3xl text-emerald-400 animate-pulse"></i>
+            </div>
+            <h2 class="text-lg font-bold text-slate-800">Mengambil Data AWB...</h2>
+            <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik puluhan ribu data dari Supabase PostgreSQL Database.</p>
+        </div>
+
+        <!-- DASHBOARD CONTENT -->
+        <div id="dashboardContent" class="hidden space-y-6">
+            
+            <!-- 1. FILTERS (STICKY) -->
+            <div class="sticky-filter-wrapper">
+                <div class="fresh-card p-5">
+                    <div class="flex flex-col xl:flex-row gap-5 justify-between items-end">
+                        
+                        <!-- Left: Search -->
+                        <div class="w-full xl:w-80 group relative">
+                            <span class="input-label">Cari AWB / Container / Vendor</span>
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-[34px] text-slate-400 text-xs group-focus-within:text-[#E81C65] transition-colors"></i>
+                            <input type="text" id="globalSearch" placeholder="Ketik nomor resi..." class="fresh-input w-full pl-9 bg-white shadow-sm" oninput="window.applyFilters()">
+                        </div>
+
+                        <!-- Right: Filters -->
+                        <div class="w-full xl:flex-1 flex flex-wrap gap-3 justify-end items-end">
+                            <!-- Date Range -->
+                            <div>
+                                <span class="input-label">Tgl Inbound</span>
+                                <div class="flex items-center bg-white rounded-xl border border-slate-200 p-1 shadow-sm h-[38px] justify-between min-w-[220px]">
+                                    <input type="date" id="filterStartDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
+                                    <span class="text-slate-300 text-[9px] mx-1 font-bold">SD</span>
+                                    <input type="date" id="filterEndDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
+                                </div>
+                            </div>
+
+                            <!-- SLA Status Filter -->
+                            <div class="w-32">
+                                <span class="input-label">Status SLA</span>
+                                <select id="filterStatus" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="After EDD">After EDD (Telat)</option>
+                                    <option value="Last Day">Last Day</option>
+                                    <option value="Same Day">Same Day</option>
+                                    <option value=">2 Hari">>2 Hari (Awal)</option>
+                                    <option value="Unknown">Tidak Diketahui</option>
+                                </select>
+                            </div>
+
+                            <!-- Origin Filter -->
+                            <div class="w-32">
+                                <span class="input-label">Origin</span>
+                                <select id="filterOrigin" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
+                                    <option value="ALL">Semua Origin</option>
+                                </select>
+                            </div>
+
+                            <!-- Destinasi Filter -->
+                            <div class="w-32">
+                                <span class="input-label">Destinasi</span>
+                                <select id="filterDest" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
+                                    <option value="ALL">Semua Destinasi</option>
+                                </select>
+                            </div>
+
+                            <!-- Service Filter -->
+                            <div class="w-32">
+                                <span class="input-label">Layanan</span>
+                                <select id="filterService" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
+                                    <option value="ALL">Semua Layanan</option>
+                                </select>
+                            </div>
+
+                            <!-- Reset -->
+                            <button onclick="window.resetFilters()" class="w-[38px] h-[38px] flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-emerald-600 text-slate-400 transition-all shadow-sm" title="Reset Filters">
+                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. KPI WIDGETS -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                <!-- Total AWB -->
+                <div class="fresh-card p-6 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
+                    <div class="relative z-10">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total AWB (Resi)</p>
+                        <h3 class="text-4xl font-extrabold text-slate-800 tracking-tight mt-1" id="kpiTotalAwb">0</h3>
+                        <div class="mt-2 text-xs font-medium text-slate-500">Tersaring dari <span id="kpiGrandTotal" class="font-bold">0</span> data server</div>
+                    </div>
+                </div>
+                
+                <!-- Kinerja Tepat Waktu -->
+                <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-emerald-500">
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <p class="text-[10px] font-bold text-emerald-600/70 uppercase tracking-widest">Performa Tepat Waktu</p>
+                        <div>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <h3 class="text-4xl font-extrabold text-emerald-600 tracking-tight" id="kpiOnTimePct">0%</h3>
+                            </div>
+                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiOnTimeCount" class="text-emerald-600">0</span> AWB Tepat Waktu</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kinerja Terlambat -->
+                <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-rose-500">
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <p class="text-[10px] font-bold text-rose-600/70 uppercase tracking-widest">Performa Terlambat (After EDD)</p>
+                        <div>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <h3 class="text-4xl font-extrabold text-rose-600 tracking-tight" id="kpiLatePct">0%</h3>
+                            </div>
+                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiLateCount" class="text-rose-600">0</span> AWB Terlambat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rata-rata Keterlambatan -->
+                <div class="fresh-card p-6 relative overflow-hidden group bg-slate-900 text-white">
+                    <div class="absolute right-0 top-0 p-4 opacity-10"><i class="fa-solid fa-stopwatch text-6xl text-white"></i></div>
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rata-rata SLA (Selisih Hari)</p>
+                        <div>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <h3 class="text-4xl font-extrabold text-white tracking-tight" id="kpiAvgSla">0</h3>
+                                <span class="text-xs font-bold text-slate-300">Hari</span>
+                            </div>
+                            <div class="mt-1 text-[10px] text-slate-400 leading-tight">Makin kecil makin mendekati H-0 EDD.<br>Minus (-) berarti terlambat.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. TABEL SLA BY EDD STATUS -->
+            <div class="fresh-card overflow-hidden flex flex-col">
+                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
+                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                        SLA by EDD Status (Destinasi)
+                    </h3>
+                </div>
+                <div class="overflow-auto custom-scrollbar max-h-[450px]">
+                    <table class="fresh-table w-full relative" id="slaEddTable">
+                        <!-- Disuntik lewat JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- 4. DETAIL DATA AWB -->
+            <div class="fresh-card overflow-hidden flex flex-col mb-10">
+                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
+                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600"><i class="fa-solid fa-list-ul"></i></span>
+                        Detail Data AWB
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-100">
+                            <button onclick="window.changePage(-1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white text-slate-400 hover:text-[#E81C65] hover:shadow-sm transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                            <span id="pageIndicator" class="px-3 text-[10px] font-mono font-bold text-slate-500">1</span>
+                            <button onclick="window.changePage(1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white text-slate-400 hover:text-[#E81C65] hover:shadow-sm transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-auto custom-scrollbar max-h-[600px]">
+                    <table class="fresh-table w-full relative">
+                        <thead class="sticky top-0 z-30 shadow-sm">
+                            <tr>
+                                <th class="text-left w-12">No</th>
+                                <th class="text-left font-extrabold text-slate-800">AWB No</th>
+                                <th class="text-left group-col">No Container (MB)</th>
+                                <th class="text-center group-col bg-slate-50">Tgl Inbound</th>
+                                <th class="text-center group-col bg-slate-50">Jam</th>
+                                <th class="text-center group-col bg-emerald-50/50 text-emerald-800">Target EDD</th>
+                                <th class="text-left group-col">Origin</th>
+                                <th class="text-left group-col">Destinasi</th>
+                                <th class="text-left group-col">Layanan</th>
+                                <th class="text-left group-col">Vendor</th>
+                                <th class="text-center font-extrabold w-24 border-l border-slate-200">Status SLA</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="p-3 bg-slate-50 text-[10px] text-slate-400 text-center border-t border-slate-100 font-mono font-medium">
+                    Menampilkan <span id="showingCount" class="text-slate-600">0</span> baris
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SUPABASE & SCRIPT LOGIC -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+        const SUPABASE_URL = 'https://svmgwupvjybfmatjfafp.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWd3dXB2anliZm1hdGpmYWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1ODc1NDUsImV4cCI6MjA4ODE2MzU0NX0.kP7Y0dy5l61Xi2S8ji9buq8W1R9ZNLyHyBHhTh3qFbw'; 
+        
+        let supabase = null;
+        try {
+            supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            console.warn("Supabase tidak valid. Berjalan di Mode Offline/Memory untuk Demo.");
+        }
+
+        // --- GLOBAL VARIABLES ---
+        window.rawData = [];
+        window.filteredData = [];
+        window.currentPage = 1;
+        window.rowsPerPage = 150;
+        document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
+        // --- UTILITIES ---
+        window.showToast = function(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' : 
+                       type === 'error' ? '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>' : 
+                       '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>';
+
+            toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3 bg-white rounded-2xl shadow-lg border border-slate-100 min-w-[240px] justify-center mb-2`;
+            toast.innerHTML = `${icon}<span class="text-xs font-bold text-slate-600">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -20px)'; setTimeout(() => toast.remove(), 300); }, 3500);
+        };
+
+        const formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
+        
+        const parseIndoDate = (dateStr) => {
+            if(!dateStr) return null;
+            let str = String(dateStr).trim().split(' ')[0]; 
+            if(str.includes('/')) {
+                const p = str.split('/');
+                if(p.length === 3) return new Date(p[2], p[1]-1, p[0]);
+            } else if (str.includes('-')) {
+                return new Date(str);
+            }
+            return null;
+        };
+
+        const formatDateToDisplay = (d) => {
+            if (d instanceof Date && !isNaN(d)) {
+                return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+            }
+            return '-';
+        };
+
+        const calculateSlaStatus = (inboundDate, eddDate) => {
+            if (!inboundDate || !eddDate || isNaN(inboundDate) || isNaN(eddDate)) {
+                return { status: "Unknown", diff: 0 };
+            }
+            inboundDate.setHours(0,0,0,0);
+            eddDate.setHours(0,0,0,0);
+            
+            const diffDays = Math.round((eddDate - inboundDate) / (1000 * 60 * 60 * 24));
+            
+            let status = "";
+            if (diffDays < 0) status = "After EDD";
+            else if (diffDays === 0) status = "Last Day";
+            else if (diffDays === 1) status = "Same Day";
+            else if (diffDays >= 2) status = ">2 Hari";
+            
+            return { status, diff: diffDays };
+        };
+
+        // --- FETCH DATA DARI SUPABASE DENGAN PROGRESS BAR ---
+        window.fetchDataFromSupabase = async function() {
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.add('hidden');
+            
+            const overlay = document.getElementById('loadingOverlay');
+            const loadText = document.getElementById('loadingText');
+            const subText = document.getElementById('loadingSubText');
+            const progressContainer = document.getElementById('fetchProgressContainer');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbText = document.getElementById('fetchProgressDetail');
+            const pbPct = document.getElementById('fetchProgressPct');
+
+            overlay.classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            loadText.textContent = "Menyiapkan Koneksi...";
+            subText.textContent = "Menghubungkan ke database Supabase";
+
+            const statusText = document.getElementById('statusText');
+            const connIcon = document.getElementById('connectionStatus');
+            
+            try {
+                statusText.textContent = "Fetching...";
+                
+                // Ambil jumlah total data untuk progress bar
+                const { count, error: countError } = await supabase
+                    .from('awb_data')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (countError) throw countError;
+                let totalData = count || 0;
+
+                let allData = [];
+                let from = 0;
+                const step = 1000;
+                let isFetching = true;
+
+                while (isFetching) {
+                    loadText.textContent = "Mengunduh Data AWB...";
+                    subText.textContent = "Memproses jutaan baris data secara instan";
+                    if (pbText) pbText.textContent = "Mengunduh data dari server...";
+                    
+                    let pct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 0;
+                    if (pbBar) pbBar.style.width = `${pct}%`;
+                    if (pbPct) pbPct.textContent = `${pct}%`;
+
+                    const { data, error } = await supabase
+                        .from('awb_data')
+                        .select('*')
+                        .order('inbound_date', { ascending: false })
+                        .range(from, from + step - 1);
+
+                    if (error) throw error;
+
+                    if (data && data.length > 0) {
+                        allData = allData.concat(data);
+                        from += step;
+
+                        let nextPct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 100;
+                        if (pbBar) pbBar.style.width = `${nextPct}%`;
+                        if (pbPct) pbPct.textContent = `${nextPct}%`;
+
+                        if (data.length < step) {
+                            isFetching = false;
+                        }
+                    } else {
+                        isFetching = false;
+                    }
+                }
+                
+                if (pbBar) pbBar.style.width = `100%`;
+                if (pbPct) pbPct.textContent = `100%`;
+                if (pbText) pbText.textContent = "Menyusun tampilan...";
+                loadText.textContent = "Memproses Tampilan...";
+                await new Promise(r => setTimeout(r, 400));
+
+                processRawData(allData || []);
+                
+                statusText.textContent = "Connected";
+                connIcon.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                overlay.classList.add('hidden');
+            } catch (err) {
+                console.error(err);
+                overlay.classList.add('hidden');
+                window.showToast("Koneksi Supabase Gagal.", "error");
+                statusText.textContent = "Offline Mode";
+                connIcon.className = "w-1.5 h-1.5 rounded-full bg-rose-500";
+            }
+        };
+
+        const processRawData = (dataFromDb) => {
+            window.rawData = [];
+            const destSet = new Set();
+            const orgSet = new Set();
+            const svcSet = new Set();
+            
+            dataFromDb.forEach(row => {
+                const inboundDt = parseIndoDate(row.inbound_date);
+                const eddDt = parseIndoDate(row.edd_date);
+                const sla = calculateSlaStatus(inboundDt, eddDt);
+                
+                const dest = row.destinasi || 'N/A';
+                const org = row.origin || 'N/A';
+                const svc = row.service || 'N/A';
+                
+                destSet.add(dest);
+                orgSet.add(org);
+                svcSet.add(svc);
+
+                window.rawData.push({
+                    _awb: row.awb_no,
+                    _container: row.container_no || '-',
+                    _inboundDate: inboundDt,
+                    _inboundTime: row.inbound_time || '-',
+                    _eddDate: eddDt,
+                    _origin: org,
+                    _dest: dest,
+                    _service: svc,
+                    _vendor: row.vendor || 'N/A',
+                    _slaStatus: sla.status,
+                    _slaDiff: sla.diff
+                });
+            });
+
+            // Populate Filter Dropdowns (FIXED O(N^2) LAG/STUCK ISSUE)
+            const destSelect = document.getElementById('filterDest');
+            let destOptions = '<option value="ALL">Semua Destinasi</option>';
+            [...destSet].sort().forEach(d => { destOptions += `<option value="${d}">${d}</option>`; });
+            destSelect.innerHTML = destOptions;
+
+            const orgSelect = document.getElementById('filterOrigin');
+            let orgOptions = '<option value="ALL">Semua Origin</option>';
+            [...orgSet].sort().forEach(o => { orgOptions += `<option value="${o}">${o}</option>`; });
+            orgSelect.innerHTML = orgOptions;
+
+            const svcSelect = document.getElementById('filterService');
+            let svcOptions = '<option value="ALL">Semua Layanan</option>';
+            [...svcSet].sort().forEach(s => { svcOptions += `<option value="${s}">${s}</option>`; });
+            svcSelect.innerHTML = svcOptions;
+
+            // Default Filter Tgl: 14 hari terakhir
+            const endD = new Date();
+            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+
+            window.applyFilters();
+        };
+
+        window.resetFilters = function() {
+            document.getElementById('globalSearch').value = '';
+            document.getElementById('filterDest').value = 'ALL';
+            document.getElementById('filterOrigin').value = 'ALL';
+            document.getElementById('filterService').value = 'ALL';
+            document.getElementById('filterStatus').value = 'ALL';
+            
+            const endD = new Date();
+            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+            
+            window.applyFilters();
+            window.showToast("Filter di-reset.", "info");
+        };
+
+        window.applyFilters = function() {
+            const search = document.getElementById('globalSearch').value.toUpperCase();
+            const destFilter = document.getElementById('filterDest').value;
+            const originFilter = document.getElementById('filterOrigin').value;
+            const serviceFilter = document.getElementById('filterService').value;
+            const statFilter = document.getElementById('filterStatus').value;
+            
+            const startStr = document.getElementById('filterStartDate').value;
+            const endStr = document.getElementById('filterEndDate').value;
+            const sDate = startStr ? new Date(startStr) : null; if(sDate) sDate.setHours(0,0,0,0);
+            const eDate = endStr ? new Date(endStr) : null; if(eDate) eDate.setHours(23,59,59,999);
+
+            window.filteredData = window.rawData.filter(d => {
+                if (sDate && (!d._inboundDate || d._inboundDate < sDate)) return false;
+                if (eDate && (!d._inboundDate || d._inboundDate > eDate)) return false;
+                if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
+                if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
+                if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
+                if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
+                
+                if (search) {
+                    const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._service}`.toUpperCase();
+                    if (!str.includes(search)) return false;
+                }
+                return true;
+            });
+
+            window.filteredData.sort((a,b) => {
+                const tA = a._inboundDate ? a._inboundDate.getTime() : 0;
+                const tB = b._inboundDate ? b._inboundDate.getTime() : 0;
+                return tB - tA; 
+            });
+
+            window.currentPage = 1;
+            window.updateDashboard();
+        };
+
+        window.updateDashboard = function() {
+            const data = window.filteredData;
+            const total = data.length;
+            
+            document.getElementById('kpiTotalAwb').innerText = formatNumber(total);
+            document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
+
+            let onTimeCount = 0;
+            let lateCount = 0;
+            let sumSlaDiff = 0;
+            let validSlaCount = 0;
+
+            data.forEach(d => {
+                if(d._slaStatus !== 'Unknown') {
+                    if (d._slaStatus === 'After EDD') lateCount++;
+                    else onTimeCount++; 
+                    
+                    sumSlaDiff += d._slaDiff;
+                    validSlaCount++;
+                }
+            });
+
+            const onTimePct = total > 0 ? ((onTimeCount/total)*100).toFixed(1) : 0;
+            const latePct = total > 0 ? ((lateCount/total)*100).toFixed(1) : 0;
+            const avgSla = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1) : "0";
+
+            document.getElementById('kpiOnTimePct').innerText = `${onTimePct}%`;
+            document.getElementById('kpiOnTimeCount').innerText = formatNumber(onTimeCount);
+            
+            document.getElementById('kpiLatePct').innerText = `${latePct}%`;
+            document.getElementById('kpiLateCount').innerText = formatNumber(lateCount);
+
+            document.getElementById('kpiAvgSla').innerText = String(avgSla).replace('.', ',');
+
+            window.renderSlaTable();
+            window.renderDetailTable();
+        };
+
+        window.renderSlaTable = function() {
+            const agg = {};
+            let gAfter=0, gLast=0, gSame=0, gOver=0, gTot=0;
+
+            window.filteredData.forEach(d => {
+                if (d._slaStatus === 'Unknown') return;
+                const dst = d._dest;
+                if (!agg[dst]) agg[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                
+                if (d._slaStatus === 'After EDD') { agg[dst].after++; gAfter++; }
+                else if (d._slaStatus === 'Last Day') { agg[dst].last++; gLast++; }
+                else if (d._slaStatus === 'Same Day') { agg[dst].same++; gSame++; }
+                else if (d._slaStatus === '>2 Hari') { agg[dst].over++; gOver++; }
+                
+                agg[dst].tot++;
+                gTot++;
+            });
+
+            const table = document.getElementById('slaEddTable');
+            let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+                        <tr>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
+                            <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD <br><span class="text-[9px] font-normal">(Terlambat)</span></th>
+                            <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day <br><span class="text-[9px] font-normal">(Hari H)</span></th>
+                            <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day <br><span class="text-[9px] font-normal">(H-1)</span></th>
+                            <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari <br><span class="text-[9px] font-normal">(Sangat Awal)</span></th>
+                            <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
+                        </tr>
+                    </thead><tbody>`;
+
+            if (gTot === 0) {
+                table.innerHTML = h + `<tr><td colspan="6" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                return;
+            }
+
+            Object.keys(agg).sort((a,b) => agg[b].tot - agg[a].tot).forEach(k => {
+                const d = agg[k];
+                h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                    <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${k}</td>
+                    <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
+                    <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
+                    <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
+                    <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
+                    <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(d.tot)}</td>
+                </tr>`;
+            });
+
+            h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
+                <tr>
+                    <td class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 bg-slate-100">
+                        <div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div>
+                        <div class="text-[10px] font-bold text-slate-500">100%</div>
+                    </td>
+                </tr>
+            </tfoot>`;
+            table.innerHTML = h;
+        };
+
+        window.changePage = function(delta) {
+            const maxPage = Math.ceil(window.filteredData.length / window.rowsPerPage) || 1;
+            let np = window.currentPage + delta;
+            if(np < 1) np = 1;
+            if(np > maxPage) np = maxPage;
+            window.currentPage = np;
+            window.renderDetailTable();
+        };
+
+        window.renderDetailTable = function() {
+            const start = (window.currentPage - 1) * window.rowsPerPage;
+            const data = window.filteredData.slice(start, start + window.rowsPerPage);
+            const tbody = document.getElementById('detailTableBody');
+            
+            let html = '';
+            data.forEach((d, i) => {
+                let badgeClass = "bg-slate-100 text-slate-500";
+                if(d._slaStatus === 'After EDD') badgeClass = "bg-rose-100 text-rose-700 border border-rose-200";
+                else if(d._slaStatus === 'Last Day') badgeClass = "bg-amber-100 text-amber-700 border border-amber-200";
+                else if(d._slaStatus === 'Same Day') badgeClass = "bg-emerald-100 text-emerald-700 border border-emerald-200";
+                else if(d._slaStatus === '>2 Hari') badgeClass = "bg-indigo-100 text-indigo-700 border border-indigo-200";
+
+                html += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                    <td class="text-slate-400 text-xs">${start + i + 1}</td>
+                    <td class="font-mono font-bold text-[#E81C65] tracking-wide">${d._awb}</td>
+                    <td class="font-mono text-xs text-slate-600 border-r border-slate-100 group-col">${d._container}</td>
+                    <td class="text-center font-semibold border-r border-slate-100 bg-slate-50 group-col">${formatDateToDisplay(d._inboundDate)}</td>
+                    <td class="text-center font-mono text-xs border-r border-slate-100 bg-slate-50 group-col">${d._inboundTime}</td>
+                    <td class="text-center font-bold text-emerald-700 border-r border-slate-100 bg-emerald-50/20 group-col">${formatDateToDisplay(d._eddDate)}</td>
+                    <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._origin}</td>
+                    <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
+                    <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
+                    <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
+                    <td class="text-center border-l border-slate-200">
+                        <span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            
+            document.getElementById('pageIndicator').innerText = window.currentPage;
+            document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
+        };
+
+        // --- UPLOAD CSV KE SUPABASE BATCH DENGAN PROGRESS BAR ---
+        window.uploadToSupabase = function(file) {
+            const overlay = document.getElementById('loadingOverlay');
+            const textEl = document.getElementById('loadingText');
+            const subEl = document.getElementById('loadingSubText');
+            const progressContainer = document.getElementById('fetchProgressContainer');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbText = document.getElementById('fetchProgressDetail');
+            const pbPct = document.getElementById('fetchProgressPct');
+            
+            overlay.classList.remove('hidden');
+            progressContainer.classList.add('hidden'); // Sembunyikan sebentar saat parsing
+            textEl.textContent = "Membaca CSV Lokal...";
+            subEl.textContent = "Mohon tunggu, jangan tutup halaman ini.";
+
+            Papa.parse(file, {
+                header: true, skipEmptyLines: true,
+                complete: async function(results) {
+                    const rows = results.data;
+                    const parsedData = [];
+                    
+                    textEl.textContent = "Menyaring Data...";
+                    subEl.textContent = `Ditemukan ${formatNumber(rows.length)} baris. Mempersiapkan ke Server.`;
+
+                    for (let r of rows) {
+                        const getVal = (possibleNames) => {
+                            for(let n of possibleNames) {
+                                if(r[n] !== undefined) return r[n];
+                                const key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase());
+                                if(key) return r[key];
+                            }
+                            return null;
+                        };
+
+                        const awb = getVal(['awb_no', 'AWB No', 'No Resi', 'AWB']);
+                        if(!awb) continue;
+
+                        const inDateStr = getVal(['Tanggal Inbound', 'Tanggal Diterima', 'inbound_date']);
+                        const inTimeStr = getVal(['Jam', 'Jam Inbound', 'inbound_time']);
+                        const eddStr = getVal(['Target EDD', 'expect_delivery_tm', 'EDD']);
+                        
+                        const toSqlDate = (str) => {
+                            if(!str) return null;
+                            let s = String(str).trim().split(' ')[0];
+                            if(s.includes('/')) {
+                                const p = s.split('/');
+                                if(p.length===3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                            } else if(s.includes('-')) {
+                                return s;
+                            }
+                            return null;
+                        };
+
+                        let sqlInDate = toSqlDate(inDateStr);
+                        let sqlEddDate = toSqlDate(eddStr);
+
+                        parsedData.push({
+                            awb_no: String(awb).trim(),
+                            container_no: String(getVal(['No Bagseals', 'container_no', 'No MB']) || '').trim(),
+                            inbound_date: sqlInDate,
+                            inbound_time: String(inTimeStr || '').trim(),
+                            edd_date: sqlEddDate,
+                            origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || '').trim(),
+                            destinasi: String(getVal(['Destinasi', 'destinasi', 'Destination']) || '').trim(),
+                            service: String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || '').trim(),
+                            vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || '').trim()
+                        });
+                    }
+
+                    if(parsedData.length === 0) {
+                        overlay.classList.add('hidden');
+                        window.showToast("Gagal membaca file CSV. Pastikan kolom sesuai.", "error");
+                        return;
+                    }
+
+                    // Munculkan Progress Bar untuk Upload
+                    progressContainer.classList.remove('hidden');
+                    textEl.textContent = "Mengunggah ke Supabase...";
+                    subEl.textContent = "Menyimpan ke Cloud Database";
+                    if (pbText) pbText.textContent = "Mengunggah data...";
+                    
+                    const CHUNK_SIZE = 5000;
+                    let successCount = 0;
+                    const totalToUpload = parsedData.length;
+                    
+                    try {
+                        for (let i = 0; i < parsedData.length; i += CHUNK_SIZE) {
+                            const chunk = parsedData.slice(i, i + CHUNK_SIZE);
+                            
+                            let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
+                            if (pbBar) pbBar.style.width = `${pct}%`;
+                            if (pbPct) pbPct.textContent = `${pct}%`;
+                            
+                            textEl.textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
+                            
+                            const { error } = await supabase.from('awb_data').upsert(chunk, { onConflict: 'awb_no' });
+                            if (error) throw error;
+                            
+                            successCount += chunk.length;
+                        }
+                        
+                        if (pbBar) pbBar.style.width = `100%`;
+                        if (pbText) pbText.textContent = `Selesai diunggah!`;
+                        if (pbPct) pbPct.textContent = `100%`;
+                        textEl.textContent = `Selesai!`;
+                        await new Promise(r => setTimeout(r, 400));
+
+                        overlay.classList.add('hidden');
+                        window.showToast(`Upload Berhasil! ${formatNumber(successCount)} data AWB tersimpan.`, "success");
+                        
+                        window.fetchDataFromSupabase();
+                        
+                    } catch (err) {
+                        console.error(err);
+                        overlay.classList.add('hidden');
+                        window.showToast("Error saat mengunggah data ke Supabase.", "error");
+                    }
+                    
+                    document.getElementById('csvAwbFile').value = '';
+                }
+            });
+        };
+
+        document.getElementById('csvAwbFile').addEventListener('change', function(e) {
+            if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]);
+        });
+
+        // Initialize Call
+        window.fetchDataFromSupabase();
+
+    </script>
+</body>
+</html>
