@@ -194,6 +194,7 @@
                 <span id="fetchProgressPct" class="text-[11px] font-black text-[#E81C65]">0%</span>
             </div>
         </div>
+
     </div>
 
     <!-- TOAST -->
@@ -949,12 +950,16 @@
 
                         let sqlInDate = toSqlDate(inDateStr);
                         let sqlEddDate = toSqlDate(eddStr);
+                        
+                        // ANTI ERROR: Jika Jam kosong, kirim null agar database TIME tidak error
+                        let rawTime = String(inTimeStr || '').trim();
+                        let sqlInTime = rawTime === '' ? null : rawTime;
 
                         parsedData.push({
                             awb_no: String(awb).trim(),
                             container_no: String(getVal(['No Bagseals', 'container_no', 'No MB']) || '').trim(),
                             inbound_date: sqlInDate,
-                            inbound_time: String(inTimeStr || '').trim(),
+                            inbound_time: sqlInTime,
                             edd_date: sqlEddDate,
                             origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || '').trim(),
                             destinasi: String(getVal(['Destinasi', 'destinasi', 'Destination']) || '').trim(),
