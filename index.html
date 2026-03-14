@@ -169,19 +169,13 @@
         <!-- Custom SVG Animation Loaders -->
         <div class="flex justify-center items-center mb-6">
             <div class="loader">
-                <svg viewBox="0 0 80 80">
-                    <rect x="8" y="8" width="64" height="64"></rect>
-                </svg>
+                <svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg>
             </div>
             <div class="loader triangle">
-                <svg viewBox="0 0 86 80">
-                    <polygon points="43 8 79 72 7 72"></polygon>
-                </svg>
+                <svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg>
             </div>
             <div class="loader">
-                <svg viewBox="0 0 80 80">
-                    <circle id="test" cx="40" cy="40" r="32"></circle>
-                </svg>
+                <svg viewBox="0 0 80 80"><circle id="test" cx="40" cy="40" r="32"></circle></svg>
             </div>
         </div>
 
@@ -200,7 +194,6 @@
                 <span id="fetchProgressPct" class="text-[11px] font-black text-[#E81C65]">0%</span>
             </div>
         </div>
-
     </div>
 
     <!-- TOAST -->
@@ -250,7 +243,7 @@
                 <i class="fa-solid fa-server text-3xl text-emerald-400 animate-pulse"></i>
             </div>
             <h2 class="text-lg font-bold text-slate-800">Mengambil Data AWB...</h2>
-            <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik puluhan ribu data dari Supabase PostgreSQL Database.</p>
+            <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik data dari Supabase PostgreSQL Database.</p>
         </div>
 
         <!-- DASHBOARD CONTENT -->
@@ -541,7 +534,7 @@
                     .from('awb_data')
                     .select('*', { count: 'exact', head: true });
                 
-                if (countError && countError.code !== 'PGRST205') throw countError;
+                if (countError) throw countError;
                 let totalData = count || 0;
 
                 let allData = [];
@@ -976,19 +969,26 @@
                         return;
                     }
 
+                    // --- ANTI ERROR: HAPUS DUPLIKAT SEBELUM UPLOAD ---
+                    const uniqueMap = new Map();
+                    parsedData.forEach(row => {
+                        uniqueMap.set(row.awb_no, row); // Timpa dengan data terbaru jika ada AWB kembar
+                    });
+                    const finalDataToUpload = Array.from(uniqueMap.values());
+
                     // Munculkan Progress Bar untuk Upload
                     progressContainer.classList.remove('hidden');
                     textEl.textContent = "Mengunggah ke Supabase...";
-                    subEl.textContent = "Menyimpan ke Cloud Database";
+                    subEl.textContent = `Menyimpan ${formatNumber(finalDataToUpload.length)} data unik ke Cloud`;
                     if (pbText) pbText.textContent = "Mengunggah data...";
                     
-                    const CHUNK_SIZE = 5000;
+                    const CHUNK_SIZE = 1000;
                     let successCount = 0;
-                    const totalToUpload = parsedData.length;
+                    const totalToUpload = finalDataToUpload.length;
                     
                     try {
-                        for (let i = 0; i < parsedData.length; i += CHUNK_SIZE) {
-                            const chunk = parsedData.slice(i, i + CHUNK_SIZE);
+                        for (let i = 0; i < finalDataToUpload.length; i += CHUNK_SIZE) {
+                            const chunk = finalDataToUpload.slice(i, i + CHUNK_SIZE);
                             
                             let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
                             if (pbBar) pbBar.style.width = `${pct}%`;
@@ -1016,7 +1016,7 @@
                     } catch (err) {
                         console.error(err);
                         overlay.classList.add('hidden');
-                        let errMsg = "Error saat mengunggah data ke Supabase.";
+                        let errMsg = err.message || "Error saat mengunggah data ke Supabase.";
                         if (err.message && err.message.includes("Failed to fetch")) {
                             errMsg = "Upload gagal (Failed to fetch). Pastikan Supabase Anda tidak Paused.";
                         }
