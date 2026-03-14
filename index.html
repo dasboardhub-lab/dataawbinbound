@@ -11,8 +11,8 @@
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!-- MENGGUNAKAN STANDAR SCRIPT UNTUK SUPABASE AGAR TIDAK DIBLOKIR DI PREVIEW -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -32,7 +32,6 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-        /* Card Styles */
         .fresh-card { 
             background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px); 
@@ -43,7 +42,6 @@
         }
         .fresh-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -5px rgba(148, 163, 184, 0.2); }
 
-        /* Inputs */
         .fresh-input { 
             background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; 
             padding: 8px 12px; font-size: 12px; font-weight: 500; color: #334155; 
@@ -51,7 +49,6 @@
         }
         .fresh-input:focus { background: #FFFFFF; border-color: #E81C65; box-shadow: 0 0 0 3px rgba(232, 28, 101, 0.15); }
 
-        /* Buttons */
         .btn-magenta { 
             background: linear-gradient(135deg, #E81C65 0%, #C01451 100%); 
             color: white; padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 12px; 
@@ -66,7 +63,6 @@
         }
         .btn-header-icon:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
-        /* Table */
         .fresh-table th { 
             text-transform: uppercase; font-size: 10px; font-weight: 700; color: #64748B; 
             letter-spacing: 0.05em; padding: 14px 16px; background: #F8FAFC; border-bottom: 2px solid #94a3b8; 
@@ -76,7 +72,6 @@
         .fresh-table tr:hover td { background-color: #F1F5F9; }
         .group-col { background-color: #FFFFFF; border-right: 1px solid #cbd5e1; }
         
-        /* Animations & Utilities */
         @keyframes slideDown { from { transform: translate(-50%, -150%); opacity: 0; } to { transform: translate(-50%, 20px); opacity: 1; } }
         .toast-animate { animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         .animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
@@ -85,80 +80,21 @@
         .input-label { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; margin-left: 2px; }
         .sticky-filter-wrapper { position: sticky; top: 72px; z-index: 30; background-color: #F8FAFC; margin-left: -1rem; margin-right: -1rem; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); }
         
-        /* --- CUSTOM SVG LOADER --- */
-        .loader {
-            --path: #2f3545;
-            --dot: #E81C65; /* Warna magenta */
-            --duration: 3s;
-            width: 44px;
-            height: 44px;
-            position: relative;
-            display: inline-block;
-            margin: 0 16px;
-        }
-
-        .loader:before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            position: absolute;
-            display: block;
-            background: var(--dot);
-            top: 37px;
-            left: 19px;
-            transform: translate(-18px, -18px);
-            animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-        }
-
-        .loader svg {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        .loader svg rect,
-        .loader svg polygon,
-        .loader svg circle {
-            fill: none;
-            stroke: var(--path);
-            stroke-width: 10px;
-            stroke-linejoin: round;
-            stroke-linecap: round;
-        }
-
-        .loader svg polygon {
-            stroke-dasharray: 145 76 145 76;
-            stroke-dashoffset: 0;
-            animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-        }
-
-        .loader svg rect {
-            stroke-dasharray: 192 64 192 64;
-            stroke-dashoffset: 0;
-            animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-        }
-
-        .loader svg circle {
-            stroke-dasharray: 150 50 150 50;
-            stroke-dashoffset: 75;
-            animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-        }
-
+        /* Loader Styles */
+        .loader { --path: #2f3545; --dot: #E81C65; --duration: 3s; width: 44px; height: 44px; position: relative; display: inline-block; margin: 0 16px; }
+        .loader:before { content: ""; width: 6px; height: 6px; border-radius: 50%; position: absolute; display: block; background: var(--dot); top: 37px; left: 19px; transform: translate(-18px, -18px); animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
+        .loader svg { display: block; width: 100%; height: 100%; }
+        .loader svg rect, .loader svg polygon, .loader svg circle { fill: none; stroke: var(--path); stroke-width: 10px; stroke-linejoin: round; stroke-linecap: round; }
+        .loader svg polygon { stroke-dasharray: 145 76 145 76; stroke-dashoffset: 0; animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
+        .loader svg rect { stroke-dasharray: 192 64 192 64; stroke-dashoffset: 0; animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
+        .loader svg circle { stroke-dasharray: 150 50 150 50; stroke-dashoffset: 75; animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
         .loader.triangle { width: 48px; }
-        .loader.triangle:before {
-            left: 21px;
-            transform: translate(-10px, -18px);
-            animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-        }
-
+        .loader.triangle:before { left: 21px; transform: translate(-10px, -18px); animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
         @keyframes pathTriangle { 33% { stroke-dashoffset: 74; } 66% { stroke-dashoffset: 147; } 100% { stroke-dashoffset: 221; } }
         @keyframes dotTriangle { 33% { transform: translate(0, 0); } 66% { transform: translate(10px, -18px); } 100% { transform: translate(-10px, -18px); } }
         @keyframes pathRect { 25% { stroke-dashoffset: 64; } 50% { stroke-dashoffset: 128; } 75% { stroke-dashoffset: 192; } 100% { stroke-dashoffset: 256; } }
         @keyframes dotRect { 25% { transform: translate(0, 0); } 50% { transform: translate(18px, -18px); } 75% { transform: translate(0, -36px); } 100% { transform: translate(-18px, -18px); } }
         @keyframes pathCircle { 25% { stroke-dashoffset: 125; } 50% { stroke-dashoffset: 175; } 75% { stroke-dashoffset: 225; } 100% { stroke-dashoffset: 275; } }
-        
-        /* --- AESTHETIC PROGRESS BAR --- */
         @keyframes shimmer { 0% { transform: skewX(-20deg) translateX(-150%); } 100% { transform: skewX(-20deg) translateX(250%); } }
         .progress-glow { box-shadow: 0 0 12px rgba(232, 28, 101, 0.5); }
     </style>
@@ -167,24 +103,13 @@
 
     <!-- LOADING OVERLAY -->
     <div id="loadingOverlay" class="loading-overlay hidden">
-        
-        <!-- Custom SVG Animation Loaders -->
         <div class="flex justify-center items-center mb-6">
-            <div class="loader">
-                <svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg>
-            </div>
-            <div class="loader triangle">
-                <svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg>
-            </div>
-            <div class="loader">
-                <svg viewBox="0 0 80 80"><circle id="test" cx="40" cy="40" r="32"></circle></svg>
-            </div>
+            <div class="loader"><svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg></div>
+            <div class="loader triangle"><svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg></div>
+            <div class="loader"><svg viewBox="0 0 80 80"><circle id="test" cx="40" cy="40" r="32"></circle></svg></div>
         </div>
-
         <h3 class="text-slate-800 font-extrabold text-xl tracking-wide" id="loadingText">Processing Data...</h3>
         <p class="text-slate-500 text-sm mt-1 font-medium" id="loadingSubText">Menghubungkan ke Supabase</p>
-
-        <!-- Aesthetic Progress Bar -->
         <div id="fetchProgressContainer" class="hidden w-80 mt-6 flex flex-col items-center animate-fade-in-up">
             <div class="w-full bg-slate-200/80 rounded-full h-3 overflow-hidden shadow-inner relative border border-slate-300/50">
                 <div id="fetchProgressBar" class="bg-gradient-to-r from-[#E81C65] to-[#C01451] h-full rounded-full transition-all duration-500 ease-out w-0 relative overflow-hidden progress-glow">
@@ -196,7 +121,6 @@
                 <span id="fetchProgressPct" class="text-[11px] font-black text-[#E81C65]">0%</span>
             </div>
         </div>
-
     </div>
 
     <!-- TOAST -->
@@ -223,7 +147,6 @@
                     <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Powered by Supabase</span>
                 </div>
                 <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
-                
                 <div class="flex items-center gap-2">
                     <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
                         <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
@@ -239,7 +162,6 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow w-full max-w-[1600px] mx-auto px-4 py-4">
-        
         <!-- INITIAL EMPTY STATE -->
         <div id="initialState" class="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in-up">
             <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center border-2 border-dashed border-emerald-200 shadow-xl shadow-emerald-50 mx-auto mb-6">
@@ -247,26 +169,24 @@
             </div>
             <h2 class="text-lg font-bold text-slate-800">Mengambil Data AWB...</h2>
             <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik data dari Supabase PostgreSQL Database.</p>
+            
+            <!-- TOMBOL PAKSA DEMO (ANTI MACET DI PRATINJAU) -->
+            <button onclick="window.loadDummyData()" class="mt-6 px-6 py-3 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 shadow-lg transition-all flex items-center gap-2">
+                <i class="fa-solid fa-eye"></i> Tampilkan Mode Demo (Pratinjau)
+            </button>
         </div>
 
         <!-- DASHBOARD CONTENT -->
         <div id="dashboardContent" class="hidden space-y-6">
-            
-            <!-- 1. FILTERS (STICKY) -->
             <div class="sticky-filter-wrapper">
                 <div class="fresh-card p-5">
                     <div class="flex flex-col xl:flex-row gap-5 justify-between items-end">
-                        
-                        <!-- Left: Search -->
                         <div class="w-full xl:w-80 group relative">
                             <span class="input-label">Cari AWB / Container / Vendor</span>
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-[34px] text-slate-400 text-xs group-focus-within:text-[#E81C65] transition-colors"></i>
                             <input type="text" id="globalSearch" placeholder="Ketik nomor resi..." class="fresh-input w-full pl-9 bg-white shadow-sm" oninput="window.applyFilters()">
                         </div>
-
-                        <!-- Right: Filters -->
                         <div class="w-full xl:flex-1 flex flex-wrap gap-3 justify-end items-end">
-                            <!-- Date Range -->
                             <div>
                                 <span class="input-label">Tgl Inbound</span>
                                 <div class="flex items-center bg-white rounded-xl border border-slate-200 p-1 shadow-sm h-[38px] justify-between min-w-[220px]">
@@ -275,8 +195,6 @@
                                     <input type="date" id="filterEndDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
                                 </div>
                             </div>
-
-                            <!-- SLA Status Filter -->
                             <div class="w-32">
                                 <span class="input-label">Status SLA</span>
                                 <select id="filterStatus" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
@@ -288,32 +206,24 @@
                                     <option value="Unknown">Tidak Diketahui</option>
                                 </select>
                             </div>
-
-                            <!-- Origin Filter -->
                             <div class="w-32">
                                 <span class="input-label">Origin</span>
                                 <select id="filterOrigin" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Origin</option>
                                 </select>
                             </div>
-
-                            <!-- Destinasi Filter -->
                             <div class="w-32">
                                 <span class="input-label">Destinasi</span>
                                 <select id="filterDest" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Destinasi</option>
                                 </select>
                             </div>
-
-                            <!-- Service Filter -->
                             <div class="w-32">
                                 <span class="input-label">Layanan</span>
                                 <select id="filterService" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Layanan</option>
                                 </select>
                             </div>
-
-                            <!-- Reset -->
                             <button onclick="window.resetFilters()" class="w-[38px] h-[38px] flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-emerald-600 text-slate-400 transition-all shadow-sm" title="Reset Filters">
                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                             </button>
@@ -322,23 +232,20 @@
                 </div>
             </div>
 
-            <!-- 2. KPI WIDGETS -->
+            <!-- 2. KPI WIDGETS (DIPULIHKAN PENUH) -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-                <!-- Total AWB -->
                 <div class="fresh-card p-6 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
                     <div class="relative z-10">
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total AWB (Sesuai Filter)</p>
                         <h3 class="text-4xl font-extrabold text-slate-800 tracking-tight mt-1" id="kpiTotalAwb">0</h3>
                         <div class="mt-2 flex flex-col gap-1">
-                            <div class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-lg inline-block w-fit">Total di Database: <span id="kpiGrandTotal" class="font-bold text-slate-700">0</span> AWB</div>
-                            <!-- Peringatan jika ada tanggal yang rusak -->
+                            <div class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-lg inline-block w-fit">Total di Database: <span id="kpiGrandTotal" class="font-bold text-slate-700">0</span> Baris Kegiatan</div>
                             <div id="kpiInvalidDate" class="hidden text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg w-fit border border-rose-100"></div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Kinerja Tepat Waktu -->
                 <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-emerald-500">
                     <div class="relative z-10 flex flex-col h-full justify-between">
                         <p class="text-[10px] font-bold text-emerald-600/70 uppercase tracking-widest">Performa Tepat Waktu</p>
@@ -346,12 +253,11 @@
                             <div class="flex items-baseline gap-2 mt-1">
                                 <h3 class="text-4xl font-extrabold text-emerald-600 tracking-tight" id="kpiOnTimePct">0%</h3>
                             </div>
-                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiOnTimeCount" class="text-emerald-600">0</span> AWB Tepat Waktu</div>
+                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiOnTimeCount" class="text-emerald-600">0</span> Baris Tepat Waktu</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Kinerja Terlambat -->
+                
                 <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-rose-500">
                     <div class="relative z-10 flex flex-col h-full justify-between">
                         <p class="text-[10px] font-bold text-rose-600/70 uppercase tracking-widest">Performa Terlambat (After EDD)</p>
@@ -359,12 +265,11 @@
                             <div class="flex items-baseline gap-2 mt-1">
                                 <h3 class="text-4xl font-extrabold text-rose-600 tracking-tight" id="kpiLatePct">0%</h3>
                             </div>
-                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiLateCount" class="text-rose-600">0</span> AWB Terlambat</div>
+                            <div class="mt-1 text-xs font-bold text-slate-500"><span id="kpiLateCount" class="text-rose-600">0</span> Baris Terlambat</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Rata-rata Keterlambatan -->
+                
                 <div class="fresh-card p-6 relative overflow-hidden group bg-slate-900 text-white">
                     <div class="absolute right-0 top-0 p-4 opacity-10"><i class="fa-solid fa-stopwatch text-6xl text-white"></i></div>
                     <div class="relative z-10 flex flex-col h-full justify-between">
@@ -380,18 +285,32 @@
                 </div>
             </div>
 
-            <!-- 3. TABEL SLA BY EDD STATUS -->
-            <div class="fresh-card overflow-hidden flex flex-col">
-                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
-                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
-                        <span class="bg-[#E81C65]/10 p-1.5 rounded-lg text-[#E81C65]"><i class="fa-solid fa-clock-rotate-left"></i></span>
-                        SLA by EDD Status (Destinasi)
-                    </h3>
+            <!-- 3. DUA TABEL SLA BY EDD STATUS (DESTINASI & LAYANAN) -->
+            <div class="grid grid-cols-1 lg:grid-cols-10 gap-5">
+                <!-- Tabel Berdasarkan Destinasi (70%) -->
+                <div class="fresh-card overflow-hidden flex flex-col lg:col-span-7">
+                    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
+                        <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                            <span class="bg-[#E81C65]/10 p-1.5 rounded-lg text-[#E81C65]"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                            SLA by EDD Status (Destinasi)
+                        </h3>
+                    </div>
+                    <div class="overflow-auto custom-scrollbar max-h-[450px]">
+                        <table class="fresh-table w-full relative" id="slaEddTable"></table>
+                    </div>
                 </div>
-                <div class="overflow-auto custom-scrollbar max-h-[450px]">
-                    <table class="fresh-table w-full relative" id="slaEddTable">
-                        <!-- Disuntik lewat JS -->
-                    </table>
+
+                <!-- Tabel Berdasarkan Layanan (Service) (30%) -->
+                <div class="fresh-card overflow-hidden flex flex-col lg:col-span-3">
+                    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
+                        <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                            <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i class="fa-solid fa-plane-departure"></i></span>
+                            SLA by EDD Status (Layanan)
+                        </h3>
+                    </div>
+                    <div class="overflow-auto custom-scrollbar max-h-[450px]">
+                        <table class="fresh-table w-full relative" id="slaServiceTable"></table>
+                    </div>
                 </div>
             </div>
 
@@ -400,7 +319,7 @@
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
                         <span class="bg-[#3ECF8E]/10 p-1.5 rounded-lg text-[#3ECF8E]"><i class="fa-solid fa-list-ul"></i></span>
-                        Detail Data AWB
+                        Detail Kegiatan AWB
                     </h3>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-100">
@@ -434,38 +353,38 @@
                     Menampilkan <span id="showingCount" class="text-slate-600">0</span> baris
                 </div>
             </div>
-
         </div>
     </main>
 
-    <!-- SUPABASE & SCRIPT LOGIC -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-
+    <!-- SCRIPTS MENGGUNAKAN STANDAR TAG (NON-MODULE) AGAR AMAN DI PREVIEW -->
+    <script>
+        // Supabase Initialization
         const SUPABASE_URL = 'https://svmgwupvjybfmatjfafp.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWd3dXB2anliZm1hdGpmYWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1ODc1NDUsImV4cCI6MjA4ODE2MzU0NX0.kP7Y0dy5l61Xi2S8ji9buq8W1R9ZNLyHyBHhTh3qFbw'; 
-        
-        let supabase = null;
+        let supabaseClient = null;
+
         try {
-            supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+            if (window.supabase) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } else {
+                console.warn("Library Supabase gagal dimuat dari CDN.");
+            }
         } catch(e) {
-            console.warn("Supabase tidak valid.");
+            console.error("Supabase Init Error:", e);
         }
 
-        // --- GLOBAL VARIABLES ---
         window.rawData = [];
         window.filteredData = [];
         window.currentPage = 1;
         window.rowsPerPage = 150;
         document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
-        // --- UTILITIES ---
         window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' : 
                        type === 'error' ? '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>' : 
-                       '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>';
+                       (type === 'warning' ? '<i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>' : '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>');
 
             toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3 bg-white rounded-2xl shadow-lg border border-slate-100 min-w-[240px] justify-center mb-2`;
             toast.innerHTML = `${icon}<span class="text-xs font-bold text-slate-600">${message}</span>`;
@@ -475,15 +394,18 @@
 
         const formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
         
-        // ANTI ERROR: Pembaruan Parser Tanggal Super Cerdas
-        // Membaca semua kombinasi format tanggal dari Excel yang merusak CSV
         const parseIndoDate = (dateStr) => {
             if(!dateStr) return null;
             let str = String(dateStr).trim(); 
-            
-            // Jika ada huruf (misal: 10-Mar-26, 09 Mar 2026, dll)
+            if(!str || str === '-' || str.toLowerCase() === 'null') return null;
+
+            if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+                const p = str.substring(0, 10).split('-');
+                return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+            }
+
             if (/[a-zA-Z]/.test(str)) {
-                str = str.replace(/[-\/]/g, ' '); // Ubah semua pemisah jadi spasi
+                str = str.replace(/[-\/]/g, ' '); 
                 const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'mei':4,'jun':5,'jul':6,'aug':7,'agu':7,'sep':8,'oct':9,'okt':9,'nov':10,'dec':11,'des':11};
                 const parts = str.toLowerCase().split(/[\s,]+/);
                 if(parts.length >= 3) {
@@ -492,29 +414,35 @@
                     let m = months[mStr] !== undefined ? months[mStr] : 0;
                     let y = parseInt(parts[2]);
                     if (y < 100) y += 2000;
+                    if(isNaN(d) || isNaN(y)) return null;
+                    return new Date(y, m, d);
+                } else if(parts.length === 2) {
+                    let d = parseInt(parts[0]);
+                    let mStr = parts[1].substring(0,3);
+                    let m = months[mStr] !== undefined ? months[mStr] : 0;
+                    let y = new Date().getFullYear();
+                    if(isNaN(d)) return null;
                     return new Date(y, m, d);
                 }
-            } 
-            // Format Angka Saja: DD/MM/YYYY, YYYY-MM-DD, DD-MM-YYYY
-            else {
+            } else {
                 let p = str.includes('/') ? str.split(' ')[0].split('/') : str.split(' ')[0].split('-');
                 if(p.length === 3) {
-                    if (p[0].length === 4) { // Format: YYYY-MM-DD
+                    if (p[0].length === 4) { 
                         return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
-                    } else { // Format: DD-MM-YYYY atau DD/MM/YYYY
+                    } else { 
                         let y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
                         return new Date(y, parseInt(p[1])-1, parseInt(p[0]));
                     }
                 }
             }
-            return null; // Jika tanggal kosong atau format benar-benar aneh
+            return null; 
         };
 
         const formatDateToDisplay = (d) => {
             if (d instanceof Date && !isNaN(d)) {
                 return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
             }
-            return '-';
+            return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
         };
 
         const calculateSlaStatus = (inboundDate, eddDate) => {
@@ -523,35 +451,29 @@
             }
             inboundDate.setHours(0,0,0,0);
             eddDate.setHours(0,0,0,0);
-            
             const diffDays = Math.round((eddDate - inboundDate) / (1000 * 60 * 60 * 24));
-            
             let status = "";
             if (diffDays < 0) status = "After EDD";
             else if (diffDays === 0) status = "Last Day";
             else if (diffDays === 1) status = "Same Day";
             else if (diffDays >= 2) status = ">2 Hari";
-            
             return { status, diff: diffDays };
         };
 
-        // --- DUMMY DATA UNTUK PREVIEW CANVAS ---
         window.loadDummyData = function() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
             const dummyData = [];
             const dests = ['CGK', 'UPG', 'BPN', 'MDC', 'KDI', 'AMQ', 'PLW', 'TRK'];
             const origins = ['MAKASSAR', 'JAKARTA', 'SURABAYA', 'BALIKPAPAN'];
             const vendors = ['LION', 'GARUDA', 'CITILINK', 'SRIWIJAYA', 'PELNI'];
             const services = ['REGULER', 'ECO', 'EXPRESS'];
 
-            for(let i=0; i<500; i++) {
-                const today = new Date();
-                const inbound = new Date(today); 
-                inbound.setDate(today.getDate() - Math.floor(Math.random()*14));
-                
-                const edd = new Date(inbound); 
-                edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
+            for(let i=0; i<1500; i++) {
+                const inbound = new Date(); inbound.setDate(inbound.getDate() - Math.floor(Math.random()*14));
+                const edd = new Date(inbound); edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
 
                 dummyData.push({
+                    _id: 'ID' + i,
                     _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
                     _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
                     _inboundDate: inbound,
@@ -566,220 +488,238 @@
                 });
             }
             
-            document.getElementById('statusText').textContent = "Mode Demo (Preview)";
-            document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500";
-            
-            window.rawData = dummyData;
-
-            // Populate Dropdowns
-            const populate = (id, field) => {
-                const sel = document.getElementById(id);
-                sel.innerHTML = `<option value="ALL">Semua ${field}</option>`;
-                [...new Set(dummyData.map(d => d[field === 'Destinasi' ? '_dest' : (field === 'Origin' ? '_origin' : '_service')]))].sort().forEach(val => {
-                    sel.innerHTML += `<option value="${val}">${val}</option>`;
+            for(let i=0; i<300; i++) {
+                dummyData.push({
+                    _id: 'ID_DUMMY_' + i,
+                    _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
+                    _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
+                    _inboundDate: null, _inboundTime: '-', _eddDate: null,
+                    _origin: origins[0], _dest: dests[0], _service: services[0], _vendor: vendors[0],
+                    _slaStatus: "Unknown", _slaDiff: 0
                 });
-            };
-            populate('filterDest', 'Destinasi');
-            populate('filterOrigin', 'Origin');
-            populate('filterService', 'Layanan');
-
-            const endD = new Date();
-            const startD = new Date(); startD.setDate(endD.getDate() - 14);
-            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
-            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
-
-            document.getElementById('initialState').classList.add('hidden');
-            document.getElementById('dashboardContent').classList.remove('hidden');
-
-            window.applyFilters();
-            window.showToast("Berhasil memuat Mode Demo", "success");
+            }
+            
+            document.getElementById('statusText').textContent = "Mode Demo Aktif";
+            document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500";
+            window.rawData = dummyData;
+            processRawData(dummyData, true);
         };
 
-        // --- FETCH DATA DARI SUPABASE DENGAN PROGRESS BAR ---
         window.fetchDataFromSupabase = async function() {
             document.getElementById('initialState').classList.add('hidden');
             document.getElementById('dashboardContent').classList.add('hidden');
-            
             const overlay = document.getElementById('loadingOverlay');
-            const loadText = document.getElementById('loadingText');
-            const subText = document.getElementById('loadingSubText');
-            const progressContainer = document.getElementById('fetchProgressContainer');
             const pbBar = document.getElementById('fetchProgressBar');
             const pbText = document.getElementById('fetchProgressDetail');
             const pbPct = document.getElementById('fetchProgressPct');
 
             overlay.classList.remove('hidden');
-            progressContainer.classList.remove('hidden');
-            loadText.textContent = "Menyiapkan Koneksi...";
-            subText.textContent = "Menghubungkan ke database Supabase";
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
 
-            const statusText = document.getElementById('statusText');
-            const connIcon = document.getElementById('connectionStatus');
-            
             try {
-                statusText.textContent = "Fetching...";
-                
-                // Ambil jumlah total data untuk progress bar
-                const { count, error: countError } = await supabase
-                    .from('awb_data')
-                    .select('*', { count: 'exact', head: true });
-                
+                if (!supabaseClient) {
+                    overlay.classList.add('hidden');
+                    window.showToast("Koneksi Supabase diblokir. Mengaktifkan Mode Demo...", "warning");
+                    window.loadDummyData();
+                    return;
+                }
+
+                const { count, error: countError } = await supabaseClient.from('awb_data').select('*', { count: 'exact', head: true });
                 if (countError) throw countError;
                 let totalData = count || 0;
 
-                let allData = [];
+                // --- TAHAP 1: FETCH DATA 2 MINGGU TERAKHIR + NULL (DI AWAL AGAR CEPAT) ---
+                const fourteenDaysAgo = new Date();
+                fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+                const dateStr = fourteenDaysAgo.toISOString().split('T')[0];
+
+                let recentData = [];
                 let from = 0;
-                const step = 1000;
-                let isFetching = true;
+                const step = 1000; 
+                let isFetchingRecent = true;
 
-                while (isFetching) {
-                    loadText.textContent = "Mengunduh Data AWB...";
-                    subText.textContent = "Memproses baris data secara instan";
-                    if (pbText) pbText.textContent = "Mengunduh data dari server...";
+                document.getElementById('loadingText').textContent = "Memuat 2 Minggu Terakhir...";
+
+                while (isFetchingRecent) {
+                    // Maksimal simulasi loader tahap 1 adalah 50%
+                    let pct = totalData > 0 ? Math.min(Math.round((recentData.length / totalData) * 100), 50) : 0;
+                    pbBar.style.width = `${pct}%`;
+                    pbText.textContent = `Menarik ${recentData.length.toLocaleString('id-ID')} Data Terbaru`;
+                    pbPct.textContent = `${pct}%`;
+
+                    let data = null;
+                    let fetchSuccess = false;
+                    let lastErr = null;
                     
-                    let pct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 0;
-                    if (pbBar) pbBar.style.width = `${pct}%`;
-                    if (pbPct) pbPct.textContent = `${pct}%`;
-
-                    const { data, error } = await supabase
-                        .from('awb_data')
-                        .select('*')
-                        .order('inbound_date', { ascending: false })
-                        .range(from, from + step - 1);
-
-                    if (error) throw error;
+                    for(let attempt=1; attempt<=3; attempt++) {
+                        try {
+                            const res = await supabaseClient.from('awb_data')
+                                .select('*')
+                                .or(`inbound_date.gte.${dateStr},inbound_date.is.null`)
+                                .range(from, from + step - 1);
+                            if (res.error) throw res.error;
+                            data = res.data;
+                            fetchSuccess = true;
+                            break;
+                        } catch(err) {
+                            lastErr = err;
+                            await new Promise(r => setTimeout(r, 1000 * attempt));
+                        }
+                    }
+                    
+                    if(!fetchSuccess) throw lastErr;
 
                     if (data && data.length > 0) {
-                        allData = allData.concat(data);
+                        recentData = recentData.concat(data);
                         from += step;
+                        if (data.length < step) isFetchingRecent = false;
+                    } else { isFetchingRecent = false; }
 
-                        let nextPct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 100;
-                        if (pbBar) pbBar.style.width = `${nextPct}%`;
-                        if (pbPct) pbPct.textContent = `${nextPct}%`;
-
-                        if (data.length < step) {
-                            isFetching = false;
-                        }
-                    } else {
-                        isFetching = false;
-                    }
+                    await new Promise(r => setTimeout(r, 150));
                 }
                 
-                if (pbBar) pbBar.style.width = `100%`;
-                if (pbPct) pbPct.textContent = `100%`;
-                if (pbText) pbText.textContent = "Menyusun tampilan...";
-                loadText.textContent = "Memproses Tampilan...";
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
                 await new Promise(r => setTimeout(r, 400));
 
-                processRawData(allData || []);
-                
-                statusText.textContent = "Connected";
-                connIcon.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                // LANGSUNG TAMPILKAN DASBOR TAHAP 1 
+                processRawData(recentData);
+                document.getElementById('statusText').textContent = "Connected (Partial)";
+                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-400";
                 overlay.classList.add('hidden');
+                
+                window.showToast("Data 2 minggu terakhir siap. Mengunduh sisa data di latar belakang...", "info");
+
+                // --- TAHAP 2: FETCH SISA DATA LAMA DI LATAR BELAKANG ---
+                let oldData = [];
+                let fromOld = 0;
+                let isFetchingOld = true;
+                
+                // Buat indikator notifikasi latar belakang
+                const bgIndicator = document.createElement('div');
+                bgIndicator.id = "bgFetchIndicator";
+                bgIndicator.className = "fixed bottom-6 right-6 bg-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-200 text-xs font-bold text-slate-600 z-50 flex items-center gap-4 animate-fade-in-up";
+                bgIndicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-indigo-500 text-xl"></i> <div><p class="text-slate-800 text-sm">Menyinkronkan Riwayat...</p><p id="bgFetchText" class="text-[11px] text-slate-400 font-medium">Mengunduh: 0 baris</p></div>`;
+                document.body.appendChild(bgIndicator);
+
+                while (isFetchingOld) {
+                    let data = null;
+                    let fetchSuccess = false;
+                    for(let attempt=1; attempt<=3; attempt++) {
+                        try {
+                            const res = await supabaseClient.from('awb_data')
+                                .select('*')
+                                .lt('inbound_date', dateStr)
+                                .range(fromOld, fromOld + step - 1);
+                            if (res.error) throw res.error;
+                            data = res.data;
+                            fetchSuccess = true;
+                            break;
+                        } catch(err) {
+                            await new Promise(r => setTimeout(r, 2000 * attempt));
+                        }
+                    }
+
+                    if(!fetchSuccess) {
+                        console.warn("Background fetch gagal ditarik penuh.");
+                        break; 
+                    }
+
+                    if (data && data.length > 0) {
+                        oldData = oldData.concat(data);
+                        fromOld += step;
+                        const elText = document.getElementById('bgFetchText');
+                        if (elText) elText.textContent = `Mengunduh: ${oldData.length.toLocaleString('id-ID')} baris`;
+                        if (data.length < step) isFetchingOld = false;
+                    } else { isFetchingOld = false; }
+
+                    // Beri jeda lebih lama agar operasi Dasbor oleh user tidak lag
+                    await new Promise(r => setTimeout(r, 400)); 
+                }
+
+                // GABUNGKAN DATA AWAL DAN DATA LAMA LALU PROSES ULANG
+                if (oldData.length > 0) {
+                    const allData = recentData.concat(oldData);
+                    processRawData(allData); 
+                }
+
+                document.getElementById('statusText').textContent = "Connected";
+                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                
+                const finalBg = document.getElementById('bgFetchIndicator');
+                if (finalBg) {
+                    finalBg.innerHTML = `<i class="fa-solid fa-check-circle text-emerald-500 text-xl"></i> <div class="text-slate-800 text-sm">Semua riwayat siap!</div>`;
+                    setTimeout(() => {
+                        finalBg.style.opacity = '0';
+                        finalBg.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => finalBg.remove(), 500);
+                    }, 3000);
+                }
+
             } catch (err) {
                 console.error("Supabase Error:", err);
                 overlay.classList.add('hidden');
-                
-                const initialState = document.getElementById('initialState');
-                initialState.classList.remove('hidden');
-                
-                let errorMsg = "Koneksi Supabase Gagal.";
-                if (err.message && err.message.includes("Failed to fetch")) {
-                    errorMsg = "Gagal terhubung ke server (Failed to fetch).";
-                }
-                window.showToast(errorMsg, "error");
-                
-                statusText.textContent = "Connection Error";
-                connIcon.className = "w-1.5 h-1.5 rounded-full bg-rose-500";
-                
-                initialState.innerHTML = `
-                    <div class="w-24 h-24 bg-rose-50 rounded-3xl flex items-center justify-center border-2 border-dashed border-rose-200 shadow-xl shadow-rose-100 mx-auto mb-6">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 animate-pulse"></i>
-                    </div>
-                    <h2 class="text-lg font-bold text-slate-800">Koneksi Database Gagal</h2>
-                    <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center text-rose-600">${errorMsg}</p>
-                    <div class="mt-5 p-5 bg-white border border-slate-200 rounded-xl text-xs text-slate-600 max-w-md shadow-sm">
-                        <p class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Kemungkinan Penyebab:</p>
-                        <ol class="list-decimal text-left pl-4 space-y-2">
-                            <li>Project Supabase Anda sedang <b>Paused</b> karena tidak aktif. Buka Dashboard Supabase lalu klik "Restore".</li>
-                            <li>Koneksi diblokir oleh lingkungan Pratinjau (Preview Canvas) atau ekstensi browser.</li>
-                        </ol>
-                    </div>
-                    <div class="mt-6 flex flex-wrap justify-center gap-3">
-                        <button onclick="window.location.reload()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 shadow-lg transition"><i class="fa-solid fa-arrows-rotate mr-2"></i> Muat Ulang</button>
-                        <button onclick="window.loadDummyData()" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:bg-emerald-600 shadow-lg transition"><i class="fa-solid fa-eye mr-2"></i> Tampilkan Mode Demo</button>
-                    </div>
-                `;
+                window.showToast("Koneksi Supabase gagal/diblokir. Mengaktifkan Mode Demo...", "warning");
+                window.loadDummyData();
             }
         };
 
-        const processRawData = (dataFromDb) => {
+        const processRawData = (dataFromDb, isDummy = false) => {
             window.rawData = [];
             const destSet = new Set();
             const orgSet = new Set();
             const svcSet = new Set();
             
             dataFromDb.forEach(row => {
-                const inboundDt = row._inboundDate !== undefined ? row._inboundDate : parseIndoDate(row.inbound_date);
-                const eddDt = row._eddDate !== undefined ? row._eddDate : parseIndoDate(row.edd_date);
-                const sla = calculateSlaStatus(inboundDt, eddDt);
+                const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
+                const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
-                const dest = row.destinasi || row._dest || 'N/A';
-                const org = row.origin || row._origin || 'N/A';
-                const svc = row.service || row._service || 'N/A';
+                // MENGGABUNGKAN 'REG' MENJADI 'REGULER'
+                let svc = String(row.Service || row.service || row._service || 'N/A').toUpperCase();
+                if (svc === 'REG') svc = 'REGULER';
+
+                const vendor = String(row.Vendor || row.vendor || row._vendor || 'N/A').toUpperCase();
+                const awb = String(row.awb_no || row._awb || '').toUpperCase();
+                const container = String(row.container_no || row._container || '-').toUpperCase();
+
+                const inboundDt = row._inboundDate !== undefined ? row._inboundDate : parseIndoDate(row.inbound_date);
+                const eddDt = row._eddDate !== undefined ? row._eddDate : parseIndoDate(row.expect_delivery_tm || row.edd_date);
+                const inboundTime = row.Jam || row.jam || row.inbound_time || row._inboundTime || '-';
+                const sla = calculateSlaStatus(inboundDt, eddDt);
                 
                 destSet.add(dest);
                 orgSet.add(org);
                 svcSet.add(svc);
 
                 window.rawData.push({
-                    _awb: row.awb_no || row._awb,
-                    _container: row.container_no || row._container || '-',
-                    _inboundDate: inboundDt,
-                    _inboundTime: row.inbound_time || row._inboundTime || '-',
-                    _eddDate: eddDt,
-                    _origin: org,
-                    _dest: dest,
-                    _service: svc,
-                    _vendor: row.vendor || row._vendor || 'N/A',
-                    _slaStatus: sla.status,
-                    _slaDiff: sla.diff
+                    _id: row.id || row._id,
+                    _awb: awb, _container: container, _inboundDate: inboundDt,
+                    _inboundTime: inboundTime,
+                    _eddDate: eddDt, _origin: org, _dest: dest, _service: svc,
+                    _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff
                 });
             });
 
-            // Populate Filter Dropdowns
-            const destSelect = document.getElementById('filterDest');
-            let destOptions = '<option value="ALL">Semua Destinasi</option>';
-            [...destSet].sort().forEach(d => { destOptions += `<option value="${d}">${d}</option>`; });
-            destSelect.innerHTML = destOptions;
+            const populateDropdown = (id, set) => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = '<option value="ALL">SEMUA</option>';
+                [...set].sort().forEach(val => { sel.innerHTML += `<option value="${val}">${val}</option>`; });
+            };
+            populateDropdown('filterDest', destSet);
+            populateDropdown('filterOrigin', orgSet);
+            populateDropdown('filterService', svcSet);
 
-            const orgSelect = document.getElementById('filterOrigin');
-            let orgOptions = '<option value="ALL">Semua Origin</option>';
-            [...orgSet].sort().forEach(o => { orgOptions += `<option value="${o}">${o}</option>`; });
-            orgSelect.innerHTML = orgOptions;
-
-            const svcSelect = document.getElementById('filterService');
-            let svcOptions = '<option value="ALL">Semua Layanan</option>';
-            [...svcSet].sort().forEach(s => { svcOptions += `<option value="${s}">${s}</option>`; });
-            svcSelect.innerHTML = svcOptions;
-
-            // SMART DATE FILTER: Setel rentang 14 hari berdasarkan tanggal data PALING BARU
             let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
-            if (validDates.length > 0) {
-                maxDate = new Date(Math.max.apply(null, validDates));
-            }
+            if (validDates.length > 0) maxDate = new Date(Math.max.apply(null, validDates));
             
-            const endD = new Date(maxDate);
-            const startD = new Date(maxDate); 
-            startD.setDate(startD.getDate() - 14);
-            
+            // Setel rentang default ke 2 minggu terakhir dari hari ini
+            const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
             document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
-            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
 
             document.getElementById('initialState').classList.add('hidden');
             document.getElementById('dashboardContent').classList.remove('hidden');
-
             window.applyFilters();
         };
 
@@ -789,20 +729,13 @@
             document.getElementById('filterOrigin').value = 'ALL';
             document.getElementById('filterService').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
-            
-            let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
             if (validDates.length > 0) {
-                maxDate = new Date(Math.max.apply(null, validDates));
+                const maxDate = new Date(Math.max.apply(null, validDates));
+                const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
+                document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+                document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
             }
-            
-            const endD = new Date(maxDate);
-            const startD = new Date(maxDate); 
-            startD.setDate(startD.getDate() - 14);
-            
-            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
-            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
-            
             window.applyFilters();
             window.showToast("Filter di-reset.", "info");
         };
@@ -813,22 +746,24 @@
             const originFilter = document.getElementById('filterOrigin').value;
             const serviceFilter = document.getElementById('filterService').value;
             const statFilter = document.getElementById('filterStatus').value;
-            
             const startStr = document.getElementById('filterStartDate').value;
             const endStr = document.getElementById('filterEndDate').value;
             const sDate = startStr ? new Date(startStr) : null; if(sDate) sDate.setHours(0,0,0,0);
             const eDate = endStr ? new Date(endStr) : null; if(eDate) eDate.setHours(23,59,59,999);
 
             window.filteredData = window.rawData.filter(d => {
-                // Menolak baris yang tanggal Inbound-nya hilang/tidak terbaca SAAT ada filter tanggal aktif
-                if (sDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate < sDate)) return false;
-                if (eDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate > eDate)) return false;
-                
+                let dateOk = true;
+                if (sDate || eDate) {
+                    if (d._inboundDate && !isNaN(d._inboundDate)) {
+                        if (sDate && d._inboundDate < sDate) dateOk = false;
+                        if (eDate && d._inboundDate > eDate) dateOk = false;
+                    } else { dateOk = true; } 
+                }
+                if (!dateOk) return false;
                 if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
                 if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
                 if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
                 if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
-                
                 if (search) {
                     const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._service}`.toUpperCase();
                     if (!str.includes(search)) return false;
@@ -837,8 +772,8 @@
             });
 
             window.filteredData.sort((a,b) => {
-                const tA = a._inboundDate ? a._inboundDate.getTime() : 0;
-                const tB = b._inboundDate ? b._inboundDate.getTime() : 0;
+                const tA = a._inboundDate && !isNaN(a._inboundDate) ? a._inboundDate.getTime() : 0;
+                const tB = b._inboundDate && !isNaN(b._inboundDate) ? b._inboundDate.getTime() : 0;
                 return tB - tA; 
             });
 
@@ -846,144 +781,183 @@
             window.updateDashboard();
         };
 
-        // --- DASHBOARD UPDATER ---
         window.updateDashboard = function() {
             const data = window.filteredData;
             const total = data.length;
-            
             document.getElementById('kpiTotalAwb').innerText = formatNumber(total);
             document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
 
-            // Deteksi Data yang rusak tanggalnya
-            const invalidDatesCount = window.rawData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
+            const invalidDatesCount = window.filteredData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
             const invalidEl = document.getElementById('kpiInvalidDate');
             if(invalidDatesCount > 0) {
                 invalidEl.classList.remove('hidden');
-                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${formatNumber(invalidDatesCount)} data disembunyikan (Tanggal Tidak Valid)`;
-            } else {
-                invalidEl.classList.add('hidden');
-            }
+                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Termasuk ${formatNumber(invalidDatesCount)} data tanpa tanggal`;
+            } else { invalidEl.classList.add('hidden'); }
 
-            let onTimeCount = 0;
-            let lateCount = 0;
-            let sumSlaDiff = 0;
-            let validSlaCount = 0;
-
+            let onTimeCount = 0, lateCount = 0, sumSlaDiff = 0, validSlaCount = 0;
             data.forEach(d => {
                 if(d._slaStatus !== 'Unknown') {
                     if (d._slaStatus === 'After EDD') lateCount++;
                     else onTimeCount++; 
-                    
                     sumSlaDiff += d._slaDiff;
                     validSlaCount++;
                 }
             });
 
-            const onTimePct = total > 0 ? ((onTimeCount/total)*100).toFixed(1) : 0;
-            const latePct = total > 0 ? ((lateCount/total)*100).toFixed(1) : 0;
-            const avgSla = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1) : "0";
-
-            document.getElementById('kpiOnTimePct').innerText = `${onTimePct}%`;
+            document.getElementById('kpiOnTimePct').innerText = total > 0 ? ((onTimeCount/total)*100).toFixed(1) + '%' : '0%';
             document.getElementById('kpiOnTimeCount').innerText = formatNumber(onTimeCount);
-            
-            document.getElementById('kpiLatePct').innerText = `${latePct}%`;
+            document.getElementById('kpiLatePct').innerText = total > 0 ? ((lateCount/total)*100).toFixed(1) + '%' : '0%';
             document.getElementById('kpiLateCount').innerText = formatNumber(lateCount);
-
-            document.getElementById('kpiAvgSla').innerText = String(avgSla).replace('.', ',');
+            document.getElementById('kpiAvgSla').innerText = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1).replace('.', ',') : "0";
 
             window.renderSlaTable();
             window.renderDetailTable();
         };
 
         window.renderSlaTable = function() {
-            const agg = {};
+            const aggDest = {};
+            const aggSvc = {
+                'After EDD': { total: 0 },
+                'Last Day': { total: 0 },
+                'Same Day': { total: 0 },
+                '>2 Hari': { total: 0 },
+                'total': { total: 0 }
+            };
+            const servicesSet = new Set();
             let gAfter=0, gLast=0, gSame=0, gOver=0, gTot=0;
-
+            
             window.filteredData.forEach(d => {
-                if (d._slaStatus === 'Unknown') return;
-                const dst = d._dest;
-                if (!agg[dst]) agg[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                const dst = d._dest || 'UNKNOWN';
+                const svc = d._service || 'UNKNOWN';
+                servicesSet.add(svc);
                 
-                if (d._slaStatus === 'After EDD') { agg[dst].after++; gAfter++; }
-                else if (d._slaStatus === 'Last Day') { agg[dst].last++; gLast++; }
-                else if (d._slaStatus === 'Same Day') { agg[dst].same++; gSame++; }
-                else if (d._slaStatus === '>2 Hari') { agg[dst].over++; gOver++; }
+                if (!aggDest[dst]) aggDest[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                if (aggSvc['After EDD'][svc] === undefined) aggSvc['After EDD'][svc] = 0;
+                if (aggSvc['Last Day'][svc] === undefined) aggSvc['Last Day'][svc] = 0;
+                if (aggSvc['Same Day'][svc] === undefined) aggSvc['Same Day'][svc] = 0;
+                if (aggSvc['>2 Hari'][svc] === undefined) aggSvc['>2 Hari'][svc] = 0;
+                if (aggSvc['total'][svc] === undefined) aggSvc['total'][svc] = 0;
                 
-                agg[dst].tot++;
+                if (d._slaStatus === 'After EDD') { aggDest[dst].after++; aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; }
+                else if (d._slaStatus === 'Last Day') { aggDest[dst].last++; aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; }
+                else if (d._slaStatus === 'Same Day') { aggDest[dst].same++; aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; }
+                else if (d._slaStatus === '>2 Hari') { aggDest[dst].over++; aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; }
+                
+                aggDest[dst].tot++; 
+                aggSvc['total'][svc]++;
                 gTot++;
             });
 
-            const table = document.getElementById('slaEddTable');
-            let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+            // 1. Tabel Destinasi
+            const renderTableHtml = (aggData, titleColumn) => {
+                let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+                    <tr>
+                        <th class="text-left text-slate-600 font-bold border-r border-slate-200">${titleColumn}</th>
+                        <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD</th>
+                        <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day</th>
+                        <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day</th>
+                        <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari</th>
+                        <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
+                    </tr>
+                </thead><tbody>`;
+
+                if (gTot === 0) {
+                    return h + `<tr><td colspan="6" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                }
+
+                Object.keys(aggData).sort((a,b) => aggData[b].tot - aggData[a].tot).forEach(k => {
+                    const d = aggData[k];
+                    h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${k}</td>
+                        <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
+                        <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
+                        <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
+                        <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
+                        <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(d.tot)}</td>
+                    </tr>`;
+                });
+
+                h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
+                    <tr>
+                        <td class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 bg-slate-100"><div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
+                    </tr>
+                </tfoot>`;
+                
+                return h;
+            };
+
+            const tableDest = document.getElementById('slaEddTable');
+            if (tableDest) tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
+
+            // 2. Tabel Layanan (Transposed)
+            const tableSvc = document.getElementById('slaServiceTable');
+            if (tableSvc) {
+                const services = [...servicesSet].sort();
+                let hSvc = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+                    <tr>
+                        <th class="text-left text-slate-600 font-bold border-r border-slate-200">SLA</th>`;
+                services.forEach(s => {
+                    hSvc += `<th class="text-center text-slate-600 bg-slate-50 border-r border-slate-200 px-2">${s}</th>`;
+                });
+                hSvc += `<th class="text-center font-extrabold bg-slate-100 text-slate-800 px-2">Total</th></tr></thead><tbody>`;
+
+                if (gTot === 0) {
+                     hSvc += `<tr><td colspan="${services.length + 2}" class="text-center py-8 text-slate-400 font-medium">Tidak ada data</td></tr></tbody>`;
+                } else {
+                    const slaKeys = [
+                        { key: 'After EDD', label: 'After EDD', colorClass: 'text-rose-600' },
+                        { key: 'Last Day', label: 'Last Day', colorClass: 'text-amber-600' },
+                        { key: 'Same Day', label: 'Same Day', colorClass: 'text-emerald-600' },
+                        { key: '>2 Hari', label: '>2 Hari', colorClass: 'text-indigo-600' }
+                    ];
+
+                    slaKeys.forEach(sla => {
+                        hSvc += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                            <td class="font-bold ${sla.colorClass} border-r border-slate-200 valign-middle whitespace-nowrap">${sla.label}</td>`;
+                        services.forEach(s => {
+                            const val = aggSvc[sla.key][s] || 0;
+                            hSvc += `<td class="text-center font-mono py-1.5 border-r border-slate-100 ${val>0?'text-slate-700':'text-slate-300'}">${val > 0 ? formatNumber(val) : '-'}</td>`;
+                        });
+                        hSvc += `<td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(aggSvc[sla.key].total)}</td></tr>`;
+                    });
+
+                    // Footer for Service
+                    hSvc += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
                         <tr>
-                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
-                            <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD <br><span class="text-[9px] font-normal">(Terlambat)</span></th>
-                            <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day <br><span class="text-[9px] font-normal">(Hari H)</span></th>
-                            <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day <br><span class="text-[9px] font-normal">(H-1)</span></th>
-                            <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari <br><span class="text-[9px] font-normal">(Sangat Awal)</span></th>
-                            <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
-                        </tr>
-                    </thead><tbody>`;
-
-            if (gTot === 0) {
-                table.innerHTML = h + `<tr><td colspan="6" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
-                return;
+                            <td class="font-black text-slate-800 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle">TOTAL</td>`;
+                    services.forEach(s => {
+                        const svcTot = aggSvc['total'][s] || 0;
+                        const pct = gTot > 0 ? ((svcTot/gTot)*100).toFixed(1) : 0;
+                        hSvc += `<td class="text-center py-2 border-r border-slate-200">
+                            <div class="font-black text-slate-700 text-[11px] font-mono">${formatNumber(svcTot)}</div>
+                            <div class="text-[9px] font-bold text-slate-400">${pct}%</div>
+                        </td>`;
+                    });
+                    hSvc += `<td class="text-center py-2 bg-slate-100">
+                            <div class="font-black text-slate-900 text-[11px] font-mono">${formatNumber(gTot)}</div>
+                            <div class="text-[9px] font-bold text-slate-500">100%</div>
+                        </td></tr></tfoot>`;
+                }
+                tableSvc.innerHTML = hSvc;
             }
-
-            Object.keys(agg).sort((a,b) => agg[b].tot - agg[a].tot).forEach(k => {
-                const d = agg[k];
-                h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
-                    <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${k}</td>
-                    <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
-                    <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
-                    <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
-                    <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
-                    <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(d.tot)}</td>
-                </tr>`;
-            });
-
-            h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
-                <tr>
-                    <td class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
-                    <td class="text-center py-2 border-r border-slate-200">
-                        <div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div>
-                        <div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div>
-                    </td>
-                    <td class="text-center py-2 border-r border-slate-200">
-                        <div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div>
-                        <div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div>
-                    </td>
-                    <td class="text-center py-2 border-r border-slate-200">
-                        <div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div>
-                        <div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div>
-                    </td>
-                    <td class="text-center py-2 border-r border-slate-200">
-                        <div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div>
-                        <div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div>
-                    </td>
-                    <td class="text-center py-2 bg-slate-100">
-                        <div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div>
-                        <div class="text-[10px] font-bold text-slate-500">100%</div>
-                    </td>
-                </tr>
-            </tfoot>`;
-            table.innerHTML = h;
         };
 
         window.changePage = function(delta) {
             const maxPage = Math.ceil(window.filteredData.length / window.rowsPerPage) || 1;
             let np = window.currentPage + delta;
-            if(np < 1) np = 1;
-            if(np > maxPage) np = maxPage;
-            window.currentPage = np;
-            window.renderDetailTable();
+            if(np < 1) np = 1; if(np > maxPage) np = maxPage;
+            window.currentPage = np; window.renderDetailTable();
         };
 
         window.renderDetailTable = function() {
             const start = (window.currentPage - 1) * window.rowsPerPage;
             const data = window.filteredData.slice(start, start + window.rowsPerPage);
             const tbody = document.getElementById('detailTableBody');
-            
             let html = '';
             data.forEach((d, i) => {
                 let badgeClass = "bg-slate-100 text-slate-500";
@@ -1003,31 +977,24 @@
                     <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
                     <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
-                    <td class="text-center border-l border-slate-200">
-                        <span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span>
-                    </td>
+                    <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
                 </tr>`;
             });
             tbody.innerHTML = html;
-            
             document.getElementById('pageIndicator').innerText = window.currentPage;
             document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
         };
 
-        // --- UPLOAD CSV KE SUPABASE ---
         window.uploadToSupabase = function(file) {
             const overlay = document.getElementById('loadingOverlay');
-            const textEl = document.getElementById('loadingText');
-            const subEl = document.getElementById('loadingSubText');
-            const progressContainer = document.getElementById('fetchProgressContainer');
-            const pbBar = document.getElementById('fetchProgressBar');
-            const pbText = document.getElementById('fetchProgressDetail');
-            const pbPct = document.getElementById('fetchProgressPct');
-            
             overlay.classList.remove('hidden');
-            progressContainer.classList.add('hidden'); // Sembunyikan sebentar saat parsing
-            textEl.textContent = "Membaca CSV Lokal...";
-            subEl.textContent = "Mohon tunggu, jangan tutup halaman ini.";
+            document.getElementById('loadingText').textContent = "Membaca CSV Lokal...";
+
+            if(!supabaseClient) {
+                overlay.classList.add('hidden');
+                window.showToast("Maaf, Supabase tidak dapat terhubung di layar Preview. Gunakan Mode Demo.", "error");
+                return;
+            }
 
             Papa.parse(file, {
                 header: true, skipEmptyLines: true,
@@ -1035,185 +1002,143 @@
                     const rows = results.data;
                     const parsedData = [];
                     
-                    textEl.textContent = "Menyaring Data...";
-                    subEl.textContent = `Ditemukan ${formatNumber(rows.length)} baris. Mempersiapkan ke Server.`;
-
-                    // --- ANTI ERROR: Parsing Tanggal Tahan Banting ---
                     const toSqlDate = (str) => {
                         if(!str) return null;
                         let s = String(str).trim();
-                        
-                        // Kalau format aslinya YYYY-MM-DD
+                        if(!s || s === '-' || s.toLowerCase() === 'null') return null;
+                        if (/^\d{5}$/.test(s)) {
+                            let d = new Date(Math.round((parseInt(s,10) - 25569) * 86400 * 1000));
+                            return isNaN(d.getTime()) ? null : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        }
+                        if (s.includes(':')) s = s.split(' ').filter(p => !p.includes(':')).join(' ');
                         if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
-
-                        // Kalau ada huruf (misal: 10-Mar-26, 10 Mar 26)
-                        if (/[a-zA-Z]/.test(s)) {
-                            s = s.replace(/[-\/]/g, ' ');
-                            const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
-                            const parts = s.toLowerCase().split(/[\s,]+/);
-                            if(parts.length >= 3) {
-                                let d = parts[0].padStart(2, '0');
-                                let mStr = parts[1].substring(0,3);
-                                let m = months[mStr] || 1;
-                                let y = parts[2];
-                                if (y.length === 2) y = '20' + y;
-                                return `${y}-${String(m).padStart(2,'0')}-${d}`;
+                        s = s.replace(/[-\/.]/g, ' ');
+                        const parts = s.split(/[\s,]+/);
+                        if (parts.length >= 3) {
+                            let d, m, y;
+                            if (/[a-zA-Z]/.test(s)) {
+                                const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
+                                d = parseInt(parts[0], 10); m = months[parts[1].substring(0,3).toLowerCase()] || 1; y = parseInt(parts[2], 10);
+                            } else {
+                                if (parts[0].length === 4) { y = parseInt(parts[0], 10); m = parseInt(parts[1], 10); d = parseInt(parts[2], 10); }
+                                else { y = parseInt(parts[2], 10); m = parseInt(parts[1], 10); d = parseInt(parts[0], 10); if (m > 12 && d <= 12) { let t = m; m = d; d = t; } }
                             }
-                        } else {
-                            // Kalau angka saja (14/03/2026 atau 14-03-2026)
-                            let p = s.includes('/') ? s.split(' ')[0].split('/') : s.split(' ')[0].split('-');
-                            if(p.length === 3) {
-                                if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2,'0')}-${p[2].padStart(2,'0')}`;
-                                let y = p[2];
-                                if(y.length === 2) y = '20' + y;
-                                return `${y}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-                            }
+                            if (y < 100) y += 2000;
+                            if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
+                            return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                         }
                         return null;
                     };
 
-                    for (let r of rows) {
-                        const getVal = (possibleNames) => {
-                            for(let n of possibleNames) {
-                                if(r[n] !== undefined) return r[n];
-                                const key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase());
-                                if(key) return r[key];
-                            }
-                            return null;
-                        };
+                    const toSqlTime = (str) => {
+                        if (!str) return null;
+                        const raw = String(str).trim();
+                        const match = raw.match(/([01]?[0-9]|2[0-3])[:;]([0-5][0-9])(?:[:;]([0-5][0-9]))?/);
+                        if (match) {
+                            const h = match[1].padStart(2, '0');
+                            const m = match[2].padStart(2, '0');
+                            const s = match[3] ? match[3].padStart(2, '0') : '00';
+                            return `${h}:${m}:${s}`;
+                        }
+                        return null; 
+                    };
 
+                    for (let r of rows) {
+                        const getVal = (names) => { for(let n of names) { if(r[n] !== undefined) return r[n]; let key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase()); if(key) return r[key]; } return null; };
                         const awb = getVal(['awb_no', 'AWB No', 'No Resi', 'AWB']);
                         if(!awb) continue;
-
-                        const inDateStr = getVal(['Tanggal Inbound', 'inbound_date', 'Tanggal Diterima']);
-                        const inTimeStr = getVal(['Jam', 'Jam Inbound', 'inbound_time']);
-                        const eddStr = getVal(['expect_delivery_tm', 'Target EDD', 'EDD']);
                         
-                        let sqlInDate = toSqlDate(inDateStr);
-                        let sqlEddDate = toSqlDate(eddStr);
+                        const awbStr = String(awb).trim().toUpperCase();
+                        const containerStr = String(getVal(['container_no', 'No Bagseals', 'No MB']) || '').trim().toUpperCase();
+                        const dateStr = toSqlDate(getVal(['inbound_date', 'Tanggal Inbound', 'Tanggal Diterima']));
+                        const timeStr = toSqlTime(getVal(['Jam', 'jam', 'Jam Inbound', 'inbound_time']));
+                        const destStr = String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase();
                         
-                        // Validasi Jam
-                        let rawTime = String(inTimeStr || '').trim();
-                        let sqlInTime = null;
-                        if (rawTime !== '') {
-                            const cleanTime = rawTime.replace(/;/g, ':').split(' ')[0]; 
-                            const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
-                            if (timeRegex.test(cleanTime)) {
-                                const parts = cleanTime.split(':');
-                                const h = parts[0].padStart(2, '0');
-                                const m = parts[1];
-                                const s = parts[2] ? ':' + parts[2] : '';
-                                sqlInTime = `${h}:${m}${s}`;
-                            }
-                        }
+                        // Normalisasi REG menjadi REGULER saat Upload
+                        let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
+                        if (svcInput === 'REG') svcInput = 'REGULER';
+                        
+                        let rowId = `${awbStr}_${containerStr}_${dateStr}_${timeStr}_${destStr}`.replace(/[^a-zA-Z0-9]/g, '_');
 
                         parsedData.push({
-                            awb_no: String(awb).trim(),
-                            container_no: String(getVal(['No Bagseals', 'container_no', 'No MB']) || '').trim(),
-                            inbound_date: sqlInDate,
-                            inbound_time: sqlInTime,
-                            edd_date: sqlEddDate,
-                            origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || '').trim(),
-                            destinasi: String(getVal(['Destinasi', 'destinasi', 'Destination']) || '').trim(),
-                            service: String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || '').trim(),
-                            vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || '').trim()
+                            id: rowId,
+                            awb_no: awbStr,
+                            container_no: containerStr,
+                            inbound_date: dateStr,
+                            Jam: timeStr, 
+                            expect_delivery_tm: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
+                            Origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase(),
+                            Destinasi: destStr,
+                            Service: svcInput,
+                            Vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase()
                         });
                     }
 
-                    if(parsedData.length === 0) {
-                        overlay.classList.add('hidden');
-                        window.showToast("Gagal membaca file CSV. Pastikan kolom sesuai.", "error");
-                        return;
-                    }
-
-                    // --- SMART FILTER: HAPUS DUPLIKAT ---
-                    const existingAwbs = new Set(window.rawData.map(d => d._awb));
-                    const uniqueMap = new Map();
-                    let skipCount = 0;
-
+                    const existingIds = new Set(); window.rawData.forEach(d => existingIds.add(d._id));
+                    const uniqueMap = new Map(); let skipCount = 0, updateCount = 0;
                     parsedData.forEach(row => {
-                        if (existingAwbs.has(row.awb_no)) {
+                        if (existingIds.has(row.id)) {
                             skipCount++; 
-                        } else if (!uniqueMap.has(row.awb_no)) {
-                            uniqueMap.set(row.awb_no, row); 
-                        } else {
+                        } else if (!uniqueMap.has(row.id)) { 
+                            uniqueMap.set(row.id, row); 
+                        } else { 
                             skipCount++; 
                         }
                     });
                     
-                    const finalDataToUpload = Array.from(uniqueMap.values());
+                    const finalData = Array.from(uniqueMap.values());
+                    if (finalData.length === 0) { overlay.classList.add('hidden'); window.showToast(`Semua data sudah ada di database. (Melewati ${formatNumber(skipCount)} duplikat identik)`, "info"); document.getElementById('csvAwbFile').value = ''; return; }
 
-                    if (finalDataToUpload.length === 0) {
-                        overlay.classList.add('hidden');
-                        window.showToast(`Upload dibatalkan: Semua data (${formatNumber(skipCount)} baris) sudah ada di database.`, "info");
-                        document.getElementById('csvAwbFile').value = '';
-                        return;
-                    }
-
-                    // Munculkan Progress Bar untuk Upload
-                    progressContainer.classList.remove('hidden');
-                    textEl.textContent = "Mengunggah ke Supabase...";
-                    subEl.textContent = `Menyimpan ${formatNumber(finalDataToUpload.length)} data baru. (Melewati ${formatNumber(skipCount)} duplikat)`;
-                    if (pbText) pbText.textContent = "Mengunggah data...";
-                    
-                    const CHUNK_SIZE = 1000;
+                    document.getElementById('fetchProgressContainer').classList.remove('hidden');
+                    const CHUNK_SIZE = 500; 
                     let successCount = 0;
-                    const totalToUpload = finalDataToUpload.length;
                     
                     try {
-                        for (let i = 0; i < finalDataToUpload.length; i += CHUNK_SIZE) {
-                            const chunk = finalDataToUpload.slice(i, i + CHUNK_SIZE);
+                        for (let i = 0; i < finalData.length; i += CHUNK_SIZE) {
+                            const chunk = finalData.slice(i, i + CHUNK_SIZE);
+                            let pct = Math.min(Math.round((i / finalData.length) * 100), 100);
+                            document.getElementById('fetchProgressBar').style.width = `${pct}%`;
+                            document.getElementById('fetchProgressPct').textContent = `${pct}%`;
+                            document.getElementById('loadingText').textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
+
+                            let upsertSuccess = false;
+                            let lastErr = null;
                             
-                            let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
-                            if (pbBar) pbBar.style.width = `${pct}%`;
-                            if (pbPct) pbPct.textContent = `${pct}%`;
-                            
-                            textEl.textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
-                            
-                            const { error } = await supabase.from('awb_data').upsert(chunk, { 
-                                onConflict: 'awb_no',
-                                ignoreDuplicates: true
-                            });
-                            if (error) throw error;
-                            
+                            for(let attempt=1; attempt<=3; attempt++) {
+                                try {
+                                    const { error } = await supabaseClient.from('awb_data').upsert(chunk, { onConflict: 'id' });
+                                    if (error) throw error;
+                                    upsertSuccess = true;
+                                    break;
+                                } catch(err) {
+                                    lastErr = err;
+                                    await new Promise(r => setTimeout(r, 1500 * attempt));
+                                }
+                            }
+
+                            if(!upsertSuccess) throw lastErr;
+
                             successCount += chunk.length;
-                            // Jeda supaya server aman
-                            await new Promise(r => setTimeout(r, 200));
+                            await new Promise(r => setTimeout(r, 250));
                         }
                         
-                        if (pbBar) pbBar.style.width = `100%`;
-                        if (pbText) pbText.textContent = `Selesai diunggah!`;
-                        if (pbPct) pbPct.textContent = `100%`;
-                        textEl.textContent = `Selesai!`;
+                        document.getElementById('fetchProgressBar').style.width = `100%`; document.getElementById('fetchProgressPct').textContent = `100%`;
                         await new Promise(r => setTimeout(r, 400));
 
                         overlay.classList.add('hidden');
-                        window.showToast(`Upload Berhasil! ${formatNumber(successCount)} data AWB tersimpan.`, "success");
-                        
+                        window.showToast(`Update Berhasil! ${formatNumber(successCount)} Baris Kegiatan Tersimpan.`, "success");
                         window.fetchDataFromSupabase();
-                        
                     } catch (err) {
-                        console.error(err);
+                        console.error("Upload Error:", err);
                         overlay.classList.add('hidden');
-                        let errMsg = err.message || "Error saat mengunggah data ke Supabase.";
-                        if (err.message && err.message.includes("Failed to fetch")) {
-                            errMsg = "Upload gagal (Failed to fetch). Pastikan Supabase Anda tidak Paused.";
-                        }
-                        window.showToast(errMsg, "error");
+                        window.showToast("Gagal mengunggah beberapa data. Silakan cek koneksi.", "error");
                     }
-                    
-                    document.getElementById('csvAwbFile').value = '';
                 }
             });
         };
 
-        document.getElementById('csvAwbFile').addEventListener('change', function(e) {
-            if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]);
-        });
-
-        // Initialize Call
+        document.getElementById('csvAwbFile').addEventListener('change', (e) => { if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]); });
         window.fetchDataFromSupabase();
-
     </script>
 </body>
 </html>
