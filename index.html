@@ -102,7 +102,7 @@
 <body class="flex flex-col min-h-screen selection:bg-pink-100 selection:text-pink-700">
 
     <!-- LOADING OVERLAY -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
+    <div id="loadingOverlay" class="loading-overlay hidden z-[9999]">
         <div class="flex justify-center items-center mb-6">
             <div class="loader"><svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg></div>
             <div class="loader triangle"><svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg></div>
@@ -125,6 +125,53 @@
 
     <!-- TOAST -->
     <div id="toast-container" class="fixed top-0 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm"></div>
+
+    <!-- MODAL HAPUS DATA -->
+    <div id="deleteModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-rose-600 shadow-sm">
+                    <i class="fa-solid fa-trash-can text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">Hapus Data</h3>
+                <p class="text-xs text-slate-500 mt-1">Pilih kriteria data yang ingin dihapus</p>
+            </div>
+            <div class="relative mb-4">
+                <label class="input-label mb-2">Tanggal Inbound</label>
+                <input type="date" id="deleteDateInput" class="w-full text-center py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-rose-500 outline-none transition-all text-sm font-bold text-slate-700">
+            </div>
+            <div class="relative mb-6">
+                <label class="input-label mb-2">Destinasi</label>
+                <select id="deleteDestInput" class="w-full text-center py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-rose-500 outline-none transition-all text-sm font-bold text-slate-700 cursor-pointer">
+                    <option value="ALL">Semua Destinasi</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="window.closeDeleteModal()" class="py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="window.confirmDelete()" class="py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 shadow-lg transition-colors">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PASSWORD -->
+    <div id="passwordModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[320px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="passwordModalContent">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-600 shadow-sm">
+                    <i class="fa-solid fa-lock text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">Security Check</h3>
+                <p class="text-xs text-slate-500 mt-1">Masukkan Password (PIN)</p>
+            </div>
+            <div class="relative mb-6">
+                <input type="password" id="passwordInput" class="w-full text-center py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-slate-500 outline-none transition-all text-sm font-mono tracking-[0.5em]" placeholder="••••••" onkeypress="if(event.key === 'Enter') window.submitPassword()">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="window.closePasswordModal()" class="py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="window.submitPassword()" class="py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 shadow-lg transition-colors">Verifikasi</button>
+            </div>
+        </div>
+    </div>
 
     <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm h-[72px]">
@@ -153,6 +200,12 @@
                     </button>
                     <button onclick="window.fetchDataFromSupabase()" class="bg-white border border-slate-200 text-slate-500 btn-header-icon hover:bg-slate-50" title="Refresh Data">
                         <i class="fa-solid fa-arrows-rotate text-[15px]"></i>
+                    </button>
+                    
+                    <div class="h-5 w-[2px] bg-slate-200 mx-1 rounded-full"></div>
+                    
+                    <button onclick="window.openDeleteModal()" class="bg-white border border-rose-200 text-rose-500 btn-header-icon hover:bg-rose-50" title="Hapus Data Spesifik">
+                        <i class="fa-solid fa-trash-can text-[15px]"></i>
                     </button>
                 </div>
                 <input type="file" id="csvAwbFile" accept=".csv" class="hidden">
@@ -232,7 +285,7 @@
                 </div>
             </div>
 
-            <!-- 2. KPI WIDGETS (DIPULIHKAN PENUH) -->
+            <!-- 2. KPI WIDGETS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                 <div class="fresh-card p-6 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
@@ -285,7 +338,7 @@
                 </div>
             </div>
 
-            <!-- 3. DUA TABEL SLA BY EDD STATUS (DESTINASI & LAYANAN) -->
+            <!-- 3. TABEL SLA BY EDD STATUS (DESTINASI & LAYANAN) -->
             <div class="grid grid-cols-1 lg:grid-cols-10 gap-5">
                 <!-- Tabel Berdasarkan Destinasi (70%) -->
                 <div class="fresh-card overflow-hidden flex flex-col lg:col-span-7">
@@ -314,6 +367,19 @@
                 </div>
             </div>
 
+            <!-- TABEL SLA BY EDD STATUS (DESTINATION STAGING) - FULL 1 KOLOM -->
+            <div class="fresh-card overflow-hidden flex flex-col mb-5">
+                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
+                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                        <span class="bg-teal-100 p-1.5 rounded-lg text-teal-600"><i class="fa-solid fa-map-location-dot"></i></span>
+                        SLA by EDD Status (Dest. Staging)
+                    </h3>
+                </div>
+                <div class="overflow-auto custom-scrollbar max-h-[450px]">
+                    <table class="fresh-table w-full relative" id="slaDestStagingTable"></table>
+                </div>
+            </div>
+
             <!-- 4. DETAIL DATA AWB -->
             <div class="fresh-card overflow-hidden flex flex-col mb-10">
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
@@ -322,6 +388,9 @@
                         Detail Kegiatan AWB
                     </h3>
                     <div class="flex items-center gap-3">
+                        <button onclick="window.downloadManifestCSV()" class="text-[10px] font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 transition shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-csv"></i> Unduh CSV
+                        </button>
                         <div class="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-100">
                             <button onclick="window.changePage(-1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white text-slate-400 hover:text-[#E81C65] hover:shadow-sm transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
                             <span id="pageIndicator" class="px-3 text-[10px] font-mono font-bold text-slate-500">1</span>
@@ -341,6 +410,7 @@
                                 <th class="text-center group-col bg-[#3ECF8E]/20 text-emerald-800">Target EDD</th>
                                 <th class="text-left group-col">Origin</th>
                                 <th class="text-left group-col">Destinasi</th>
+                                <th class="text-left group-col bg-teal-50">Dest. Staging</th>
                                 <th class="text-left group-col">Layanan</th>
                                 <th class="text-left group-col">Vendor</th>
                                 <th class="text-center font-extrabold w-24 border-l border-slate-200">Status SLA</th>
@@ -378,6 +448,110 @@
         window.currentPage = 1;
         window.rowsPerPage = 150;
         document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
+        // --- SISTEM MODAL (TAMPILAN & LOGIKA HAPUS) ---
+        window.openDeleteModal = function() {
+            document.getElementById('deleteModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('deleteModal').classList.remove('opacity-0');
+                document.getElementById('deleteModalContent').classList.remove('scale-95');
+                document.getElementById('deleteModalContent').classList.add('scale-100');
+            }, 10);
+        };
+        
+        window.closeDeleteModal = function() {
+            document.getElementById('deleteModal').classList.add('opacity-0');
+            document.getElementById('deleteModalContent').classList.remove('scale-100');
+            document.getElementById('deleteModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('deleteModal').classList.add('hidden'), 300);
+        };
+
+        window.confirmDelete = function() {
+             const date = document.getElementById('deleteDateInput').value;
+             if(!date) return window.showToast("Pilih tanggal terlebih dahulu!", "error");
+             window.closeDeleteModal();
+             window.openPasswordModal();
+        };
+
+        window.openPasswordModal = function() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('passwordModal').classList.remove('opacity-0');
+                document.getElementById('passwordModalContent').classList.remove('scale-95');
+                document.getElementById('passwordModalContent').classList.add('scale-100');
+            }, 10);
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+        };
+
+        window.closePasswordModal = function() {
+            document.getElementById('passwordModal').classList.add('opacity-0');
+            document.getElementById('passwordModalContent').classList.remove('scale-100');
+            document.getElementById('passwordModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
+        };
+
+        window.submitPassword = function() {
+            const pwd = document.getElementById('passwordInput').value;
+            if (pwd === "TAB123") {
+                window.closePasswordModal();
+                const date = document.getElementById('deleteDateInput').value;
+                const dest = document.getElementById('deleteDestInput').value;
+                if(window.deleteDataForDate) window.deleteDataForDate(date, dest);
+            } else {
+                window.showToast("Password Salah!", "error");
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        };
+
+        // --- FUNGSI UTAMA PENGHAPUSAN DATA KE SUPABASE (METODE BARU - ANTI ERROR BAD REQUEST) ---
+        window.deleteDataForDate = async function(dateString, destString) {
+            if(!supabaseClient) return window.showToast("Koneksi Supabase diblokir Pratinjau.", "error");
+
+            // Tampilkan UI Loading
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbPct = document.getElementById('fetchProgressPct');
+            const pbText = document.getElementById('fetchProgressDetail');
+            
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Menghapus Data...";
+            
+            pbBar.style.width = `50%`;
+            pbPct.textContent = `50%`;
+            pbText.textContent = `Mengeksekusi perintah hapus di database...`;
+
+            try {
+                // SQL Direct Delete (Menghapus langsung berdasarkan tanggal dan destinasi tanpa kirim array ID panjang)
+                let query = supabaseClient.from('awb_data').delete().eq('inbound_date', dateString);
+                
+                if (destString !== 'ALL') {
+                    // Karena nama kolom di database Anda menggunakan huruf besar 'Destinasi'
+                    query = query.eq('Destinasi', destString);
+                }
+
+                const { error } = await query;
+                
+                if (error) throw error;
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+                
+                overlay.classList.add('hidden');
+                window.showToast(`Berhasil menghapus data pada tanggal ${dateString}`, "success");
+                
+                // Segarkan ulang data dari database setelah penghapusan
+                window.fetchDataFromSupabase();
+                
+            } catch(e) {
+                console.error("Delete Error:", e);
+                overlay.classList.add('hidden');
+                window.showToast("Gagal menghapus data dari Supabase.", "error");
+            }
+        };
 
         window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -445,6 +619,14 @@
             return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
         };
 
+        // Format untuk Export CSV YYYY-MM-DD
+        const formatDateForCsv = (d) => {
+            if (d instanceof Date && !isNaN(d)) {
+                return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            }
+            return '-';
+        };
+
         const calculateSlaStatus = (inboundDate, eddDate) => {
             if (!inboundDate || !eddDate || isNaN(inboundDate) || isNaN(eddDate)) {
                 return { status: "Unknown", diff: 0 };
@@ -464,6 +646,7 @@
             document.getElementById('loadingOverlay').classList.add('hidden');
             const dummyData = [];
             const dests = ['CGK', 'UPG', 'BPN', 'MDC', 'KDI', 'AMQ', 'PLW', 'TRK'];
+            const destStagings = ['CGK-STG', 'UPG-STG', 'BPN-STG', 'MDC-STG'];
             const origins = ['MAKASSAR', 'JAKARTA', 'SURABAYA', 'BALIKPAPAN'];
             const vendors = ['LION', 'GARUDA', 'CITILINK', 'SRIWIJAYA', 'PELNI'];
             const services = ['REGULER', 'ECO', 'EXPRESS'];
@@ -481,6 +664,7 @@
                     _eddDate: edd,
                     _origin: origins[Math.floor(Math.random()*origins.length)],
                     _dest: dests[Math.floor(Math.random()*dests.length)],
+                    _destStaging: destStagings[Math.floor(Math.random()*destStagings.length)],
                     _service: services[Math.floor(Math.random()*services.length)],
                     _vendor: vendors[Math.floor(Math.random()*vendors.length)],
                     _slaStatus: calculateSlaStatus(inbound, edd).status,
@@ -494,7 +678,7 @@
                     _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
                     _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
                     _inboundDate: null, _inboundTime: '-', _eddDate: null,
-                    _origin: origins[0], _dest: dests[0], _service: services[0], _vendor: vendors[0],
+                    _origin: origins[0], _dest: dests[0], _destStaging: destStagings[0], _service: services[0], _vendor: vendors[0],
                     _slaStatus: "Unknown", _slaDiff: 0
                 });
             }
@@ -541,7 +725,6 @@
                 document.getElementById('loadingText').textContent = "Memuat 2 Minggu Terakhir...";
 
                 while (isFetchingRecent) {
-                    // Maksimal simulasi loader tahap 1 adalah 50%
                     let pct = totalData > 0 ? Math.min(Math.round((recentData.length / totalData) * 100), 50) : 0;
                     pbBar.style.width = `${pct}%`;
                     pbText.textContent = `Menarik ${recentData.length.toLocaleString('id-ID')} Data Terbaru`;
@@ -595,10 +778,9 @@
                 let fromOld = 0;
                 let isFetchingOld = true;
                 
-                // Buat indikator notifikasi latar belakang
                 const bgIndicator = document.createElement('div');
                 bgIndicator.id = "bgFetchIndicator";
-                bgIndicator.className = "fixed bottom-6 right-6 bg-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-200 text-xs font-bold text-slate-600 z-50 flex items-center gap-4 animate-fade-in-up";
+                bgIndicator.className = "fixed bottom-6 right-6 bg-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-200 text-xs font-bold text-slate-600 z-[99] flex items-center gap-4 animate-fade-in-up";
                 bgIndicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-indigo-500 text-xl"></i> <div><p class="text-slate-800 text-sm">Menyinkronkan Riwayat...</p><p id="bgFetchText" class="text-[11px] text-slate-400 font-medium">Mengunduh: 0 baris</p></div>`;
                 document.body.appendChild(bgIndicator);
 
@@ -633,7 +815,6 @@
                         if (data.length < step) isFetchingOld = false;
                     } else { isFetchingOld = false; }
 
-                    // Beri jeda lebih lama agar operasi Dasbor oleh user tidak lag
                     await new Promise(r => setTimeout(r, 400)); 
                 }
 
@@ -672,6 +853,7 @@
             
             dataFromDb.forEach(row => {
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
+                const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
                 const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
                 // MENGGABUNGKAN 'REG' MENJADI 'REGULER'
@@ -695,8 +877,8 @@
                     _id: row.id || row._id,
                     _awb: awb, _container: container, _inboundDate: inboundDt,
                     _inboundTime: inboundTime,
-                    _eddDate: eddDt, _origin: org, _dest: dest, _service: svc,
-                    _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff
+                    _eddDate: eddDt, _origin: org, _dest: dest, _destStaging: destStaging, 
+                    _service: svc, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff
                 });
             });
 
@@ -708,6 +890,15 @@
             populateDropdown('filterDest', destSet);
             populateDropdown('filterOrigin', orgSet);
             populateDropdown('filterService', svcSet);
+
+            // POPULATE DROPDOWN UNTUK MODAL HAPUS (DELETE)
+            const deleteDestSelect = document.getElementById('deleteDestInput');
+            if (deleteDestSelect) {
+                const currentVal = deleteDestSelect.value;
+                deleteDestSelect.innerHTML = '<option value="ALL">Semua Destinasi</option>';
+                [...destSet].sort().forEach(val => { deleteDestSelect.innerHTML += `<option value="${val}">${val}</option>`; });
+                if ([...destSet].includes(currentVal)) deleteDestSelect.value = currentVal;
+            }
 
             let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
@@ -765,7 +956,7 @@
                 if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
                 if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
                 if (search) {
-                    const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._service}`.toUpperCase();
+                    const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._destStaging} ${d._service}`.toUpperCase();
                     if (!str.includes(search)) return false;
                 }
                 return true;
@@ -816,6 +1007,7 @@
 
         window.renderSlaTable = function() {
             const aggDest = {};
+            const aggDestStaging = {};
             const aggSvc = {
                 'After EDD': { total: 0 },
                 'Last Day': { total: 0 },
@@ -828,27 +1020,43 @@
             
             window.filteredData.forEach(d => {
                 const dst = d._dest || 'UNKNOWN';
+                const dstStg = d._destStaging || 'UNKNOWN';
                 const svc = d._service || 'UNKNOWN';
                 servicesSet.add(svc);
                 
                 if (!aggDest[dst]) aggDest[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                if (!aggDestStaging[dstStg]) aggDestStaging[dstStg] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                
                 if (aggSvc['After EDD'][svc] === undefined) aggSvc['After EDD'][svc] = 0;
                 if (aggSvc['Last Day'][svc] === undefined) aggSvc['Last Day'][svc] = 0;
                 if (aggSvc['Same Day'][svc] === undefined) aggSvc['Same Day'][svc] = 0;
                 if (aggSvc['>2 Hari'][svc] === undefined) aggSvc['>2 Hari'][svc] = 0;
                 if (aggSvc['total'][svc] === undefined) aggSvc['total'][svc] = 0;
                 
-                if (d._slaStatus === 'After EDD') { aggDest[dst].after++; aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; }
-                else if (d._slaStatus === 'Last Day') { aggDest[dst].last++; aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; }
-                else if (d._slaStatus === 'Same Day') { aggDest[dst].same++; aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; }
-                else if (d._slaStatus === '>2 Hari') { aggDest[dst].over++; aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; }
+                if (d._slaStatus === 'After EDD') { 
+                    aggDest[dst].after++; aggDestStaging[dstStg].after++; 
+                    aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; 
+                }
+                else if (d._slaStatus === 'Last Day') { 
+                    aggDest[dst].last++; aggDestStaging[dstStg].last++; 
+                    aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; 
+                }
+                else if (d._slaStatus === 'Same Day') { 
+                    aggDest[dst].same++; aggDestStaging[dstStg].same++; 
+                    aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; 
+                }
+                else if (d._slaStatus === '>2 Hari') { 
+                    aggDest[dst].over++; aggDestStaging[dstStg].over++; 
+                    aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; 
+                }
                 
                 aggDest[dst].tot++; 
+                aggDestStaging[dstStg].tot++;
                 aggSvc['total'][svc]++;
                 gTot++;
             });
 
-            // 1. Tabel Destinasi
+            // Fungsi Pembantu Render Tabel Format Destinasi & Staging
             const renderTableHtml = (aggData, titleColumn) => {
                 let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
                     <tr>
@@ -891,10 +1099,15 @@
                 return h;
             };
 
+            // Render Tabel Destinasi
             const tableDest = document.getElementById('slaEddTable');
             if (tableDest) tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
 
-            // 2. Tabel Layanan (Transposed)
+            // Render Tabel Destination Staging
+            const tableDestStaging = document.getElementById('slaDestStagingTable');
+            if (tableDestStaging) tableDestStaging.innerHTML = renderTableHtml(aggDestStaging, "Dest. Staging");
+
+            // Render Tabel Layanan (Transposed)
             const tableSvc = document.getElementById('slaServiceTable');
             if (tableSvc) {
                 const services = [...servicesSet].sort();
@@ -926,7 +1139,6 @@
                         hSvc += `<td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(aggSvc[sla.key].total)}</td></tr>`;
                     });
 
-                    // Footer for Service
                     hSvc += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
                         <tr>
                             <td class="font-black text-slate-800 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle">TOTAL</td>`;
@@ -975,6 +1187,7 @@
                     <td class="text-center font-bold text-emerald-700 border-r border-slate-100 bg-emerald-50/20 group-col">${formatDateToDisplay(d._eddDate)}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._origin}</td>
                     <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
+                    <td class="font-bold text-teal-700 border-r border-slate-100 bg-teal-50 group-col">${d._destStaging}</td>
                     <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
                     <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
@@ -983,6 +1196,47 @@
             tbody.innerHTML = html;
             document.getElementById('pageIndicator').innerText = window.currentPage;
             document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
+        };
+
+        window.downloadManifestCSV = function() {
+            if (!window.filteredData || window.filteredData.length === 0) {
+                window.showToast("Tidak ada data untuk diunduh", "info");
+                return;
+            }
+
+            const headers = [
+                "No AWB", "No Container", "Tanggal Inbound", "Jam Inbound", "Target EDD", 
+                "Origin", "Destinasi", "Destinasi Staging", "Layanan", "Vendor", "Status SLA"
+            ];
+
+            const csvRows = window.filteredData.map(d => {
+                return [
+                    d._awb || '-',
+                    d._container || '-',
+                    formatDateForCsv(d._inboundDate),
+                    d._inboundTime || '-',
+                    formatDateForCsv(d._eddDate),
+                    d._origin || '-',
+                    d._dest || '-',
+                    d._destStaging || '-',
+                    d._service || '-',
+                    d._vendor || '-',
+                    d._slaStatus || '-'
+                ].map(val => `"${val}"`).join(','); 
+            });
+
+            const csvContent = [headers.join(','), ...csvRows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Laporan_AWB_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            window.showToast("Mendownload CSV...", "success");
         };
 
         window.uploadToSupabase = function(file) {
@@ -1053,6 +1307,7 @@
                         const dateStr = toSqlDate(getVal(['inbound_date', 'Tanggal Inbound', 'Tanggal Diterima']));
                         const timeStr = toSqlTime(getVal(['Jam', 'jam', 'Jam Inbound', 'inbound_time']));
                         const destStr = String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase();
+                        const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || 'N/A').trim().toUpperCase();
                         
                         // Normalisasi REG menjadi REGULER saat Upload
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
@@ -1069,6 +1324,7 @@
                             expect_delivery_tm: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
                             Origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase(),
                             Destinasi: destStr,
+                            destination_staging: destStagingStr, // Menyimpan kolom baru ke Supabase
                             Service: svcInput,
                             Vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase()
                         });
