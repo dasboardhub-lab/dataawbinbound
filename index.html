@@ -32,6 +32,7 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
+        /* Card Styles */
         .fresh-card { 
             background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px); 
@@ -42,6 +43,7 @@
         }
         .fresh-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -5px rgba(148, 163, 184, 0.2); }
 
+        /* Inputs */
         .fresh-input { 
             background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; 
             padding: 8px 12px; font-size: 12px; font-weight: 500; color: #334155; 
@@ -49,6 +51,7 @@
         }
         .fresh-input:focus { background: #FFFFFF; border-color: #E81C65; box-shadow: 0 0 0 3px rgba(232, 28, 101, 0.15); }
 
+        /* Buttons */
         .btn-magenta { 
             background: linear-gradient(135deg, #E81C65 0%, #C01451 100%); 
             color: white; padding: 8px 16px; border-radius: 12px; font-weight: 600; font-size: 12px; 
@@ -63,6 +66,7 @@
         }
         .btn-header-icon:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
+        /* Table */
         .fresh-table th { 
             text-transform: uppercase; font-size: 10px; font-weight: 700; color: #64748B; 
             letter-spacing: 0.05em; padding: 14px 16px; background: #F8FAFC; border-bottom: 2px solid #94a3b8; 
@@ -72,6 +76,7 @@
         .fresh-table tr:hover td { background-color: #F1F5F9; }
         .group-col { background-color: #FFFFFF; border-right: 1px solid #cbd5e1; }
         
+        /* Animations & Utilities */
         @keyframes slideDown { from { transform: translate(-50%, -150%); opacity: 0; } to { transform: translate(-50%, 20px); opacity: 1; } }
         .toast-animate { animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         .animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
@@ -80,21 +85,80 @@
         .input-label { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; margin-left: 2px; }
         .sticky-filter-wrapper { position: sticky; top: 72px; z-index: 30; background-color: #F8FAFC; margin-left: -1rem; margin-right: -1rem; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); }
         
-        /* Loader Styles */
-        .loader { --path: #2f3545; --dot: #E81C65; --duration: 3s; width: 44px; height: 44px; position: relative; display: inline-block; margin: 0 16px; }
-        .loader:before { content: ""; width: 6px; height: 6px; border-radius: 50%; position: absolute; display: block; background: var(--dot); top: 37px; left: 19px; transform: translate(-18px, -18px); animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
-        .loader svg { display: block; width: 100%; height: 100%; }
-        .loader svg rect, .loader svg polygon, .loader svg circle { fill: none; stroke: var(--path); stroke-width: 10px; stroke-linejoin: round; stroke-linecap: round; }
-        .loader svg polygon { stroke-dasharray: 145 76 145 76; stroke-dashoffset: 0; animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
-        .loader svg rect { stroke-dasharray: 192 64 192 64; stroke-dashoffset: 0; animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
-        .loader svg circle { stroke-dasharray: 150 50 150 50; stroke-dashoffset: 75; animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
+        /* --- CUSTOM SVG LOADER --- */
+        .loader {
+            --path: #2f3545;
+            --dot: #E81C65; /* Warna magenta */
+            --duration: 3s;
+            width: 44px;
+            height: 44px;
+            position: relative;
+            display: inline-block;
+            margin: 0 16px;
+        }
+
+        .loader:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            position: absolute;
+            display: block;
+            background: var(--dot);
+            top: 37px;
+            left: 19px;
+            transform: translate(-18px, -18px);
+            animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader svg rect,
+        .loader svg polygon,
+        .loader svg circle {
+            fill: none;
+            stroke: var(--path);
+            stroke-width: 10px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        .loader svg polygon {
+            stroke-dasharray: 145 76 145 76;
+            stroke-dashoffset: 0;
+            animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg rect {
+            stroke-dasharray: 192 64 192 64;
+            stroke-dashoffset: 0;
+            animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
+        .loader svg circle {
+            stroke-dasharray: 150 50 150 50;
+            stroke-dashoffset: 75;
+            animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
         .loader.triangle { width: 48px; }
-        .loader.triangle:before { left: 21px; transform: translate(-10px, -18px); animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
+        .loader.triangle:before {
+            left: 21px;
+            transform: translate(-10px, -18px);
+            animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+        }
+
         @keyframes pathTriangle { 33% { stroke-dashoffset: 74; } 66% { stroke-dashoffset: 147; } 100% { stroke-dashoffset: 221; } }
         @keyframes dotTriangle { 33% { transform: translate(0, 0); } 66% { transform: translate(10px, -18px); } 100% { transform: translate(-10px, -18px); } }
         @keyframes pathRect { 25% { stroke-dashoffset: 64; } 50% { stroke-dashoffset: 128; } 75% { stroke-dashoffset: 192; } 100% { stroke-dashoffset: 256; } }
         @keyframes dotRect { 25% { transform: translate(0, 0); } 50% { transform: translate(18px, -18px); } 75% { transform: translate(0, -36px); } 100% { transform: translate(-18px, -18px); } }
         @keyframes pathCircle { 25% { stroke-dashoffset: 125; } 50% { stroke-dashoffset: 175; } 75% { stroke-dashoffset: 225; } 100% { stroke-dashoffset: 275; } }
+        
+        /* --- AESTHETIC PROGRESS BAR --- */
         @keyframes shimmer { 0% { transform: skewX(-20deg) translateX(-150%); } 100% { transform: skewX(-20deg) translateX(250%); } }
         .progress-glow { box-shadow: 0 0 12px rgba(232, 28, 101, 0.5); }
     </style>
@@ -103,13 +167,24 @@
 
     <!-- LOADING OVERLAY -->
     <div id="loadingOverlay" class="loading-overlay hidden">
+        
+        <!-- Custom SVG Animation Loaders -->
         <div class="flex justify-center items-center mb-6">
-            <div class="loader"><svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg></div>
-            <div class="loader triangle"><svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg></div>
-            <div class="loader"><svg viewBox="0 0 80 80"><circle id="test" cx="40" cy="40" r="32"></circle></svg></div>
+            <div class="loader">
+                <svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg>
+            </div>
+            <div class="loader triangle">
+                <svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg>
+            </div>
+            <div class="loader">
+                <svg viewBox="0 0 80 80"><circle id="test" cx="40" cy="40" r="32"></circle></svg>
+            </div>
         </div>
+
         <h3 class="text-slate-800 font-extrabold text-xl tracking-wide" id="loadingText">Processing Data...</h3>
         <p class="text-slate-500 text-sm mt-1 font-medium" id="loadingSubText">Menghubungkan ke Supabase</p>
+
+        <!-- Aesthetic Progress Bar -->
         <div id="fetchProgressContainer" class="hidden w-80 mt-6 flex flex-col items-center animate-fade-in-up">
             <div class="w-full bg-slate-200/80 rounded-full h-3 overflow-hidden shadow-inner relative border border-slate-300/50">
                 <div id="fetchProgressBar" class="bg-gradient-to-r from-[#E81C65] to-[#C01451] h-full rounded-full transition-all duration-500 ease-out w-0 relative overflow-hidden progress-glow">
@@ -121,6 +196,7 @@
                 <span id="fetchProgressPct" class="text-[11px] font-black text-[#E81C65]">0%</span>
             </div>
         </div>
+
     </div>
 
     <!-- TOAST -->
@@ -147,6 +223,7 @@
                     <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Powered by Supabase</span>
                 </div>
                 <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
+                
                 <div class="flex items-center gap-2">
                     <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
                         <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
@@ -162,6 +239,7 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow w-full max-w-[1600px] mx-auto px-4 py-4">
+        
         <!-- INITIAL EMPTY STATE -->
         <div id="initialState" class="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in-up">
             <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center border-2 border-dashed border-emerald-200 shadow-xl shadow-emerald-50 mx-auto mb-6">
@@ -173,15 +251,22 @@
 
         <!-- DASHBOARD CONTENT -->
         <div id="dashboardContent" class="hidden space-y-6">
+            
+            <!-- 1. FILTERS (STICKY) -->
             <div class="sticky-filter-wrapper">
                 <div class="fresh-card p-5">
                     <div class="flex flex-col xl:flex-row gap-5 justify-between items-end">
+                        
+                        <!-- Left: Search -->
                         <div class="w-full xl:w-80 group relative">
                             <span class="input-label">Cari AWB / Container / Vendor</span>
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-[34px] text-slate-400 text-xs group-focus-within:text-[#E81C65] transition-colors"></i>
                             <input type="text" id="globalSearch" placeholder="Ketik nomor resi..." class="fresh-input w-full pl-9 bg-white shadow-sm" oninput="window.applyFilters()">
                         </div>
+
+                        <!-- Right: Filters -->
                         <div class="w-full xl:flex-1 flex flex-wrap gap-3 justify-end items-end">
+                            <!-- Date Range -->
                             <div>
                                 <span class="input-label">Tgl Inbound</span>
                                 <div class="flex items-center bg-white rounded-xl border border-slate-200 p-1 shadow-sm h-[38px] justify-between min-w-[220px]">
@@ -190,6 +275,8 @@
                                     <input type="date" id="filterEndDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
                                 </div>
                             </div>
+
+                            <!-- SLA Status Filter -->
                             <div class="w-32">
                                 <span class="input-label">Status SLA</span>
                                 <select id="filterStatus" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
@@ -201,24 +288,32 @@
                                     <option value="Unknown">Tidak Diketahui</option>
                                 </select>
                             </div>
+
+                            <!-- Origin Filter -->
                             <div class="w-32">
                                 <span class="input-label">Origin</span>
                                 <select id="filterOrigin" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Origin</option>
                                 </select>
                             </div>
+
+                            <!-- Destinasi Filter -->
                             <div class="w-32">
                                 <span class="input-label">Destinasi</span>
                                 <select id="filterDest" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Destinasi</option>
                                 </select>
                             </div>
+
+                            <!-- Service Filter -->
                             <div class="w-32">
                                 <span class="input-label">Layanan</span>
                                 <select id="filterService" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
                                     <option value="ALL">Semua Layanan</option>
                                 </select>
                             </div>
+
+                            <!-- Reset -->
                             <button onclick="window.resetFilters()" class="w-[38px] h-[38px] flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-emerald-600 text-slate-400 transition-all shadow-sm" title="Reset Filters">
                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                             </button>
@@ -229,6 +324,7 @@
 
             <!-- 2. KPI WIDGETS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                <!-- Total AWB -->
                 <div class="fresh-card p-6 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
                     <div class="relative z-10">
@@ -236,10 +332,13 @@
                         <h3 class="text-4xl font-extrabold text-slate-800 tracking-tight mt-1" id="kpiTotalAwb">0</h3>
                         <div class="mt-2 flex flex-col gap-1">
                             <div class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-lg inline-block w-fit">Total di Database: <span id="kpiGrandTotal" class="font-bold text-slate-700">0</span> AWB</div>
+                            <!-- Peringatan jika ada tanggal yang rusak -->
                             <div id="kpiInvalidDate" class="hidden text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg w-fit border border-rose-100"></div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Kinerja Tepat Waktu -->
                 <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-emerald-500">
                     <div class="relative z-10 flex flex-col h-full justify-between">
                         <p class="text-[10px] font-bold text-emerald-600/70 uppercase tracking-widest">Performa Tepat Waktu</p>
@@ -251,6 +350,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Kinerja Terlambat -->
                 <div class="fresh-card p-6 relative overflow-hidden group border-b-4 border-rose-500">
                     <div class="relative z-10 flex flex-col h-full justify-between">
                         <p class="text-[10px] font-bold text-rose-600/70 uppercase tracking-widest">Performa Terlambat (After EDD)</p>
@@ -262,6 +363,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Rata-rata Keterlambatan -->
                 <div class="fresh-card p-6 relative overflow-hidden group bg-slate-900 text-white">
                     <div class="absolute right-0 top-0 p-4 opacity-10"><i class="fa-solid fa-stopwatch text-6xl text-white"></i></div>
                     <div class="relative z-10 flex flex-col h-full justify-between">
@@ -286,7 +389,9 @@
                     </h3>
                 </div>
                 <div class="overflow-auto custom-scrollbar max-h-[450px]">
-                    <table class="fresh-table w-full relative" id="slaEddTable"></table>
+                    <table class="fresh-table w-full relative" id="slaEddTable">
+                        <!-- Disuntik lewat JS -->
+                    </table>
                 </div>
             </div>
 
@@ -329,6 +434,7 @@
                     Menampilkan <span id="showingCount" class="text-slate-600">0</span> baris
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -346,18 +452,20 @@
             console.warn("Supabase tidak valid.");
         }
 
+        // --- GLOBAL VARIABLES ---
         window.rawData = [];
         window.filteredData = [];
         window.currentPage = 1;
         window.rowsPerPage = 150;
         document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
+        // --- UTILITIES ---
         window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' : 
                        type === 'error' ? '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>' : 
-                       (type === 'warning' ? '<i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>' : '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>');
+                       '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>';
 
             toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3 bg-white rounded-2xl shadow-lg border border-slate-100 min-w-[240px] justify-center mb-2`;
             toast.innerHTML = `${icon}<span class="text-xs font-bold text-slate-600">${message}</span>`;
@@ -367,18 +475,15 @@
 
         const formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
         
+        // ANTI ERROR: Pembaruan Parser Tanggal Super Cerdas
+        // Membaca semua kombinasi format tanggal dari Excel yang merusak CSV
         const parseIndoDate = (dateStr) => {
             if(!dateStr) return null;
             let str = String(dateStr).trim(); 
-            if(!str || str === '-' || str.toLowerCase() === 'null') return null;
-
-            if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
-                const p = str.substring(0, 10).split('-');
-                return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
-            }
-
+            
+            // Jika ada huruf (misal: 10-Mar-26, 09 Mar 2026, dll)
             if (/[a-zA-Z]/.test(str)) {
-                str = str.replace(/[-\/]/g, ' '); 
+                str = str.replace(/[-\/]/g, ' '); // Ubah semua pemisah jadi spasi
                 const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'mei':4,'jun':5,'jul':6,'aug':7,'agu':7,'sep':8,'oct':9,'okt':9,'nov':10,'dec':11,'des':11};
                 const parts = str.toLowerCase().split(/[\s,]+/);
                 if(parts.length >= 3) {
@@ -387,35 +492,29 @@
                     let m = months[mStr] !== undefined ? months[mStr] : 0;
                     let y = parseInt(parts[2]);
                     if (y < 100) y += 2000;
-                    if(isNaN(d) || isNaN(y)) return null;
-                    return new Date(y, m, d);
-                } else if(parts.length === 2) {
-                    let d = parseInt(parts[0]);
-                    let mStr = parts[1].substring(0,3);
-                    let m = months[mStr] !== undefined ? months[mStr] : 0;
-                    let y = new Date().getFullYear();
-                    if(isNaN(d)) return null;
                     return new Date(y, m, d);
                 }
-            } else {
+            } 
+            // Format Angka Saja: DD/MM/YYYY, YYYY-MM-DD, DD-MM-YYYY
+            else {
                 let p = str.includes('/') ? str.split(' ')[0].split('/') : str.split(' ')[0].split('-');
                 if(p.length === 3) {
-                    if (p[0].length === 4) { 
+                    if (p[0].length === 4) { // Format: YYYY-MM-DD
                         return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
-                    } else { 
+                    } else { // Format: DD-MM-YYYY atau DD/MM/YYYY
                         let y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
                         return new Date(y, parseInt(p[1])-1, parseInt(p[0]));
                     }
                 }
             }
-            return null; 
+            return null; // Jika tanggal kosong atau format benar-benar aneh
         };
 
         const formatDateToDisplay = (d) => {
             if (d instanceof Date && !isNaN(d)) {
                 return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
             }
-            return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
+            return '-';
         };
 
         const calculateSlaStatus = (inboundDate, eddDate) => {
@@ -424,26 +523,33 @@
             }
             inboundDate.setHours(0,0,0,0);
             eddDate.setHours(0,0,0,0);
+            
             const diffDays = Math.round((eddDate - inboundDate) / (1000 * 60 * 60 * 24));
+            
             let status = "";
             if (diffDays < 0) status = "After EDD";
             else if (diffDays === 0) status = "Last Day";
             else if (diffDays === 1) status = "Same Day";
             else if (diffDays >= 2) status = ">2 Hari";
+            
             return { status, diff: diffDays };
         };
 
+        // --- DUMMY DATA UNTUK PREVIEW CANVAS ---
         window.loadDummyData = function() {
-            document.getElementById('loadingOverlay').classList.add('hidden');
             const dummyData = [];
             const dests = ['CGK', 'UPG', 'BPN', 'MDC', 'KDI', 'AMQ', 'PLW', 'TRK'];
             const origins = ['MAKASSAR', 'JAKARTA', 'SURABAYA', 'BALIKPAPAN'];
             const vendors = ['LION', 'GARUDA', 'CITILINK', 'SRIWIJAYA', 'PELNI'];
             const services = ['REGULER', 'ECO', 'EXPRESS'];
 
-            for(let i=0; i<1500; i++) {
-                const inbound = new Date(); inbound.setDate(inbound.getDate() - Math.floor(Math.random()*14));
-                const edd = new Date(inbound); edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
+            for(let i=0; i<500; i++) {
+                const today = new Date();
+                const inbound = new Date(today); 
+                inbound.setDate(today.getDate() - Math.floor(Math.random()*14));
+                
+                const edd = new Date(inbound); 
+                edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
 
                 dummyData.push({
                     _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
@@ -460,126 +566,220 @@
                 });
             }
             
-            for(let i=0; i<300; i++) {
-                dummyData.push({
-                    _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
-                    _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
-                    _inboundDate: null, _inboundTime: '-', _eddDate: null,
-                    _origin: origins[0], _dest: dests[0], _service: services[0], _vendor: vendors[0],
-                    _slaStatus: "Unknown", _slaDiff: 0
-                });
-            }
-            
-            document.getElementById('statusText').textContent = "Mode Demo Aktif";
+            document.getElementById('statusText').textContent = "Mode Demo (Preview)";
             document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500";
+            
             window.rawData = dummyData;
-            processRawData(dummyData, true);
+
+            // Populate Dropdowns
+            const populate = (id, field) => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = `<option value="ALL">Semua ${field}</option>`;
+                [...new Set(dummyData.map(d => d[field === 'Destinasi' ? '_dest' : (field === 'Origin' ? '_origin' : '_service')]))].sort().forEach(val => {
+                    sel.innerHTML += `<option value="${val}">${val}</option>`;
+                });
+            };
+            populate('filterDest', 'Destinasi');
+            populate('filterOrigin', 'Origin');
+            populate('filterService', 'Layanan');
+
+            const endD = new Date();
+            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+
+            window.applyFilters();
+            window.showToast("Berhasil memuat Mode Demo", "success");
         };
 
+        // --- FETCH DATA DARI SUPABASE DENGAN PROGRESS BAR ---
         window.fetchDataFromSupabase = async function() {
             document.getElementById('initialState').classList.add('hidden');
             document.getElementById('dashboardContent').classList.add('hidden');
+            
             const overlay = document.getElementById('loadingOverlay');
+            const loadText = document.getElementById('loadingText');
+            const subText = document.getElementById('loadingSubText');
+            const progressContainer = document.getElementById('fetchProgressContainer');
             const pbBar = document.getElementById('fetchProgressBar');
             const pbText = document.getElementById('fetchProgressDetail');
             const pbPct = document.getElementById('fetchProgressPct');
 
             overlay.classList.remove('hidden');
-            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            loadText.textContent = "Menyiapkan Koneksi...";
+            subText.textContent = "Menghubungkan ke database Supabase";
 
+            const statusText = document.getElementById('statusText');
+            const connIcon = document.getElementById('connectionStatus');
+            
             try {
-                const { count, error: countError } = await supabase.from('awb_data').select('*', { count: 'exact', head: true });
+                statusText.textContent = "Fetching...";
+                
+                // Ambil jumlah total data untuk progress bar
+                const { count, error: countError } = await supabase
+                    .from('awb_data')
+                    .select('*', { count: 'exact', head: true });
+                
                 if (countError) throw countError;
                 let totalData = count || 0;
 
                 let allData = [];
                 let from = 0;
-                const step = 2000; // Tingkatkan step karena Supabase efisien
+                const step = 1000;
                 let isFetching = true;
 
                 while (isFetching) {
+                    loadText.textContent = "Mengunduh Data AWB...";
+                    subText.textContent = "Memproses baris data secara instan";
+                    if (pbText) pbText.textContent = "Mengunduh data dari server...";
+                    
                     let pct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 0;
-                    pbBar.style.width = `${pct}%`;
-                    pbText.textContent = `${allData.length.toLocaleString('id-ID')} / ${totalData.toLocaleString('id-ID')} Baris`;
-                    pbPct.textContent = `${pct}%`;
+                    if (pbBar) pbBar.style.width = `${pct}%`;
+                    if (pbPct) pbPct.textContent = `${pct}%`;
 
-                    // PENTING: Jangan gunakan .order() di server jika ada masalah record hilang, biarkan order di JS saja
-                    const { data, error } = await supabase.from('awb_data').select('*').range(from, from + step - 1);
+                    const { data, error } = await supabase
+                        .from('awb_data')
+                        .select('*')
+                        .order('inbound_date', { ascending: false })
+                        .range(from, from + step - 1);
+
                     if (error) throw error;
 
                     if (data && data.length > 0) {
                         allData = allData.concat(data);
                         from += step;
-                        if (data.length < step) isFetching = false;
-                    } else { isFetching = false; }
+
+                        let nextPct = totalData > 0 ? Math.min(Math.round((allData.length / totalData) * 100), 100) : 100;
+                        if (pbBar) pbBar.style.width = `${nextPct}%`;
+                        if (pbPct) pbPct.textContent = `${nextPct}%`;
+
+                        if (data.length < step) {
+                            isFetching = false;
+                        }
+                    } else {
+                        isFetching = false;
+                    }
                 }
                 
-                pbBar.style.width = `100%`;
-                pbPct.textContent = `100%`;
+                if (pbBar) pbBar.style.width = `100%`;
+                if (pbPct) pbPct.textContent = `100%`;
+                if (pbText) pbText.textContent = "Menyusun tampilan...";
+                loadText.textContent = "Memproses Tampilan...";
                 await new Promise(r => setTimeout(r, 400));
 
-                processRawData(allData);
-                document.getElementById('statusText').textContent = "Connected";
-                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                processRawData(allData || []);
+                
+                statusText.textContent = "Connected";
+                connIcon.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
                 overlay.classList.add('hidden');
             } catch (err) {
                 console.error("Supabase Error:", err);
                 overlay.classList.add('hidden');
-                window.showToast("Koneksi Supabase diblokir. Beralih ke Mode Demo...", "warning");
-                window.loadDummyData();
+                
+                const initialState = document.getElementById('initialState');
+                initialState.classList.remove('hidden');
+                
+                let errorMsg = "Koneksi Supabase Gagal.";
+                if (err.message && err.message.includes("Failed to fetch")) {
+                    errorMsg = "Gagal terhubung ke server (Failed to fetch).";
+                }
+                window.showToast(errorMsg, "error");
+                
+                statusText.textContent = "Connection Error";
+                connIcon.className = "w-1.5 h-1.5 rounded-full bg-rose-500";
+                
+                initialState.innerHTML = `
+                    <div class="w-24 h-24 bg-rose-50 rounded-3xl flex items-center justify-center border-2 border-dashed border-rose-200 shadow-xl shadow-rose-100 mx-auto mb-6">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 animate-pulse"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-800">Koneksi Database Gagal</h2>
+                    <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center text-rose-600">${errorMsg}</p>
+                    <div class="mt-5 p-5 bg-white border border-slate-200 rounded-xl text-xs text-slate-600 max-w-md shadow-sm">
+                        <p class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Kemungkinan Penyebab:</p>
+                        <ol class="list-decimal text-left pl-4 space-y-2">
+                            <li>Project Supabase Anda sedang <b>Paused</b> karena tidak aktif. Buka Dashboard Supabase lalu klik "Restore".</li>
+                            <li>Koneksi diblokir oleh lingkungan Pratinjau (Preview Canvas) atau ekstensi browser.</li>
+                        </ol>
+                    </div>
+                    <div class="mt-6 flex flex-wrap justify-center gap-3">
+                        <button onclick="window.location.reload()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 shadow-lg transition"><i class="fa-solid fa-arrows-rotate mr-2"></i> Muat Ulang</button>
+                        <button onclick="window.loadDummyData()" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:bg-emerald-600 shadow-lg transition"><i class="fa-solid fa-eye mr-2"></i> Tampilkan Mode Demo</button>
+                    </div>
+                `;
             }
         };
 
-        const processRawData = (dataFromDb, isDummy = false) => {
+        const processRawData = (dataFromDb) => {
             window.rawData = [];
             const destSet = new Set();
             const orgSet = new Set();
             const svcSet = new Set();
             
             dataFromDb.forEach(row => {
-                // Konversi semua ke Uppercase
-                const dest = String(row.destinasi || row._dest || 'N/A').toUpperCase();
-                const org = String(row.origin || row._origin || 'N/A').toUpperCase();
-                const svc = String(row.service || row._service || 'N/A').toUpperCase();
-                const vendor = String(row.vendor || row._vendor || 'N/A').toUpperCase();
-                const awb = String(row.awb_no || row._awb || '').toUpperCase();
-                const container = String(row.container_no || row._container || '-').toUpperCase();
-
                 const inboundDt = row._inboundDate !== undefined ? row._inboundDate : parseIndoDate(row.inbound_date);
                 const eddDt = row._eddDate !== undefined ? row._eddDate : parseIndoDate(row.edd_date);
                 const sla = calculateSlaStatus(inboundDt, eddDt);
+                
+                const dest = row.destinasi || row._dest || 'N/A';
+                const org = row.origin || row._origin || 'N/A';
+                const svc = row.service || row._service || 'N/A';
                 
                 destSet.add(dest);
                 orgSet.add(org);
                 svcSet.add(svc);
 
                 window.rawData.push({
-                    _awb: awb, _container: container, _inboundDate: inboundDt,
+                    _awb: row.awb_no || row._awb,
+                    _container: row.container_no || row._container || '-',
+                    _inboundDate: inboundDt,
                     _inboundTime: row.inbound_time || row._inboundTime || '-',
-                    _eddDate: eddDt, _origin: org, _dest: dest, _service: svc,
-                    _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff
+                    _eddDate: eddDt,
+                    _origin: org,
+                    _dest: dest,
+                    _service: svc,
+                    _vendor: row.vendor || row._vendor || 'N/A',
+                    _slaStatus: sla.status,
+                    _slaDiff: sla.diff
                 });
             });
 
-            const populateDropdown = (id, set) => {
-                const sel = document.getElementById(id);
-                sel.innerHTML = '<option value="ALL">SEMUA</option>';
-                [...set].sort().forEach(val => { sel.innerHTML += `<option value="${val}">${val}</option>`; });
-            };
-            populateDropdown('filterDest', destSet);
-            populateDropdown('filterOrigin', orgSet);
-            populateDropdown('filterService', svcSet);
+            // Populate Filter Dropdowns
+            const destSelect = document.getElementById('filterDest');
+            let destOptions = '<option value="ALL">Semua Destinasi</option>';
+            [...destSet].sort().forEach(d => { destOptions += `<option value="${d}">${d}</option>`; });
+            destSelect.innerHTML = destOptions;
 
+            const orgSelect = document.getElementById('filterOrigin');
+            let orgOptions = '<option value="ALL">Semua Origin</option>';
+            [...orgSet].sort().forEach(o => { orgOptions += `<option value="${o}">${o}</option>`; });
+            orgSelect.innerHTML = orgOptions;
+
+            const svcSelect = document.getElementById('filterService');
+            let svcOptions = '<option value="ALL">Semua Layanan</option>';
+            [...svcSet].sort().forEach(s => { svcOptions += `<option value="${s}">${s}</option>`; });
+            svcSelect.innerHTML = svcOptions;
+
+            // SMART DATE FILTER: Setel rentang 14 hari berdasarkan tanggal data PALING BARU
             let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
-            if (validDates.length > 0) maxDate = new Date(Math.max.apply(null, validDates));
+            if (validDates.length > 0) {
+                maxDate = new Date(Math.max.apply(null, validDates));
+            }
             
-            const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
+            const endD = new Date(maxDate);
+            const startD = new Date(maxDate); 
+            startD.setDate(startD.getDate() - 14);
+            
             document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
-            document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
 
             document.getElementById('initialState').classList.add('hidden');
             document.getElementById('dashboardContent').classList.remove('hidden');
+
             window.applyFilters();
         };
 
@@ -589,13 +789,20 @@
             document.getElementById('filterOrigin').value = 'ALL';
             document.getElementById('filterService').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
+            
+            let maxDate = new Date();
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
             if (validDates.length > 0) {
-                const maxDate = new Date(Math.max.apply(null, validDates));
-                const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
-                document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
-                document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
+                maxDate = new Date(Math.max.apply(null, validDates));
             }
+            
+            const endD = new Date(maxDate);
+            const startD = new Date(maxDate); 
+            startD.setDate(startD.getDate() - 14);
+            
+            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+            
             window.applyFilters();
             window.showToast("Filter di-reset.", "info");
         };
@@ -606,24 +813,22 @@
             const originFilter = document.getElementById('filterOrigin').value;
             const serviceFilter = document.getElementById('filterService').value;
             const statFilter = document.getElementById('filterStatus').value;
+            
             const startStr = document.getElementById('filterStartDate').value;
             const endStr = document.getElementById('filterEndDate').value;
             const sDate = startStr ? new Date(startStr) : null; if(sDate) sDate.setHours(0,0,0,0);
             const eDate = endStr ? new Date(endStr) : null; if(eDate) eDate.setHours(23,59,59,999);
 
             window.filteredData = window.rawData.filter(d => {
-                let dateOk = true;
-                if (sDate || eDate) {
-                    if (d._inboundDate && !isNaN(d._inboundDate)) {
-                        if (sDate && d._inboundDate < sDate) dateOk = false;
-                        if (eDate && d._inboundDate > eDate) dateOk = false;
-                    } else { dateOk = true; } // LOLOSKAN DATA TANPA TANGGAL
-                }
-                if (!dateOk) return false;
+                // Menolak baris yang tanggal Inbound-nya hilang/tidak terbaca SAAT ada filter tanggal aktif
+                if (sDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate < sDate)) return false;
+                if (eDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate > eDate)) return false;
+                
                 if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
                 if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
                 if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
                 if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
+                
                 if (search) {
                     const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._service}`.toUpperCase();
                     if (!str.includes(search)) return false;
@@ -632,8 +837,8 @@
             });
 
             window.filteredData.sort((a,b) => {
-                const tA = a._inboundDate && !isNaN(a._inboundDate) ? a._inboundDate.getTime() : 0;
-                const tB = b._inboundDate && !isNaN(b._inboundDate) ? b._inboundDate.getTime() : 0;
+                const tA = a._inboundDate ? a._inboundDate.getTime() : 0;
+                const tB = b._inboundDate ? b._inboundDate.getTime() : 0;
                 return tB - tA; 
             });
 
@@ -641,34 +846,50 @@
             window.updateDashboard();
         };
 
+        // --- DASHBOARD UPDATER ---
         window.updateDashboard = function() {
             const data = window.filteredData;
             const total = data.length;
+            
             document.getElementById('kpiTotalAwb').innerText = formatNumber(total);
             document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
 
-            const invalidDatesCount = window.filteredData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
+            // Deteksi Data yang rusak tanggalnya
+            const invalidDatesCount = window.rawData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
             const invalidEl = document.getElementById('kpiInvalidDate');
             if(invalidDatesCount > 0) {
                 invalidEl.classList.remove('hidden');
-                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Termasuk ${formatNumber(invalidDatesCount)} data tanpa tanggal`;
-            } else { invalidEl.classList.add('hidden'); }
+                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${formatNumber(invalidDatesCount)} data disembunyikan (Tanggal Tidak Valid)`;
+            } else {
+                invalidEl.classList.add('hidden');
+            }
 
-            let onTimeCount = 0, lateCount = 0, sumSlaDiff = 0, validSlaCount = 0;
+            let onTimeCount = 0;
+            let lateCount = 0;
+            let sumSlaDiff = 0;
+            let validSlaCount = 0;
+
             data.forEach(d => {
                 if(d._slaStatus !== 'Unknown') {
                     if (d._slaStatus === 'After EDD') lateCount++;
                     else onTimeCount++; 
+                    
                     sumSlaDiff += d._slaDiff;
                     validSlaCount++;
                 }
             });
 
-            document.getElementById('kpiOnTimePct').innerText = total > 0 ? ((onTimeCount/total)*100).toFixed(1) + '%' : '0%';
+            const onTimePct = total > 0 ? ((onTimeCount/total)*100).toFixed(1) : 0;
+            const latePct = total > 0 ? ((lateCount/total)*100).toFixed(1) : 0;
+            const avgSla = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1) : "0";
+
+            document.getElementById('kpiOnTimePct').innerText = `${onTimePct}%`;
             document.getElementById('kpiOnTimeCount').innerText = formatNumber(onTimeCount);
-            document.getElementById('kpiLatePct').innerText = total > 0 ? ((lateCount/total)*100).toFixed(1) + '%' : '0%';
+            
+            document.getElementById('kpiLatePct').innerText = `${latePct}%`;
             document.getElementById('kpiLateCount').innerText = formatNumber(lateCount);
-            document.getElementById('kpiAvgSla').innerText = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1).replace('.', ',') : "0";
+
+            document.getElementById('kpiAvgSla').innerText = String(avgSla).replace('.', ',');
 
             window.renderSlaTable();
             window.renderDetailTable();
@@ -677,28 +898,32 @@
         window.renderSlaTable = function() {
             const agg = {};
             let gAfter=0, gLast=0, gSame=0, gOver=0, gTot=0;
+
             window.filteredData.forEach(d => {
                 if (d._slaStatus === 'Unknown') return;
                 const dst = d._dest;
                 if (!agg[dst]) agg[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                
                 if (d._slaStatus === 'After EDD') { agg[dst].after++; gAfter++; }
                 else if (d._slaStatus === 'Last Day') { agg[dst].last++; gLast++; }
                 else if (d._slaStatus === 'Same Day') { agg[dst].same++; gSame++; }
                 else if (d._slaStatus === '>2 Hari') { agg[dst].over++; gOver++; }
-                agg[dst].tot++; gTot++;
+                
+                agg[dst].tot++;
+                gTot++;
             });
 
             const table = document.getElementById('slaEddTable');
             let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
-                <tr>
-                    <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
-                    <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD <br><span class="text-[9px] font-normal">(Terlambat)</span></th>
-                    <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day <br><span class="text-[9px] font-normal">(Hari H)</span></th>
-                    <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day <br><span class="text-[9px] font-normal">(H-1)</span></th>
-                    <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari <br><span class="text-[9px] font-normal">(Sangat Awal)</span></th>
-                    <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
-                </tr>
-            </thead><tbody>`;
+                        <tr>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
+                            <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD <br><span class="text-[9px] font-normal">(Terlambat)</span></th>
+                            <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day <br><span class="text-[9px] font-normal">(Hari H)</span></th>
+                            <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day <br><span class="text-[9px] font-normal">(H-1)</span></th>
+                            <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari <br><span class="text-[9px] font-normal">(Sangat Awal)</span></th>
+                            <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
+                        </tr>
+                    </thead><tbody>`;
 
             if (gTot === 0) {
                 table.innerHTML = h + `<tr><td colspan="6" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
@@ -720,11 +945,26 @@
             h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
                 <tr>
                     <td class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
-                    <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
-                    <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
-                    <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
-                    <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
-                    <td class="text-center py-2 bg-slate-100"><div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 border-r border-slate-200">
+                        <div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div>
+                        <div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div>
+                    </td>
+                    <td class="text-center py-2 bg-slate-100">
+                        <div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div>
+                        <div class="text-[10px] font-bold text-slate-500">100%</div>
+                    </td>
                 </tr>
             </tfoot>`;
             table.innerHTML = h;
@@ -733,14 +973,17 @@
         window.changePage = function(delta) {
             const maxPage = Math.ceil(window.filteredData.length / window.rowsPerPage) || 1;
             let np = window.currentPage + delta;
-            if(np < 1) np = 1; if(np > maxPage) np = maxPage;
-            window.currentPage = np; window.renderDetailTable();
+            if(np < 1) np = 1;
+            if(np > maxPage) np = maxPage;
+            window.currentPage = np;
+            window.renderDetailTable();
         };
 
         window.renderDetailTable = function() {
             const start = (window.currentPage - 1) * window.rowsPerPage;
             const data = window.filteredData.slice(start, start + window.rowsPerPage);
             const tbody = document.getElementById('detailTableBody');
+            
             let html = '';
             data.forEach((d, i) => {
                 let badgeClass = "bg-slate-100 text-slate-500";
@@ -760,18 +1003,31 @@
                     <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
                     <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
-                    <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
+                    <td class="text-center border-l border-slate-200">
+                        <span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span>
+                    </td>
                 </tr>`;
             });
             tbody.innerHTML = html;
+            
             document.getElementById('pageIndicator').innerText = window.currentPage;
             document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
         };
 
+        // --- UPLOAD CSV KE SUPABASE ---
         window.uploadToSupabase = function(file) {
             const overlay = document.getElementById('loadingOverlay');
+            const textEl = document.getElementById('loadingText');
+            const subEl = document.getElementById('loadingSubText');
+            const progressContainer = document.getElementById('fetchProgressContainer');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbText = document.getElementById('fetchProgressDetail');
+            const pbPct = document.getElementById('fetchProgressPct');
+            
             overlay.classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Membaca CSV Lokal...";
+            progressContainer.classList.add('hidden'); // Sembunyikan sebentar saat parsing
+            textEl.textContent = "Membaca CSV Lokal...";
+            subEl.textContent = "Mohon tunggu, jangan tutup halaman ini.";
 
             Papa.parse(file, {
                 header: true, skipEmptyLines: true,
@@ -779,81 +1035,185 @@
                     const rows = results.data;
                     const parsedData = [];
                     
+                    textEl.textContent = "Menyaring Data...";
+                    subEl.textContent = `Ditemukan ${formatNumber(rows.length)} baris. Mempersiapkan ke Server.`;
+
+                    // --- ANTI ERROR: Parsing Tanggal Tahan Banting ---
                     const toSqlDate = (str) => {
                         if(!str) return null;
                         let s = String(str).trim();
-                        if(!s || s === '-' || s.toLowerCase() === 'null') return null;
-                        if (/^\d{5}$/.test(s)) {
-                            let d = new Date(Math.round((parseInt(s,10) - 25569) * 86400 * 1000));
-                            return isNaN(d.getTime()) ? null : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                        }
-                        if (s.includes(':')) s = s.split(' ').filter(p => !p.includes(':')).join(' ');
+                        
+                        // Kalau format aslinya YYYY-MM-DD
                         if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
-                        s = s.replace(/[-\/.]/g, ' ');
-                        const parts = s.split(/[\s,]+/);
-                        if (parts.length >= 3) {
-                            let d, m, y;
-                            if (/[a-zA-Z]/.test(s)) {
-                                const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
-                                d = parseInt(parts[0], 10); m = months[parts[1].substring(0,3).toLowerCase()] || 1; y = parseInt(parts[2], 10);
-                            } else {
-                                if (parts[0].length === 4) { y = parseInt(parts[0], 10); m = parseInt(parts[1], 10); d = parseInt(parts[2], 10); }
-                                else { y = parseInt(parts[2], 10); m = parseInt(parts[1], 10); d = parseInt(parts[0], 10); if (m > 12 && d <= 12) { let t = m; m = d; d = t; } }
+
+                        // Kalau ada huruf (misal: 10-Mar-26, 10 Mar 26)
+                        if (/[a-zA-Z]/.test(s)) {
+                            s = s.replace(/[-\/]/g, ' ');
+                            const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
+                            const parts = s.toLowerCase().split(/[\s,]+/);
+                            if(parts.length >= 3) {
+                                let d = parts[0].padStart(2, '0');
+                                let mStr = parts[1].substring(0,3);
+                                let m = months[mStr] || 1;
+                                let y = parts[2];
+                                if (y.length === 2) y = '20' + y;
+                                return `${y}-${String(m).padStart(2,'0')}-${d}`;
                             }
-                            if (y < 100) y += 2000;
-                            if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
-                            return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                        } else {
+                            // Kalau angka saja (14/03/2026 atau 14-03-2026)
+                            let p = s.includes('/') ? s.split(' ')[0].split('/') : s.split(' ')[0].split('-');
+                            if(p.length === 3) {
+                                if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2,'0')}-${p[2].padStart(2,'0')}`;
+                                let y = p[2];
+                                if(y.length === 2) y = '20' + y;
+                                return `${y}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                            }
                         }
                         return null;
                     };
 
                     for (let r of rows) {
-                        const getVal = (names) => { for(let n of names) { if(r[n] !== undefined) return r[n]; let key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase()); if(key) return r[key]; } return null; };
+                        const getVal = (possibleNames) => {
+                            for(let n of possibleNames) {
+                                if(r[n] !== undefined) return r[n];
+                                const key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase());
+                                if(key) return r[key];
+                            }
+                            return null;
+                        };
+
                         const awb = getVal(['awb_no', 'AWB No', 'No Resi', 'AWB']);
                         if(!awb) continue;
+
+                        const inDateStr = getVal(['Tanggal Inbound', 'inbound_date', 'Tanggal Diterima']);
+                        const inTimeStr = getVal(['Jam', 'Jam Inbound', 'inbound_time']);
+                        const eddStr = getVal(['expect_delivery_tm', 'Target EDD', 'EDD']);
+                        
+                        let sqlInDate = toSqlDate(inDateStr);
+                        let sqlEddDate = toSqlDate(eddStr);
+                        
+                        // Validasi Jam
+                        let rawTime = String(inTimeStr || '').trim();
+                        let sqlInTime = null;
+                        if (rawTime !== '') {
+                            const cleanTime = rawTime.replace(/;/g, ':').split(' ')[0]; 
+                            const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+                            if (timeRegex.test(cleanTime)) {
+                                const parts = cleanTime.split(':');
+                                const h = parts[0].padStart(2, '0');
+                                const m = parts[1];
+                                const s = parts[2] ? ':' + parts[2] : '';
+                                sqlInTime = `${h}:${m}${s}`;
+                            }
+                        }
+
                         parsedData.push({
-                            awb_no: String(awb).trim().toUpperCase(),
-                            container_no: String(getVal(['No Bagseals', 'container_no', 'No MB']) || '').trim().toUpperCase(),
-                            inbound_date: toSqlDate(getVal(['Tanggal Inbound', 'inbound_date', 'Tanggal Diterima'])),
-                            inbound_time: String(getVal(['Jam', 'Jam Inbound', 'inbound_time']) || '').trim(),
-                            edd_date: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
-                            origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase(),
-                            destinasi: String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase(),
-                            service: String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase(),
-                            vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase()
+                            awb_no: String(awb).trim(),
+                            container_no: String(getVal(['No Bagseals', 'container_no', 'No MB']) || '').trim(),
+                            inbound_date: sqlInDate,
+                            inbound_time: sqlInTime,
+                            edd_date: sqlEddDate,
+                            origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || '').trim(),
+                            destinasi: String(getVal(['Destinasi', 'destinasi', 'Destination']) || '').trim(),
+                            service: String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || '').trim(),
+                            vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || '').trim()
                         });
                     }
 
-                    const existingAwbs = new Map(); window.rawData.forEach(d => existingAwbs.set(d._awb, d));
-                    const uniqueMap = new Map(); let skipCount = 0, updateCount = 0;
+                    if(parsedData.length === 0) {
+                        overlay.classList.add('hidden');
+                        window.showToast("Gagal membaca file CSV. Pastikan kolom sesuai.", "error");
+                        return;
+                    }
+
+                    // --- SMART FILTER: HAPUS DUPLIKAT ---
+                    const existingAwbs = new Set(window.rawData.map(d => d._awb));
+                    const uniqueMap = new Map();
+                    let skipCount = 0;
+
                     parsedData.forEach(row => {
-                        const ex = existingAwbs.get(row.awb_no);
-                        if (ex) {
-                            if (!ex._inboundDate || isNaN(ex._inboundDate)) { uniqueMap.set(row.awb_no, row); updateCount++; }
-                            else { skipCount++; }
-                        } else if (!uniqueMap.has(row.awb_no)) { uniqueMap.set(row.awb_no, row); } else { skipCount++; }
+                        if (existingAwbs.has(row.awb_no)) {
+                            skipCount++; 
+                        } else if (!uniqueMap.has(row.awb_no)) {
+                            uniqueMap.set(row.awb_no, row); 
+                        } else {
+                            skipCount++; 
+                        }
                     });
                     
-                    const finalData = Array.from(uniqueMap.values());
-                    if (finalData.length === 0) { overlay.classList.add('hidden'); window.showToast("Semua data sudah ada di database.", "info"); return; }
+                    const finalDataToUpload = Array.from(uniqueMap.values());
 
-                    document.getElementById('fetchProgressContainer').classList.remove('hidden');
-                    const CHUNK_SIZE = 1000;
-                    for (let i = 0; i < finalData.length; i += CHUNK_SIZE) {
-                        const chunk = finalData.slice(i, i + CHUNK_SIZE);
-                        const { error } = await supabase.from('awb_data').upsert(chunk, { onConflict: 'awb_no' });
-                        if (error) throw error;
-                        await new Promise(r => setTimeout(r, 200));
+                    if (finalDataToUpload.length === 0) {
+                        overlay.classList.add('hidden');
+                        window.showToast(`Upload dibatalkan: Semua data (${formatNumber(skipCount)} baris) sudah ada di database.`, "info");
+                        document.getElementById('csvAwbFile').value = '';
+                        return;
                     }
-                    overlay.classList.add('hidden');
-                    window.showToast("Update Berhasil!", "success");
-                    window.fetchDataFromSupabase();
+
+                    // Munculkan Progress Bar untuk Upload
+                    progressContainer.classList.remove('hidden');
+                    textEl.textContent = "Mengunggah ke Supabase...";
+                    subEl.textContent = `Menyimpan ${formatNumber(finalDataToUpload.length)} data baru. (Melewati ${formatNumber(skipCount)} duplikat)`;
+                    if (pbText) pbText.textContent = "Mengunggah data...";
+                    
+                    const CHUNK_SIZE = 1000;
+                    let successCount = 0;
+                    const totalToUpload = finalDataToUpload.length;
+                    
+                    try {
+                        for (let i = 0; i < finalDataToUpload.length; i += CHUNK_SIZE) {
+                            const chunk = finalDataToUpload.slice(i, i + CHUNK_SIZE);
+                            
+                            let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
+                            if (pbBar) pbBar.style.width = `${pct}%`;
+                            if (pbPct) pbPct.textContent = `${pct}%`;
+                            
+                            textEl.textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
+                            
+                            const { error } = await supabase.from('awb_data').upsert(chunk, { 
+                                onConflict: 'awb_no',
+                                ignoreDuplicates: true
+                            });
+                            if (error) throw error;
+                            
+                            successCount += chunk.length;
+                            // Jeda supaya server aman
+                            await new Promise(r => setTimeout(r, 200));
+                        }
+                        
+                        if (pbBar) pbBar.style.width = `100%`;
+                        if (pbText) pbText.textContent = `Selesai diunggah!`;
+                        if (pbPct) pbPct.textContent = `100%`;
+                        textEl.textContent = `Selesai!`;
+                        await new Promise(r => setTimeout(r, 400));
+
+                        overlay.classList.add('hidden');
+                        window.showToast(`Upload Berhasil! ${formatNumber(successCount)} data AWB tersimpan.`, "success");
+                        
+                        window.fetchDataFromSupabase();
+                        
+                    } catch (err) {
+                        console.error(err);
+                        overlay.classList.add('hidden');
+                        let errMsg = err.message || "Error saat mengunggah data ke Supabase.";
+                        if (err.message && err.message.includes("Failed to fetch")) {
+                            errMsg = "Upload gagal (Failed to fetch). Pastikan Supabase Anda tidak Paused.";
+                        }
+                        window.showToast(errMsg, "error");
+                    }
+                    
+                    document.getElementById('csvAwbFile').value = '';
                 }
             });
         };
 
-        document.getElementById('csvAwbFile').addEventListener('change', (e) => { if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]); });
+        document.getElementById('csvAwbFile').addEventListener('change', function(e) {
+            if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]);
+        });
+
+        // Initialize Call
         window.fetchDataFromSupabase();
+
     </script>
 </body>
 </html>
