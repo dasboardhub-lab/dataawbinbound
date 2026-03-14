@@ -11,6 +11,8 @@
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -326,9 +328,13 @@
                 <div class="fresh-card p-6 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
                     <div class="relative z-10">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total AWB (Resi)</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total AWB (Sesuai Filter)</p>
                         <h3 class="text-4xl font-extrabold text-slate-800 tracking-tight mt-1" id="kpiTotalAwb">0</h3>
-                        <div class="mt-2 text-xs font-medium text-slate-500">Tersaring dari <span id="kpiGrandTotal" class="font-bold">0</span> data server</div>
+                        <div class="mt-2 flex flex-col gap-1">
+                            <div class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-lg inline-block w-fit">Total di Database: <span id="kpiGrandTotal" class="font-bold text-slate-700">0</span> AWB</div>
+                            <!-- Peringatan jika ada tanggal yang rusak -->
+                            <div id="kpiInvalidDate" class="hidden text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg w-fit border border-rose-100"></div>
+                        </div>
                     </div>
                 </div>
                 
@@ -469,16 +475,39 @@
 
         const formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
         
+        // ANTI ERROR: Pembaruan Parser Tanggal Super Cerdas
+        // Membaca semua kombinasi format tanggal dari Excel yang merusak CSV
         const parseIndoDate = (dateStr) => {
             if(!dateStr) return null;
-            let str = String(dateStr).trim().split(' ')[0]; 
-            if(str.includes('/')) {
-                const p = str.split('/');
-                if(p.length === 3) return new Date(p[2], p[1]-1, p[0]);
-            } else if (str.includes('-')) {
-                return new Date(str);
+            let str = String(dateStr).trim(); 
+            
+            // Jika ada huruf (misal: 10-Mar-26, 09 Mar 2026, dll)
+            if (/[a-zA-Z]/.test(str)) {
+                str = str.replace(/[-\/]/g, ' '); // Ubah semua pemisah jadi spasi
+                const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'mei':4,'jun':5,'jul':6,'aug':7,'agu':7,'sep':8,'oct':9,'okt':9,'nov':10,'dec':11,'des':11};
+                const parts = str.toLowerCase().split(/[\s,]+/);
+                if(parts.length >= 3) {
+                    let d = parseInt(parts[0]);
+                    let mStr = parts[1].substring(0,3);
+                    let m = months[mStr] !== undefined ? months[mStr] : 0;
+                    let y = parseInt(parts[2]);
+                    if (y < 100) y += 2000;
+                    return new Date(y, m, d);
+                }
+            } 
+            // Format Angka Saja: DD/MM/YYYY, YYYY-MM-DD, DD-MM-YYYY
+            else {
+                let p = str.includes('/') ? str.split(' ')[0].split('/') : str.split(' ')[0].split('-');
+                if(p.length === 3) {
+                    if (p[0].length === 4) { // Format: YYYY-MM-DD
+                        return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+                    } else { // Format: DD-MM-YYYY atau DD/MM/YYYY
+                        let y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
+                        return new Date(y, parseInt(p[1])-1, parseInt(p[0]));
+                    }
+                }
             }
-            return null;
+            return null; // Jika tanggal kosong atau format benar-benar aneh
         };
 
         const formatDateToDisplay = (d) => {
@@ -504,6 +533,66 @@
             else if (diffDays >= 2) status = ">2 Hari";
             
             return { status, diff: diffDays };
+        };
+
+        // --- DUMMY DATA UNTUK PREVIEW CANVAS ---
+        window.loadDummyData = function() {
+            const dummyData = [];
+            const dests = ['CGK', 'UPG', 'BPN', 'MDC', 'KDI', 'AMQ', 'PLW', 'TRK'];
+            const origins = ['MAKASSAR', 'JAKARTA', 'SURABAYA', 'BALIKPAPAN'];
+            const vendors = ['LION', 'GARUDA', 'CITILINK', 'SRIWIJAYA', 'PELNI'];
+            const services = ['REGULER', 'ECO', 'EXPRESS'];
+
+            for(let i=0; i<500; i++) {
+                const today = new Date();
+                const inbound = new Date(today); 
+                inbound.setDate(today.getDate() - Math.floor(Math.random()*14));
+                
+                const edd = new Date(inbound); 
+                edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
+
+                dummyData.push({
+                    _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
+                    _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
+                    _inboundDate: inbound,
+                    _inboundTime: `${String(Math.floor(Math.random()*24)).padStart(2,'0')}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}`,
+                    _eddDate: edd,
+                    _origin: origins[Math.floor(Math.random()*origins.length)],
+                    _dest: dests[Math.floor(Math.random()*dests.length)],
+                    _service: services[Math.floor(Math.random()*services.length)],
+                    _vendor: vendors[Math.floor(Math.random()*vendors.length)],
+                    _slaStatus: calculateSlaStatus(inbound, edd).status,
+                    _slaDiff: calculateSlaStatus(inbound, edd).diff
+                });
+            }
+            
+            document.getElementById('statusText').textContent = "Mode Demo (Preview)";
+            document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500";
+            
+            window.rawData = dummyData;
+
+            // Populate Dropdowns
+            const populate = (id, field) => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = `<option value="ALL">Semua ${field}</option>`;
+                [...new Set(dummyData.map(d => d[field === 'Destinasi' ? '_dest' : (field === 'Origin' ? '_origin' : '_service')]))].sort().forEach(val => {
+                    sel.innerHTML += `<option value="${val}">${val}</option>`;
+                });
+            };
+            populate('filterDest', 'Destinasi');
+            populate('filterOrigin', 'Origin');
+            populate('filterService', 'Layanan');
+
+            const endD = new Date();
+            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
+
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+
+            window.applyFilters();
+            window.showToast("Berhasil memuat Mode Demo", "success");
         };
 
         // --- FETCH DATA DARI SUPABASE DENGAN PROGRESS BAR ---
@@ -613,11 +702,13 @@
                         <p class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Kemungkinan Penyebab:</p>
                         <ol class="list-decimal text-left pl-4 space-y-2">
                             <li>Project Supabase Anda sedang <b>Paused</b> karena tidak aktif. Buka Dashboard Supabase lalu klik "Restore".</li>
-                            <li>Koneksi internet diblokir oleh ekstensi browser (AdBlock/VPN).</li>
-                            <li>Tabel 'awb_data' belum dibuat di SQL Editor.</li>
+                            <li>Koneksi diblokir oleh lingkungan Pratinjau (Preview Canvas) atau ekstensi browser.</li>
                         </ol>
                     </div>
-                    <button onclick="window.location.reload()" class="mt-6 px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 shadow-lg transition"><i class="fa-solid fa-arrows-rotate mr-2"></i> Muat Ulang</button>
+                    <div class="mt-6 flex flex-wrap justify-center gap-3">
+                        <button onclick="window.location.reload()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 shadow-lg transition"><i class="fa-solid fa-arrows-rotate mr-2"></i> Muat Ulang</button>
+                        <button onclick="window.loadDummyData()" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:bg-emerald-600 shadow-lg transition"><i class="fa-solid fa-eye mr-2"></i> Tampilkan Mode Demo</button>
+                    </div>
                 `;
             }
         };
@@ -629,28 +720,28 @@
             const svcSet = new Set();
             
             dataFromDb.forEach(row => {
-                const inboundDt = parseIndoDate(row.inbound_date);
-                const eddDt = parseIndoDate(row.edd_date);
+                const inboundDt = row._inboundDate !== undefined ? row._inboundDate : parseIndoDate(row.inbound_date);
+                const eddDt = row._eddDate !== undefined ? row._eddDate : parseIndoDate(row.edd_date);
                 const sla = calculateSlaStatus(inboundDt, eddDt);
                 
-                const dest = row.destinasi || 'N/A';
-                const org = row.origin || 'N/A';
-                const svc = row.service || 'N/A';
+                const dest = row.destinasi || row._dest || 'N/A';
+                const org = row.origin || row._origin || 'N/A';
+                const svc = row.service || row._service || 'N/A';
                 
                 destSet.add(dest);
                 orgSet.add(org);
                 svcSet.add(svc);
 
                 window.rawData.push({
-                    _awb: row.awb_no,
-                    _container: row.container_no || '-',
+                    _awb: row.awb_no || row._awb,
+                    _container: row.container_no || row._container || '-',
                     _inboundDate: inboundDt,
-                    _inboundTime: row.inbound_time || '-',
+                    _inboundTime: row.inbound_time || row._inboundTime || '-',
                     _eddDate: eddDt,
                     _origin: org,
                     _dest: dest,
                     _service: svc,
-                    _vendor: row.vendor || 'N/A',
+                    _vendor: row.vendor || row._vendor || 'N/A',
                     _slaStatus: sla.status,
                     _slaDiff: sla.diff
                 });
@@ -672,9 +763,17 @@
             [...svcSet].sort().forEach(s => { svcOptions += `<option value="${s}">${s}</option>`; });
             svcSelect.innerHTML = svcOptions;
 
-            // Default Filter Tgl: 14 hari terakhir
-            const endD = new Date();
-            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            // SMART DATE FILTER: Setel rentang 14 hari berdasarkan tanggal data PALING BARU
+            let maxDate = new Date();
+            const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
+            if (validDates.length > 0) {
+                maxDate = new Date(Math.max.apply(null, validDates));
+            }
+            
+            const endD = new Date(maxDate);
+            const startD = new Date(maxDate); 
+            startD.setDate(startD.getDate() - 14);
+            
             document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
             document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
 
@@ -691,8 +790,16 @@
             document.getElementById('filterService').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
             
-            const endD = new Date();
-            const startD = new Date(); startD.setDate(endD.getDate() - 14);
+            let maxDate = new Date();
+            const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
+            if (validDates.length > 0) {
+                maxDate = new Date(Math.max.apply(null, validDates));
+            }
+            
+            const endD = new Date(maxDate);
+            const startD = new Date(maxDate); 
+            startD.setDate(startD.getDate() - 14);
+            
             document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
             document.getElementById('filterEndDate').value = endD.toISOString().split('T')[0];
             
@@ -713,8 +820,10 @@
             const eDate = endStr ? new Date(endStr) : null; if(eDate) eDate.setHours(23,59,59,999);
 
             window.filteredData = window.rawData.filter(d => {
-                if (sDate && (!d._inboundDate || d._inboundDate < sDate)) return false;
-                if (eDate && (!d._inboundDate || d._inboundDate > eDate)) return false;
+                // Menolak baris yang tanggal Inbound-nya hilang/tidak terbaca SAAT ada filter tanggal aktif
+                if (sDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate < sDate)) return false;
+                if (eDate && (!d._inboundDate || isNaN(d._inboundDate) || d._inboundDate > eDate)) return false;
+                
                 if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
                 if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
                 if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
@@ -744,6 +853,16 @@
             
             document.getElementById('kpiTotalAwb').innerText = formatNumber(total);
             document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
+
+            // Deteksi Data yang rusak tanggalnya
+            const invalidDatesCount = window.rawData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
+            const invalidEl = document.getElementById('kpiInvalidDate');
+            if(invalidDatesCount > 0) {
+                invalidEl.classList.remove('hidden');
+                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${formatNumber(invalidDatesCount)} data disembunyikan (Tanggal Tidak Valid)`;
+            } else {
+                invalidEl.classList.add('hidden');
+            }
 
             let onTimeCount = 0;
             let lateCount = 0;
@@ -919,6 +1038,40 @@
                     textEl.textContent = "Menyaring Data...";
                     subEl.textContent = `Ditemukan ${formatNumber(rows.length)} baris. Mempersiapkan ke Server.`;
 
+                    // --- ANTI ERROR: Parsing Tanggal Tahan Banting ---
+                    const toSqlDate = (str) => {
+                        if(!str) return null;
+                        let s = String(str).trim();
+                        
+                        // Kalau format aslinya YYYY-MM-DD
+                        if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
+
+                        // Kalau ada huruf (misal: 10-Mar-26, 10 Mar 26)
+                        if (/[a-zA-Z]/.test(s)) {
+                            s = s.replace(/[-\/]/g, ' ');
+                            const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
+                            const parts = s.toLowerCase().split(/[\s,]+/);
+                            if(parts.length >= 3) {
+                                let d = parts[0].padStart(2, '0');
+                                let mStr = parts[1].substring(0,3);
+                                let m = months[mStr] || 1;
+                                let y = parts[2];
+                                if (y.length === 2) y = '20' + y;
+                                return `${y}-${String(m).padStart(2,'0')}-${d}`;
+                            }
+                        } else {
+                            // Kalau angka saja (14/03/2026 atau 14-03-2026)
+                            let p = s.includes('/') ? s.split(' ')[0].split('/') : s.split(' ')[0].split('-');
+                            if(p.length === 3) {
+                                if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2,'0')}-${p[2].padStart(2,'0')}`;
+                                let y = p[2];
+                                if(y.length === 2) y = '20' + y;
+                                return `${y}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                            }
+                        }
+                        return null;
+                    };
+
                     for (let r of rows) {
                         const getVal = (possibleNames) => {
                             for(let n of possibleNames) {
@@ -932,26 +1085,14 @@
                         const awb = getVal(['awb_no', 'AWB No', 'No Resi', 'AWB']);
                         if(!awb) continue;
 
-                        const inDateStr = getVal(['Tanggal Inbound', 'Tanggal Diterima', 'inbound_date']);
+                        const inDateStr = getVal(['Tanggal Inbound', 'inbound_date', 'Tanggal Diterima']);
                         const inTimeStr = getVal(['Jam', 'Jam Inbound', 'inbound_time']);
-                        const eddStr = getVal(['Target EDD', 'expect_delivery_tm', 'EDD']);
+                        const eddStr = getVal(['expect_delivery_tm', 'Target EDD', 'EDD']);
                         
-                        const toSqlDate = (str) => {
-                            if(!str) return null;
-                            let s = String(str).trim().split(' ')[0];
-                            if(s.includes('/')) {
-                                const p = s.split('/');
-                                if(p.length===3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-                            } else if(s.includes('-')) {
-                                return s;
-                            }
-                            return null;
-                        };
-
                         let sqlInDate = toSqlDate(inDateStr);
                         let sqlEddDate = toSqlDate(eddStr);
                         
-                        // ANTI ERROR: Validasi Format Jam (Mencegah error 'TOLAKAN BANDARA' dsb)
+                        // Validasi Jam
                         let rawTime = String(inTimeStr || '').trim();
                         let sqlInTime = null;
                         if (rawTime !== '') {
@@ -985,17 +1126,34 @@
                         return;
                     }
 
-                    // --- ANTI ERROR: HAPUS DUPLIKAT SEBELUM UPLOAD ---
+                    // --- SMART FILTER: HAPUS DUPLIKAT ---
+                    const existingAwbs = new Set(window.rawData.map(d => d._awb));
                     const uniqueMap = new Map();
+                    let skipCount = 0;
+
                     parsedData.forEach(row => {
-                        uniqueMap.set(row.awb_no, row); // Timpa dengan data terbaru jika ada AWB kembar
+                        if (existingAwbs.has(row.awb_no)) {
+                            skipCount++; 
+                        } else if (!uniqueMap.has(row.awb_no)) {
+                            uniqueMap.set(row.awb_no, row); 
+                        } else {
+                            skipCount++; 
+                        }
                     });
+                    
                     const finalDataToUpload = Array.from(uniqueMap.values());
+
+                    if (finalDataToUpload.length === 0) {
+                        overlay.classList.add('hidden');
+                        window.showToast(`Upload dibatalkan: Semua data (${formatNumber(skipCount)} baris) sudah ada di database.`, "info");
+                        document.getElementById('csvAwbFile').value = '';
+                        return;
+                    }
 
                     // Munculkan Progress Bar untuk Upload
                     progressContainer.classList.remove('hidden');
                     textEl.textContent = "Mengunggah ke Supabase...";
-                    subEl.textContent = `Menyimpan ${formatNumber(finalDataToUpload.length)} data unik ke Cloud`;
+                    subEl.textContent = `Menyimpan ${formatNumber(finalDataToUpload.length)} data baru. (Melewati ${formatNumber(skipCount)} duplikat)`;
                     if (pbText) pbText.textContent = "Mengunggah data...";
                     
                     const CHUNK_SIZE = 1000;
@@ -1012,10 +1170,15 @@
                             
                             textEl.textContent = `Mengunggah Batch ${Math.ceil(i/CHUNK_SIZE)+1}...`;
                             
-                            const { error } = await supabase.from('awb_data').upsert(chunk, { onConflict: 'awb_no' });
+                            const { error } = await supabase.from('awb_data').upsert(chunk, { 
+                                onConflict: 'awb_no',
+                                ignoreDuplicates: true
+                            });
                             if (error) throw error;
                             
                             successCount += chunk.length;
+                            // Jeda supaya server aman
+                            await new Promise(r => setTimeout(r, 200));
                         }
                         
                         if (pbBar) pbBar.style.width = `100%`;
