@@ -144,7 +144,7 @@
                     <span class="text-sm font-black text-emerald-600" id="previewNewCount">0</span>
                 </div>
                 <div class="flex justify-between items-center border-t border-slate-200 pt-3">
-                    <span class="text-xs font-bold text-slate-500">Duplikat (Diabaikan):</span>
+                    <span class="text-xs font-bold text-slate-500">Diabaikan (Duplikat/N#A):</span>
                     <span class="text-sm font-black text-rose-500" id="previewDupCount">0</span>
                 </div>
             </div>
@@ -302,41 +302,57 @@
                                     <input type="date" id="filterEndDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
                                 </div>
                             </div>
-                            <div class="w-32">
-                                <span class="input-label">Status SLA</span>
-                                <select id="filterStatus" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
-                                    <option value="ALL">Semua Status</option>
-                                    <option value="After EDD">After EDD (Telat)</option>
-                                    <option value="Last Day">Last Day</option>
-                                    <option value="Same Day">Same Day</option>
-                                    <option value=">2 Hari">>2 Hari (Awal)</option>
-                                    <option value="Unknown">Tidak Diketahui</option>
-                                </select>
+
+                            <!-- Status SLA (Multi-Select) -->
+                            <div class="relative w-28 shrink-0">
+                                <span class="input-label truncate">Status SLA</span>
+                                <button onclick="window.toggleMulti('statusMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
+                                    <span id="statusLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
+                                </button>
+                                <div id="statusMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
-                            <div class="w-32">
-                                <span class="input-label">Origin</span>
-                                <select id="filterOrigin" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
-                                    <option value="ALL">Semua Origin</option>
-                                </select>
+                            
+                            <!-- Origin (Multi-Select) -->
+                            <div class="relative w-28 shrink-0">
+                                <span class="input-label truncate">Origin</span>
+                                <button onclick="window.toggleMulti('originMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
+                                    <span id="originLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
+                                </button>
+                                <div id="originMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
-                            <div class="w-32">
-                                <span class="input-label">Destinasi</span>
-                                <select id="filterDest" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
-                                    <option value="ALL">Semua Destinasi</option>
-                                </select>
+
+                            <!-- Destinasi (Multi-Select) -->
+                            <div class="relative w-28 shrink-0">
+                                <span class="input-label truncate">Destinasi</span>
+                                <button onclick="window.toggleMulti('destMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
+                                    <span id="destLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
+                                </button>
+                                <div id="destMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
-                            <div class="w-32">
-                                <span class="input-label">Staging</span>
-                                <select id="filterStaging" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
-                                    <option value="ALL">Semua Staging</option>
-                                </select>
+
+                            <!-- Staging (Multi-Select) -->
+                            <div class="relative w-28 shrink-0">
+                                <span class="input-label truncate">Staging</span>
+                                <button onclick="window.toggleMulti('stagingMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
+                                    <span id="stagingLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
+                                </button>
+                                <div id="stagingMenu" class="hidden absolute top-full right-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
-                            <div class="w-32">
-                                <span class="input-label">Layanan</span>
-                                <select id="filterService" class="fresh-input w-full h-[38px] cursor-pointer bg-white shadow-sm" onchange="window.applyFilters()">
-                                    <option value="ALL">Semua Layanan</option>
-                                </select>
+
+                            <!-- Layanan (Multi-Select) -->
+                            <div class="relative w-28 shrink-0">
+                                <span class="input-label truncate">Layanan</span>
+                                <button onclick="window.toggleMulti('serviceMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
+                                    <span id="serviceLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
+                                </button>
+                                <div id="serviceMenu" class="hidden absolute top-full right-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
+
                             <button onclick="window.resetFilters()" class="w-[38px] h-[38px] flex items-center justify-center bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-emerald-600 text-slate-400 transition-all shadow-sm" title="Reset Filters">
                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                             </button>
@@ -508,6 +524,71 @@
         window.currentPage = 1;
         window.rowsPerPage = 150;
         document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
+        // --- FUNGSI MULTI-SELECT FILTER ---
+        window.toggleMulti = (id) => {
+            const el = document.getElementById(id);
+            ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu'].forEach(m => {
+                if(m !== id) {
+                    const otherEl = document.getElementById(m);
+                    if(otherEl) otherEl.classList.add('hidden');
+                }
+            });
+            if(el) el.classList.toggle('hidden');
+        };
+
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) {
+                ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu'].forEach(m => {
+                    const el = document.getElementById(m);
+                    if(el) el.classList.add('hidden');
+                });
+            }
+        });
+
+        window.handleMultiChange = (menuId, labelId, checkbox) => {
+            const menu = document.getElementById(menuId);
+            const allChk = menu.querySelector('input[value="ALL"]');
+            const items = menu.querySelectorAll('input.item-checkbox');
+
+            if (checkbox.value === 'ALL') {
+                items.forEach(i => i.checked = checkbox.checked);
+            } else {
+                const allChecked = [...items].every(i => i.checked);
+                allChk.checked = allChecked;
+                if (!checkbox.checked) allChk.checked = false;
+            }
+            window.updateMultiLabel(menuId, labelId);
+            window.applyFilters();
+        };
+
+        window.updateMultiLabel = (menuId, labelId) => {
+            const menu = document.getElementById(menuId);
+            if(!menu) return;
+            const items = menu.querySelectorAll('input.item-checkbox');
+            const checked = [...items].filter(i => i.checked);
+            const label = document.getElementById(labelId);
+            
+            if (checked.length === 0) {
+                label.textContent = "Pilih...";
+                label.classList.add("text-slate-400");
+            } else if (checked.length === items.length) {
+                label.textContent = "Semua";
+                label.classList.remove("text-slate-400", "font-bold", "text-[#E81C65]");
+            } else {
+                label.textContent = `${checked.length} Terpilih`;
+                label.classList.add("font-bold", "text-[#E81C65]");
+                label.classList.remove("text-slate-400");
+            }
+        };
+
+        window.getSelectedValues = (menuId) => {
+            const menu = document.getElementById(menuId);
+            if(!menu) return ['ALL'];
+            const allChk = menu.querySelector('input[value="ALL"]');
+            if (allChk && allChk.checked) return ['ALL'];
+            return [...menu.querySelectorAll('input.item-checkbox:checked')].map(i => i.value);
+        };
 
         // --- SISTEM MODAL (TAMPILAN & LOGIKA HAPUS) ---
         window.openDeleteModal = function() {
@@ -919,8 +1000,8 @@
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
                 const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
                 
-                // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL N#A ---
-                if (destStaging === 'N#A' || destStaging === '#N/A') return;
+                // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL #N/A atau N#A ---
+                if (destStaging.includes('#N/A') || destStaging.includes('N#A') || destStaging === 'N/A' || dest.includes('#N/A')) return;
 
                 const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
@@ -951,18 +1032,36 @@
                 });
             });
 
-            const populateDropdown = (id, set) => {
-                const sel = document.getElementById(id);
-                if (sel) {
-                    sel.innerHTML = '<option value="ALL">SEMUA</option>';
-                    [...set].sort().forEach(val => { sel.innerHTML += `<option value="${val}">${val}</option>`; });
-                }
+            // MULTI-SELECT POPULATOR
+            const populateMulti = (menuId, labelId, opts) => {
+                const menu = document.getElementById(menuId);
+                if(!menu) return;
+                
+                let html = `
+                    <label class="flex items-center gap-2 px-2 py-1.5 hover:bg-pink-50 rounded cursor-pointer transition-colors border-b border-slate-100 mb-1">
+                        <input type="checkbox" value="ALL" class="accent-[#E81C65] w-3.5 h-3.5" onchange="window.handleMultiChange('${menuId}', '${labelId}', this)" checked>
+                        <span class="text-xs font-bold text-slate-700">Semua</span>
+                    </label>
+                `;
+                
+                opts.forEach(o => {
+                    html += `
+                    <label class="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded cursor-pointer transition-colors">
+                        <input type="checkbox" value="${o}" class="accent-[#E81C65] w-3.5 h-3.5 item-checkbox" onchange="window.handleMultiChange('${menuId}', '${labelId}', this)" checked>
+                        <span class="text-xs text-slate-600">${o}</span>
+                    </label>`;
+                });
+                menu.innerHTML = html;
+                window.updateMultiLabel(menuId, labelId);
             };
-            populateDropdown('filterDest', destSet);
-            populateDropdown('filterStaging', destStagingSet);
-            populateDropdown('filterOrigin', orgSet);
-            populateDropdown('filterService', svcSet);
 
+            populateMulti('destMenu', 'destLabel', [...destSet].sort());
+            populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
+            populateMulti('originMenu', 'originLabel', [...orgSet].sort());
+            populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
+            populateMulti('statusMenu', 'statusLabel', ['After EDD', 'Last Day', 'Same Day', '>2 Hari', 'Unknown']);
+
+            // Delete Modal khusus Dropdown (tetap select biasa)
             const deleteDestSelect = document.getElementById('deleteDestInput');
             if (deleteDestSelect) {
                 const currentVal = deleteDestSelect.value;
@@ -988,12 +1087,15 @@
         };
 
         window.resetFilters = function() {
+            ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu'].forEach(id => {
+                const inputs = document.querySelectorAll(`#${id} input`);
+                inputs.forEach(i => i.checked = true);
+                let labelId = id.replace('Menu', 'Label');
+                window.updateMultiLabel(id, labelId);
+            });
+            
             document.getElementById('globalSearch').value = '';
-            document.getElementById('filterDest').value = 'ALL';
-            document.getElementById('filterStaging').value = 'ALL';
-            document.getElementById('filterOrigin').value = 'ALL';
-            document.getElementById('filterService').value = 'ALL';
-            document.getElementById('filterStatus').value = 'ALL';
+            
             const validDates = window.rawData.map(d => d._inboundDate).filter(d => d instanceof Date && !isNaN(d));
             if (validDates.length > 0) {
                 const maxTime = validDates.reduce((max, d) => Math.max(max, d.getTime()), validDates[0].getTime());
@@ -1008,11 +1110,13 @@
 
         window.applyFilters = function() {
             const search = document.getElementById('globalSearch').value.toUpperCase();
-            const destFilter = document.getElementById('filterDest').value;
-            const stagingFilter = document.getElementById('filterStaging').value;
-            const originFilter = document.getElementById('filterOrigin').value;
-            const serviceFilter = document.getElementById('filterService').value;
-            const statFilter = document.getElementById('filterStatus').value;
+            
+            const fStatus = window.getSelectedValues('statusMenu');
+            const fOrigin = window.getSelectedValues('originMenu');
+            const fDest = window.getSelectedValues('destMenu');
+            const fStaging = window.getSelectedValues('stagingMenu');
+            const fService = window.getSelectedValues('serviceMenu');
+
             const startStr = document.getElementById('filterStartDate').value;
             const endStr = document.getElementById('filterEndDate').value;
             const sDate = startStr ? new Date(startStr) : null; if(sDate) sDate.setHours(0,0,0,0);
@@ -1027,11 +1131,15 @@
                     } else { dateOk = true; } 
                 }
                 if (!dateOk) return false;
-                if (destFilter !== 'ALL' && d._dest !== destFilter) return false;
-                if (stagingFilter !== 'ALL' && d._destStaging !== stagingFilter) return false;
-                if (originFilter !== 'ALL' && d._origin !== originFilter) return false;
-                if (serviceFilter !== 'ALL' && d._service !== serviceFilter) return false;
-                if (statFilter !== 'ALL' && d._slaStatus !== statFilter) return false;
+                
+                const statOk = fStatus.includes('ALL') || fStatus.includes(d._slaStatus);
+                const originOk = fOrigin.includes('ALL') || fOrigin.includes(d._origin);
+                const destOk = fDest.includes('ALL') || fDest.includes(d._dest);
+                const stagingOk = fStaging.includes('ALL') || fStaging.includes(d._destStaging);
+                const serviceOk = fService.includes('ALL') || fService.includes(d._service);
+                
+                if (!(statOk && originOk && destOk && stagingOk && serviceOk)) return false;
+
                 if (search) {
                     const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._destStaging} ${d._service}`.toUpperCase();
                     if (!str.includes(search)) return false;
@@ -1385,7 +1493,7 @@
                         const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || '-').trim().toUpperCase();
                         
                         // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL N#A SEBELUM DISIMPAN ---
-                        if (destStagingStr === 'N#A' || destStagingStr === '#N/A') continue;
+                        if (destStagingStr.includes('N#A') || destStagingStr.includes('#N/A') || destStagingStr === 'N/A' || destStr.includes('#N/A')) continue;
                         
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
                         if (svcInput === 'REG') svcInput = 'REGULER';
