@@ -11,6 +11,8 @@
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <!-- MENGGUNAKAN STANDAR SCRIPT UNTUK SUPABASE AGAR TIDAK DIBLOKIR DI PREVIEW -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -246,6 +248,12 @@
                 </div>
                 <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
                 <div class="flex items-center gap-2">
+                    <!-- Tombol Link ke Inbound Data -->
+                    <a href="https://inboundhubkalsulamp.vercel.app/" class="flex items-center justify-center h-[38px] px-3 sm:px-4 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-colors shadow-md mr-1 gap-2" title="Buka Dashboard Inbound Data">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                        <span class="hidden sm:inline">Data Inbound</span>
+                    </a>
+
                     <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
                         <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
                     </button>
@@ -273,11 +281,6 @@
             </div>
             <h2 class="text-lg font-bold text-slate-800">Mengambil Data AWB...</h2>
             <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik data dari Supabase PostgreSQL Database.</p>
-            
-            <!-- TOMBOL PAKSA DEMO (ANTI MACET DI PRATINJAU) -->
-            <button onclick="window.loadDummyData()" class="mt-6 px-6 py-3 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 shadow-lg transition-all flex items-center gap-2">
-                <i class="fa-solid fa-eye"></i> Tampilkan Mode Demo (Pratinjau)
-            </button>
         </div>
 
         <!-- DASHBOARD CONTENT -->
@@ -618,7 +621,7 @@
 
         // --- FUNGSI UTAMA PENGHAPUSAN DATA KE SUPABASE (METODE BARU - ANTI ERROR BAD REQUEST) ---
         window.deleteDataForDate = async function(dateString, destString) {
-            if(!supabaseClient) return window.showToast("Koneksi Supabase diblokir Pratinjau.", "error");
+            if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
 
             // Tampilkan UI Loading
             const overlay = document.getElementById('loadingOverlay');
@@ -635,11 +638,10 @@
             pbText.textContent = `Mengeksekusi perintah hapus di database...`;
 
             try {
-                // SQL Direct Delete (Menghapus langsung berdasarkan tanggal dan destinasi tanpa kirim array ID panjang)
+                // SQL Direct Delete
                 let query = supabaseClient.from('awb_data').delete().eq('inbound_date', dateString);
                 
                 if (destString !== 'ALL') {
-                    // Karena nama kolom di database Anda menggunakan huruf besar 'Destinasi'
                     query = query.eq('Destinasi', destString);
                 }
 
@@ -753,53 +755,6 @@
             return { status, diff: diffDays };
         };
 
-        window.loadDummyData = function() {
-            document.getElementById('loadingOverlay').classList.add('hidden');
-            const dummyData = [];
-            const dests = ['CGK', 'UPG', 'BPN', 'MDC', 'KDI', 'AMQ', 'PLW', 'TRK'];
-            const destStagings = ['CGK-STG', 'UPG-STG', 'BPN-STG', 'MDC-STG'];
-            const origins = ['MAKASSAR', 'JAKARTA', 'SURABAYA', 'BALIKPAPAN'];
-            const vendors = ['LION', 'GARUDA', 'CITILINK', 'SRIWIJAYA', 'PELNI'];
-            const services = ['REGULER', 'ECO', 'EXPRESS'];
-
-            for(let i=0; i<1500; i++) {
-                const inbound = new Date(); inbound.setDate(inbound.getDate() - Math.floor(Math.random()*14));
-                const edd = new Date(inbound); edd.setDate(inbound.getDate() + Math.floor(Math.random()*5) - 1); 
-
-                dummyData.push({
-                    _id: 'ID' + i,
-                    _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
-                    _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
-                    _inboundDate: inbound,
-                    _inboundTime: `${String(Math.floor(Math.random()*24)).padStart(2,'0')}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}`,
-                    _eddDate: edd,
-                    _origin: origins[Math.floor(Math.random()*origins.length)],
-                    _dest: dests[Math.floor(Math.random()*dests.length)],
-                    _destStaging: destStagings[Math.floor(Math.random()*destStagings.length)],
-                    _service: services[Math.floor(Math.random()*services.length)],
-                    _vendor: vendors[Math.floor(Math.random()*vendors.length)],
-                    _slaStatus: calculateSlaStatus(inbound, edd).status,
-                    _slaDiff: calculateSlaStatus(inbound, edd).diff
-                });
-            }
-            
-            for(let i=0; i<300; i++) {
-                dummyData.push({
-                    _id: 'ID_DUMMY_' + i,
-                    _awb: `AWB${Math.floor(100000000 + Math.random()*900000000)}`,
-                    _container: `MB-${Math.floor(1000 + Math.random()*9000)}`,
-                    _inboundDate: null, _inboundTime: '-', _eddDate: null,
-                    _origin: origins[0], _dest: dests[0], _destStaging: destStagings[0], _service: services[0], _vendor: vendors[0],
-                    _slaStatus: "Unknown", _slaDiff: 0
-                });
-            }
-            
-            document.getElementById('statusText').textContent = "Mode Demo Aktif";
-            document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500";
-            window.rawData = dummyData;
-            processRawData(dummyData, true);
-        };
-
         window.fetchDataFromSupabase = async function() {
             document.getElementById('initialState').classList.add('hidden');
             document.getElementById('dashboardContent').classList.add('hidden');
@@ -814,8 +769,7 @@
             try {
                 if (!supabaseClient) {
                     overlay.classList.add('hidden');
-                    window.showToast("Koneksi Supabase diblokir. Mengaktifkan Mode Demo...", "warning");
-                    window.loadDummyData();
+                    window.showToast("Koneksi Supabase gagal.", "error");
                     return;
                 }
 
@@ -929,7 +883,6 @@
                     await new Promise(r => setTimeout(r, 400)); 
                 }
 
-                // GABUNGKAN DATA AWAL DAN DATA LAMA LALU PROSES ULANG
                 if (oldData.length > 0) {
                     const allData = recentData.concat(oldData);
                     processRawData(allData); 
@@ -951,8 +904,7 @@
             } catch (err) {
                 console.error("Supabase Error:", err);
                 overlay.classList.add('hidden');
-                window.showToast("Koneksi Supabase gagal/diblokir. Mengaktifkan Mode Demo...", "warning");
-                window.loadDummyData();
+                window.showToast("Gagal memuat data dari Supabase.", "error");
             }
         };
 
@@ -966,6 +918,10 @@
             dataFromDb.forEach(row => {
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
                 const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
+                
+                // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL N#A ---
+                if (destStaging === 'N#A' || destStaging === '#N/A') return;
+
                 const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
                 // MENGGABUNGKAN 'REG' MENJADI 'REGULER'
@@ -1007,7 +963,6 @@
             populateDropdown('filterOrigin', orgSet);
             populateDropdown('filterService', svcSet);
 
-            // POPULATE DROPDOWN UNTUK MODAL HAPUS (DELETE)
             const deleteDestSelect = document.getElementById('deleteDestInput');
             if (deleteDestSelect) {
                 const currentVal = deleteDestSelect.value;
@@ -1023,7 +978,6 @@
                 maxDate = new Date(maxTime);
             }
             
-            // Setel rentang default ke 2 minggu terakhir dari hari ini
             const startD = new Date(maxDate); startD.setDate(startD.getDate() - 14);
             document.getElementById('filterStartDate').value = startD.toISOString().split('T')[0];
             document.getElementById('filterEndDate').value = maxDate.toISOString().split('T')[0];
@@ -1179,7 +1133,6 @@
                 gTot++;
             });
 
-            // Fungsi Pembantu Render Tabel Format Destinasi & Staging
             const renderTableHtml = (aggData, titleColumn) => {
                 let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
                     <tr>
@@ -1222,15 +1175,12 @@
                 return h;
             };
 
-            // Render Tabel Destinasi
             const tableDest = document.getElementById('slaEddTable');
             if (tableDest) tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
 
-            // Render Tabel Destination Staging
             const tableDestStaging = document.getElementById('slaDestStagingTable');
             if (tableDestStaging) tableDestStaging.innerHTML = renderTableHtml(aggDestStaging, "Dest. Staging");
 
-            // Render Tabel Layanan (Transposed)
             const tableSvc = document.getElementById('slaServiceTable');
             if (tableSvc) {
                 const services = [...servicesSet].sort();
@@ -1362,7 +1312,6 @@
             window.showToast("Mendownload CSV...", "success");
         };
 
-        // VARIABEL GLOBAL UNTUK MENAMPUNG DATA SEMENTARA
         window.pendingUploadData = [];
 
         window.uploadToSupabase = function(file) {
@@ -1372,7 +1321,7 @@
 
             if(!supabaseClient) {
                 overlay.classList.add('hidden');
-                window.showToast("Maaf, Supabase tidak dapat terhubung di layar Preview. Gunakan Mode Demo.", "error");
+                window.showToast("Maaf, Supabase tidak dapat terhubung.", "error");
                 return;
             }
 
@@ -1433,12 +1382,14 @@
                         const dateStr = toSqlDate(getVal(['inbound_date', 'Tanggal Inbound', 'Tanggal Diterima']));
                         const timeStr = toSqlTime(getVal(['Jam', 'jam', 'Jam Inbound', 'inbound_time']));
                         const destStr = String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase();
-                        const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || 'N/A').trim().toUpperCase();
+                        const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || '-').trim().toUpperCase();
+                        
+                        // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL N#A SEBELUM DISIMPAN ---
+                        if (destStagingStr === 'N#A' || destStagingStr === '#N/A') continue;
                         
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
                         if (svcInput === 'REG') svcInput = 'REGULER';
                         
-                        // Buat ID spesifik transaksi: AWB + Tgl + Jam + Lokasi (Agar riwayat perjalanan AWB tidak saling timpa)
                         let rowId = `${awbStr}_${containerStr}_${dateStr}_${timeStr}_${destStr}`.replace(/[^a-zA-Z0-9]/g, '_');
 
                         parsedData.push({
@@ -1456,7 +1407,6 @@
                         });
                     }
 
-                    // CEK DUPLIKAT TERHADAP DATA YANG SUDAH ADA
                     const existingIds = new Set(); window.rawData.forEach(d => existingIds.add(d._id));
                     const uniqueMap = new Map(); 
                     let skipCount = 0;
@@ -1467,7 +1417,7 @@
                         } else if (!uniqueMap.has(row.id)) { 
                             uniqueMap.set(row.id, row); 
                         } else { 
-                            skipCount++; // Duplikat dalam internal file itu sendiri
+                            skipCount++; 
                         }
                     });
                     
@@ -1476,10 +1426,9 @@
                     overlay.classList.add('hidden');
 
                     if (window.pendingUploadData.length === 0 && skipCount > 0) {
-                        window.showToast("Tidak ada data baru. Semua data duplikat.", "info");
+                        window.showToast("Semua data duplikat.", "info");
                         document.getElementById('csvAwbFile').value = '';
                     } else {
-                        // TAMPILKAN MODAL KONFIRMASI (PREVIEW)
                         window.openPreviewModal(window.pendingUploadData.length, skipCount);
                     }
                 }
@@ -1532,7 +1481,7 @@
                         failCount += chunk.length;
                     }
                     
-                    await new Promise(r => setTimeout(r, 200)); // Jeda stabilisasi
+                    await new Promise(r => setTimeout(r, 200)); 
                 }
                 
                 pbBar.style.width = `100%`;
@@ -1542,10 +1491,8 @@
                 overlay.classList.add('hidden');
                 document.getElementById('csvAwbFile').value = ''; 
                 
-                // TAMPILKAN HASIL AKHIR (SUCCESS MODAL)
                 window.openSuccessModal(successCount, failCount);
 
-                // REFRESH DATA DI BACKGROUND
                 if (successCount > 0) {
                     window.fetchDataFromSupabase();
                 }
