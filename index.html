@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWB Tracking Dashboard</title>
+    <title>AWB Tracking Dashboard | Supabase</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23E81C65' d='M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM192 256l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0-96l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z'/></svg>">
@@ -226,6 +226,46 @@
         </div>
     </div>
 
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[500px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="settingsModalContent">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-gear text-slate-400 mr-2"></i> Pengaturan Staging Valid</h3>
+                <button onclick="window.closeSettingsModal()" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Masukkan daftar staging yang benar untuk setiap destinasi. Pisahkan dengan koma. Staging di luar daftar ini akan otomatis dikelompokkan menjadi <b>XRT</b>. Jika dikosongkan, semua staging dianggap valid.</p>
+            <div id="settingsList" class="max-h-[50vh] overflow-y-auto custom-scrollbar pr-2 mb-4 flex flex-col gap-3">
+                <!-- Dinamis -->
+            </div>
+            <div class="flex gap-3 pt-3 border-t border-slate-100">
+                <button onclick="window.closeSettingsModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="window.saveSettingsModal()" class="flex-1 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 shadow-lg transition-colors">Simpan & Terapkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- XRT DETAILS MODAL -->
+    <div id="xrtModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[400px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="xrtModalContent">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-rose-600"><i class="fa-solid fa-code-merge mr-2"></i> Rincian XRT: <span id="xrtDestName" class="text-slate-800"></span></h3>
+                <button onclick="window.closeXrtModal()" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="overflow-y-auto custom-scrollbar max-h-[50vh]">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 sticky top-0">
+                        <tr>
+                            <th class="p-3 text-xs font-bold text-slate-600 border-b border-slate-200">Staging Asli (Missroute)</th>
+                            <th class="p-3 text-center text-xs font-bold text-slate-600 border-b border-slate-200">Total AWB</th>
+                        </tr>
+                    </thead>
+                    <tbody id="xrtTableBody"></tbody>
+                </table>
+            </div>
+            <button onclick="window.closeXrtModal()" class="w-full mt-4 py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-colors">Tutup</button>
+        </div>
+    </div>
+
     <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm h-[72px]">
         <div class="max-w-[1600px] mx-auto px-6 h-full flex justify-between items-center">
@@ -253,6 +293,11 @@
                         <i class="fa-solid fa-boxes-packing"></i>
                         <span class="hidden sm:inline">Data Inbound</span>
                     </a>
+
+                    <!-- Tombol Pengaturan Staging -->
+                    <button onclick="window.openPasswordModal('settings')" class="bg-white border border-amber-200 text-amber-500 btn-header-icon hover:bg-amber-50 mr-1" title="Pengaturan Staging Valid">
+                        <i class="fa-solid fa-gear text-[15px]"></i>
+                    </button>
 
                     <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
                         <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
@@ -414,15 +459,36 @@
                 </div>
             </div>
 
-            <!-- 3. TABEL SLA BY EDD STATUS (DESTINASI & LAYANAN) -->
-            <div class="grid grid-cols-1 lg:grid-cols-10 gap-5">
-                <!-- Tabel Berdasarkan Destinasi (70%) -->
+            <!-- GRAFIK TREN HARIAN -->
+            <div class="fresh-card p-5 mb-5">
+                <div class="px-2 py-2 mb-2 flex justify-between items-center">
+                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i class="fa-solid fa-chart-line"></i></span>
+                        Tren Harian Inbound
+                    </h3>
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button id="btnTrendTotal" onclick="window.setTrendChartMode('total')" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-slate-900 text-white shadow-md">Total AWB</button>
+                        <button id="btnTrendStatus" onclick="window.setTrendChartMode('status')" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-white text-slate-600 hover:bg-slate-50">Status SLA</button>
+                    </div>
+                </div>
+                <div class="h-60 w-full relative">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 3. TABEL SLA BY EDD STATUS (DESTINASI/STAGING & LAYANAN) -->
+            <div class="grid grid-cols-1 lg:grid-cols-10 gap-5 mb-5">
+                <!-- Tabel Berdasarkan Destinasi & Staging (70%) -->
                 <div class="fresh-card overflow-hidden flex flex-col lg:col-span-7">
                     <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
-                        <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
+                        <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2" id="slaDestTitle">
                             <span class="bg-[#E81C65]/10 p-1.5 rounded-lg text-[#E81C65]"><i class="fa-solid fa-clock-rotate-left"></i></span>
                             SLA by EDD Status (Destinasi)
                         </h3>
+                        <div class="flex bg-slate-100 p-1 rounded-xl">
+                            <button id="btnSlaDest" onclick="window.setSlaDestMode('destinasi')" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-slate-900 text-white shadow-md">Destinasi</button>
+                            <button id="btnSlaStaging" onclick="window.setSlaDestMode('staging')" class="px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-white text-slate-600 hover:bg-slate-50">Staging</button>
+                        </div>
                     </div>
                     <div class="overflow-auto custom-scrollbar max-h-[450px]">
                         <table class="fresh-table w-full relative" id="slaEddTable"></table>
@@ -440,19 +506,6 @@
                     <div class="overflow-auto custom-scrollbar max-h-[450px]">
                         <table class="fresh-table w-full relative" id="slaServiceTable"></table>
                     </div>
-                </div>
-            </div>
-
-            <!-- TABEL SLA BY EDD STATUS (DESTINATION STAGING) - FULL 1 KOLOM -->
-            <div class="fresh-card overflow-hidden flex flex-col mb-5">
-                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
-                    <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
-                        <span class="bg-teal-100 p-1.5 rounded-lg text-teal-600"><i class="fa-solid fa-map-location-dot"></i></span>
-                        SLA by EDD Status (Dest. Staging)
-                    </h3>
-                </div>
-                <div class="overflow-auto custom-scrollbar max-h-[450px]">
-                    <table class="fresh-table w-full relative" id="slaDestStagingTable"></table>
                 </div>
             </div>
 
@@ -504,6 +557,8 @@
 
     <!-- SCRIPTS MENGGUNAKAN STANDAR TAG (NON-MODULE) AGAR AMAN DI PREVIEW -->
     <script>
+        Chart.register(ChartDataLabels);
+
         // Supabase Initialization
         const SUPABASE_URL = 'https://svmgwupvjybfmatjfafp.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWd3dXB2anliZm1hdGpmYWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1ODc1NDUsImV4cCI6MjA4ODE2MzU0NX0.kP7Y0dy5l61Xi2S8ji9buq8W1R9ZNLyHyBHhTh3qFbw'; 
@@ -611,10 +666,13 @@
              const date = document.getElementById('deleteDateInput').value;
              if(!date) return window.showToast("Pilih tanggal terlebih dahulu!", "error");
              window.closeDeleteModal();
-             window.openPasswordModal();
+             window.openPasswordModal('delete');
         };
 
-        window.openPasswordModal = function() {
+        window.currentAction = '';
+
+        window.openPasswordModal = function(action) {
+            window.currentAction = action || 'delete';
             document.getElementById('passwordModal').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('passwordModal').classList.remove('opacity-0');
@@ -630,6 +688,101 @@
             document.getElementById('passwordModalContent').classList.remove('scale-100');
             document.getElementById('passwordModalContent').classList.add('scale-95');
             setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
+        };
+
+        // --- SISTEM MODAL PENGATURAN STAGING & XRT ---
+        window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
+
+        window.openSettingsModal = function() {
+            const list = document.getElementById('settingsList');
+            list.innerHTML = '';
+            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
+            
+            dests.forEach(dest => {
+                const val = window.stagingMap[dest] ? window.stagingMap[dest].join(', ') : '';
+                list.innerHTML += `
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded w-fit border border-slate-200">${dest}</label>
+                        <input type="text" id="setting_dest_${dest}" value="${val}" class="fresh-input w-full text-xs font-mono" placeholder="Kosongkan jika semua staging dianggap valid. Cth: WWNS0, MNDX9">
+                    </div>
+                `;
+            });
+            
+            document.getElementById('settingsModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('settingsModal').classList.remove('opacity-0');
+                document.getElementById('settingsModalContent').classList.remove('scale-95');
+                document.getElementById('settingsModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeSettingsModal = function() {
+            document.getElementById('settingsModal').classList.add('opacity-0');
+            document.getElementById('settingsModalContent').classList.remove('scale-100');
+            document.getElementById('settingsModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('settingsModal').classList.add('hidden'), 300);
+        };
+
+        window.saveSettingsModal = function() {
+            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
+            dests.forEach(dest => {
+                const val = document.getElementById(`setting_dest_${dest}`).value;
+                if(val.trim()) {
+                    window.stagingMap[dest] = val.split(',').map(s => s.trim().toUpperCase()).filter(s => s);
+                } else {
+                    delete window.stagingMap[dest];
+                }
+            });
+            localStorage.setItem('awbStagingMap', JSON.stringify(window.stagingMap));
+            window.closeSettingsModal();
+            window.showToast("Pengaturan Staging berhasil disimpan", "success");
+            
+            // Rekalkulasi staging tanpa fetch database
+            window.rawData.forEach(d => {
+                if (window.stagingMap[d._dest] && window.stagingMap[d._dest].length > 0) {
+                    d._displayStaging = window.stagingMap[d._dest].includes(d._destStaging) ? d._destStaging : 'XRT';
+                } else {
+                    d._displayStaging = d._destStaging;
+                }
+            });
+            
+            // Update filter list
+            const destStagingSet = new Set(window.rawData.map(d => d._displayStaging));
+            window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
+            
+            window.applyFilters();
+        };
+
+        window.showXrtDetails = function(dest) {
+            const xrtData = window.filteredData.filter(d => d._dest === dest && d._displayStaging === 'XRT');
+            const agg = {};
+            xrtData.forEach(d => {
+                agg[d._destStaging] = (agg[d._destStaging] || 0) + 1;
+            });
+            
+            let h = '';
+            Object.keys(agg).sort((a,b) => agg[b] - agg[a]).forEach(k => {
+                h += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3 font-bold text-slate-700">${k}</td><td class="p-3 text-center font-mono text-slate-600">${agg[k]}</td></tr>`;
+            });
+            
+            if (Object.keys(agg).length === 0) h = `<tr><td colspan="2" class="p-4 text-center text-slate-400">Tidak ada data</td></tr>`;
+            
+            document.getElementById('xrtTableBody').innerHTML = h;
+            document.getElementById('xrtDestName').textContent = dest;
+            
+            document.getElementById('xrtModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('xrtModal').classList.remove('opacity-0');
+                document.getElementById('xrtModalContent').classList.remove('scale-95');
+                document.getElementById('xrtModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeXrtModal = function() {
+            document.getElementById('xrtModal').classList.add('opacity-0');
+            document.getElementById('xrtModalContent').classList.remove('scale-100');
+            document.getElementById('xrtModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('xrtModal').classList.add('hidden'), 300);
         };
 
         // --- SISTEM MODAL PREVIEW & SUCCESS (UPLOAD) ---
@@ -690,9 +843,13 @@
             const pwd = document.getElementById('passwordInput').value;
             if (pwd === "TAB123") {
                 window.closePasswordModal();
-                const date = document.getElementById('deleteDateInput').value;
-                const dest = document.getElementById('deleteDestInput').value;
-                if(window.deleteDataForDate) window.deleteDataForDate(date, dest);
+                if (window.currentAction === 'settings') {
+                    window.openSettingsModal();
+                } else {
+                    const date = document.getElementById('deleteDateInput').value;
+                    const dest = document.getElementById('deleteDestInput').value;
+                    if(window.deleteDataForDate) window.deleteDataForDate(date, dest);
+                }
             } else {
                 window.showToast("Password Salah!", "error");
                 document.getElementById('passwordInput').value = '';
@@ -886,7 +1043,17 @@
                                 .select('*')
                                 .or(`inbound_date.gte.${dateStr},inbound_date.is.null`)
                                 .range(from, from + step - 1);
-                            if (res.error) throw res.error;
+                                
+                            if (res.error) {
+                                // Memaklumi error Range Not Satisfiable (PGRST103) atau pesan kosong sebagai tanda data habis
+                                if (res.error.code === 'PGRST103' || !res.error.message) {
+                                    data = [];
+                                    fetchSuccess = true;
+                                    break;
+                                }
+                                throw res.error;
+                            }
+                            
                             data = res.data;
                             fetchSuccess = true;
                             break;
@@ -939,7 +1106,17 @@
                                 .select('*')
                                 .lt('inbound_date', dateStr)
                                 .range(fromOld, fromOld + step - 1);
-                            if (res.error) throw res.error;
+                                
+                            if (res.error) {
+                                // Memaklumi error Range Not Satisfiable (PGRST103) atau pesan kosong sebagai tanda data habis
+                                if (res.error.code === 'PGRST103' || !res.error.message) {
+                                    data = [];
+                                    fetchSuccess = true;
+                                    break;
+                                }
+                                throw res.error;
+                            }
+                            
                             data = res.data;
                             fetchSuccess = true;
                             break;
@@ -996,12 +1173,21 @@
             const svcSet = new Set();
             const destStagingSet = new Set();
             
+            if(!window.stagingMap) window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
+            
             dataFromDb.forEach(row => {
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
                 const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
                 
                 // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL #N/A atau N#A ---
                 if (destStaging.includes('#N/A') || destStaging.includes('N#A') || destStaging === 'N/A' || dest.includes('#N/A')) return;
+
+                let displayStaging = destStaging;
+                if (window.stagingMap[dest] && window.stagingMap[dest].length > 0) {
+                    if (!window.stagingMap[dest].includes(destStaging)) {
+                        displayStaging = 'XRT';
+                    }
+                }
 
                 const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
@@ -1021,19 +1207,20 @@
                 destSet.add(dest);
                 orgSet.add(org);
                 svcSet.add(svc);
-                destStagingSet.add(destStaging);
+                destStagingSet.add(displayStaging);
 
                 window.rawData.push({
                     _id: row.id || row._id,
                     _awb: awb, _container: container, _inboundDate: inboundDt,
                     _inboundTime: inboundTime,
                     _eddDate: eddDt, _origin: org, _dest: dest, _destStaging: destStaging, 
+                    _displayStaging: displayStaging,
                     _service: svc, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff
                 });
             });
 
             // MULTI-SELECT POPULATOR
-            const populateMulti = (menuId, labelId, opts) => {
+            window.populateMulti = (menuId, labelId, opts) => {
                 const menu = document.getElementById(menuId);
                 if(!menu) return;
                 
@@ -1162,13 +1349,13 @@
                 const statOk = fStatus.includes('ALL') || fStatus.includes(d._slaStatus);
                 const originOk = fOrigin.includes('ALL') || fOrigin.includes(d._origin);
                 const destOk = fDest.includes('ALL') || fDest.includes(d._dest);
-                const stagingOk = fStaging.includes('ALL') || fStaging.includes(d._destStaging);
+                const stagingOk = fStaging.includes('ALL') || fStaging.includes(d._displayStaging);
                 const serviceOk = fService.includes('ALL') || fService.includes(d._service);
                 
                 if (!(statOk && originOk && destOk && stagingOk && serviceOk)) return false;
 
                 if (search) {
-                    const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._destStaging} ${d._service}`.toUpperCase();
+                    const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._displayStaging} ${d._destStaging} ${d._service}`.toUpperCase();
                     if (!str.includes(search)) return false;
                 }
                 return true;
@@ -1213,8 +1400,163 @@
             document.getElementById('kpiLateCount').innerText = formatNumber(lateCount);
             document.getElementById('kpiAvgSla').innerText = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1).replace('.', ',') : "0";
 
+            window.renderTrendChart();
             window.renderSlaTable();
             window.renderDetailTable();
+        };
+
+        window.trendChartMode = 'total';
+
+        window.setTrendChartMode = function(mode) {
+            window.trendChartMode = mode;
+            const btnTotal = document.getElementById('btnTrendTotal');
+            const btnStatus = document.getElementById('btnTrendStatus');
+            const baseClasses = "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all";
+            const activeStyle = "bg-slate-900 text-white shadow-md";
+            const inactiveStyle = "bg-white text-slate-600 hover:bg-slate-50";
+
+            if (mode === 'total') {
+                btnTotal.className = `${baseClasses} ${activeStyle}`;
+                btnStatus.className = `${baseClasses} ${inactiveStyle}`;
+            } else {
+                btnTotal.className = `${baseClasses} ${inactiveStyle}`;
+                btnStatus.className = `${baseClasses} ${activeStyle}`;
+            }
+            window.renderTrendChart();
+        };
+
+        window.renderTrendChart = function() {
+            if(!window.chartInstances) window.chartInstances = {};
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            if (window.chartInstances.trend) window.chartInstances.trend.destroy();
+
+            const agg = {};
+            window.filteredData.forEach(d => {
+                if (d._inboundDate && !isNaN(d._inboundDate)) {
+                    const k = formatDateForCsv(d._inboundDate);
+                    if (!agg[k]) agg[k] = { total: 0, after: 0, last: 0, same: 0, over: 0 };
+                    agg[k].total += 1;
+                    if (d._slaStatus === 'After EDD') agg[k].after += 1;
+                    else if (d._slaStatus === 'Last Day') agg[k].last += 1;
+                    else if (d._slaStatus === 'Same Day') agg[k].same += 1;
+                    else if (d._slaStatus === '>2 Hari') agg[k].over += 1;
+                }
+            });
+
+            const keys = Object.keys(agg).sort();
+            const labels = keys.map(k => {
+                const p = k.split('-');
+                return `${p[2]}/${p[1]}`;
+            });
+
+            let chartData, chartOptions;
+
+            if (window.trendChartMode === 'total') {
+                const vals = keys.map(k => agg[k].total);
+                chartData = {
+                    labels: labels,
+                    datasets: [{
+                        data: vals,
+                        borderColor: '#E81C65',
+                        backgroundColor: 'rgba(232, 28, 101, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#E81C65',
+                        pointRadius: 4
+                    }]
+                };
+                chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 25 } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#64748B' } },
+                        y: { display: false, beginAtZero: true, grace: '15%' }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true },
+                        datalabels: {
+                            display: true,
+                            align: 'top',
+                            anchor: 'end',
+                            color: '#E81C65',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: (v) => formatNumber(v),
+                            clip: false
+                        }
+                    }
+                };
+            } else {
+                const dAfter = keys.map(k => agg[k].after);
+                const dLast = keys.map(k => agg[k].last);
+                const dSame = keys.map(k => agg[k].same);
+                const dOver = keys.map(k => agg[k].over);
+
+                chartData = {
+                    labels: labels,
+                    datasets: [
+                        { label: '>2 Hari', data: dOver, backgroundColor: '#4F46E5', stack: 'Stack 0', borderRadius: 4 },
+                        { label: 'Same Day', data: dSame, backgroundColor: '#059669', stack: 'Stack 0', borderRadius: 4 },
+                        { label: 'Last Day', data: dLast, backgroundColor: '#D97706', stack: 'Stack 0', borderRadius: 4 },
+                        { label: 'After EDD', data: dAfter, backgroundColor: '#E11D48', stack: 'Stack 0', borderRadius: 4 }
+                    ]
+                };
+                chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 10 } },
+                    scales: {
+                        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, color: '#64748B' } },
+                        y: { stacked: true, display: false, beginAtZero: true, grace: '15%' }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 10 } } },
+                        tooltip: { enabled: true },
+                        datalabels: {
+                            display: function(context) {
+                                return context.dataset.data[context.dataIndex] > 0;
+                            },
+                            align: 'center',
+                            anchor: 'center',
+                            color: '#FFFFFF',
+                            font: { weight: 'bold', size: 9 },
+                            formatter: (v) => formatNumber(v),
+                            clip: false
+                        }
+                    }
+                };
+            }
+
+            window.chartInstances.trend = new Chart(ctx, {
+                type: window.trendChartMode === 'total' ? 'line' : 'bar',
+                data: chartData,
+                options: chartOptions
+            });
+        };
+
+        window.slaDestMode = 'destinasi';
+
+        window.setSlaDestMode = function(mode) {
+            window.slaDestMode = mode;
+            const btnDest = document.getElementById('btnSlaDest');
+            const btnStaging = document.getElementById('btnSlaStaging');
+            const title = document.getElementById('slaDestTitle');
+            const baseClasses = "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all";
+            const activeStyle = "bg-slate-900 text-white shadow-md";
+            const inactiveStyle = "bg-white text-slate-600 hover:bg-slate-50";
+
+            if (mode === 'destinasi') {
+                btnDest.className = `${baseClasses} ${activeStyle}`;
+                btnStaging.className = `${baseClasses} ${inactiveStyle}`;
+                title.innerHTML = `<span class="bg-[#E81C65]/10 p-1.5 rounded-lg text-[#E81C65]"><i class="fa-solid fa-clock-rotate-left"></i></span> SLA by EDD Status (Destinasi)`;
+            } else {
+                btnDest.className = `${baseClasses} ${inactiveStyle}`;
+                btnStaging.className = `${baseClasses} ${activeStyle}`;
+                title.innerHTML = `<span class="bg-teal-100 p-1.5 rounded-lg text-teal-600"><i class="fa-solid fa-map-location-dot"></i></span> SLA by EDD Status (Dest. Staging)`;
+            }
+            window.renderSlaTable();
         };
 
         window.renderSlaTable = function() {
@@ -1232,12 +1574,13 @@
             
             window.filteredData.forEach(d => {
                 const dst = d._dest || 'UNKNOWN';
-                const dstStg = d._destStaging || 'UNKNOWN';
+                const dstStg = d._displayStaging || 'UNKNOWN';
+                const stgKey = dst + '|' + dstStg;
                 const svc = d._service || 'UNKNOWN';
                 servicesSet.add(svc);
                 
                 if (!aggDest[dst]) aggDest[dst] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
-                if (!aggDestStaging[dstStg]) aggDestStaging[dstStg] = { after: 0, last: 0, same: 0, over: 0, tot: 0 };
+                if (!aggDestStaging[stgKey]) aggDestStaging[stgKey] = { dest: dst, stg: dstStg, after: 0, last: 0, same: 0, over: 0, tot: 0 };
                 
                 if (aggSvc['After EDD'][svc] === undefined) aggSvc['After EDD'][svc] = 0;
                 if (aggSvc['Last Day'][svc] === undefined) aggSvc['Last Day'][svc] = 0;
@@ -1246,24 +1589,24 @@
                 if (aggSvc['total'][svc] === undefined) aggSvc['total'][svc] = 0;
                 
                 if (d._slaStatus === 'After EDD') { 
-                    aggDest[dst].after++; aggDestStaging[dstStg].after++; 
+                    aggDest[dst].after++; aggDestStaging[stgKey].after++; 
                     aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; 
                 }
                 else if (d._slaStatus === 'Last Day') { 
-                    aggDest[dst].last++; aggDestStaging[dstStg].last++; 
+                    aggDest[dst].last++; aggDestStaging[stgKey].last++; 
                     aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; 
                 }
                 else if (d._slaStatus === 'Same Day') { 
-                    aggDest[dst].same++; aggDestStaging[dstStg].same++; 
+                    aggDest[dst].same++; aggDestStaging[stgKey].same++; 
                     aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; 
                 }
                 else if (d._slaStatus === '>2 Hari') { 
-                    aggDest[dst].over++; aggDestStaging[dstStg].over++; 
+                    aggDest[dst].over++; aggDestStaging[stgKey].over++; 
                     aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; 
                 }
                 
                 aggDest[dst].tot++; 
-                aggDestStaging[dstStg].tot++;
+                aggDestStaging[stgKey].tot++;
                 aggSvc['total'][svc]++;
                 gTot++;
             });
@@ -1311,10 +1654,64 @@
             };
 
             const tableDest = document.getElementById('slaEddTable');
-            if (tableDest) tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
+            if (tableDest) {
+                if (window.slaDestMode === 'destinasi') {
+                    tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
+                } else {
+                    let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+                        <tr>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Dest. Staging</th>
+                            <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD</th>
+                            <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day</th>
+                            <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day</th>
+                            <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari</th>
+                            <th class="text-center font-extrabold bg-slate-100 text-slate-800">Total AWB</th>
+                        </tr>
+                    </thead><tbody>`;
 
-            const tableDestStaging = document.getElementById('slaDestStagingTable');
-            if (tableDestStaging) tableDestStaging.innerHTML = renderTableHtml(aggDestStaging, "Dest. Staging");
+                    if (gTot === 0) {
+                        h += `<tr><td colspan="7" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                    } else {
+                        const sortedKeys = Object.keys(aggDestStaging).sort((a,b) => {
+                            if (aggDestStaging[a].dest === aggDestStaging[b].dest) {
+                                return aggDestStaging[b].tot - aggDestStaging[a].tot;
+                            }
+                            return aggDestStaging[a].dest.localeCompare(aggDestStaging[b].dest);
+                        });
+
+                        sortedKeys.forEach(k => {
+                            const d = aggDestStaging[k];
+                            let stgDisplay = d.stg;
+                            if(d.stg === 'XRT') {
+                                stgDisplay = `<span class="cursor-pointer text-rose-500 font-extrabold underline hover:text-rose-700 transition-colors" onclick="window.showXrtDetails('${d.dest}')">XRT <i class="fa-solid fa-circle-info text-[9px] ml-0.5"></i></span>`;
+                            }
+                            
+                            h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                                <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${d.dest}</td>
+                                <td class="font-bold text-teal-700 border-r border-slate-200 valign-middle">${stgDisplay}</td>
+                                <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
+                                <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
+                                <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
+                                <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
+                                <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(d.tot)}</td>
+                            </tr>`;
+                        });
+
+                        h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
+                            <tr>
+                                <td colspan="2" class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 bg-slate-100"><div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
+                            </tr>
+                        </tfoot>`;
+                    }
+                    tableDest.innerHTML = h;
+                }
+            }
 
             const tableSvc = document.getElementById('slaServiceTable');
             if (tableSvc) {
@@ -1386,6 +1783,8 @@
                 else if(d._slaStatus === 'Same Day') badgeClass = "bg-emerald-100 text-emerald-700 border border-emerald-200";
                 else if(d._slaStatus === '>2 Hari') badgeClass = "bg-indigo-100 text-indigo-700 border border-indigo-200";
 
+                const stagingText = d._displayStaging === 'XRT' ? `<span class="text-rose-500 font-bold">XRT</span> <br><span class="text-[9px] text-slate-400 leading-none">(${d._destStaging})</span>` : d._displayStaging;
+
                 html += `<tr class="hover:bg-slate-50 border-b border-slate-100">
                     <td class="text-slate-400 text-xs">${start + i + 1}</td>
                     <td class="font-mono font-bold text-[#E81C65] tracking-wide">${d._awb}</td>
@@ -1395,7 +1794,7 @@
                     <td class="text-center font-bold text-emerald-700 border-r border-slate-100 bg-emerald-50/20 group-col">${formatDateToDisplay(d._eddDate)}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._origin}</td>
                     <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
-                    <td class="font-bold text-teal-700 border-r border-slate-100 bg-teal-50 group-col">${d._destStaging}</td>
+                    <td class="font-bold text-teal-700 border-r border-slate-100 bg-teal-50 group-col">${stagingText}</td>
                     <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
                     <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
                     <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
