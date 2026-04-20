@@ -1723,6 +1723,15 @@
                             return aggDestStaging[a].dest.localeCompare(aggDestStaging[b].dest);
                         });
 
+                        const destGroup = {};
+                        sortedKeys.forEach(k => {
+                            const dest = aggDestStaging[k].dest;
+                            if (!destGroup[dest]) destGroup[dest] = 0;
+                            destGroup[dest]++;
+                        });
+
+                        let currentDest = null;
+
                         sortedKeys.forEach(k => {
                             const d = aggDestStaging[k];
                             let stgDisplay = d.stg;
@@ -1730,8 +1739,14 @@
                                 stgDisplay = `<span class="cursor-pointer text-rose-500 font-extrabold underline hover:text-rose-700 transition-colors" onclick="window.showXrtDetails('${d.dest}')">XRT <i class="fa-solid fa-circle-info text-[9px] ml-0.5"></i></span>`;
                             }
                             
-                            h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
-                                <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${d.dest}</td>
+                            h += `<tr class="hover:bg-slate-50 border-b border-slate-100">`;
+                            
+                            if (currentDest !== d.dest) {
+                                h += `<td class="font-bold text-slate-700 border-r border-slate-200 valign-middle bg-white" rowspan="${destGroup[d.dest]}">${d.dest}</td>`;
+                                currentDest = d.dest;
+                            }
+                            
+                            h += `
                                 <td class="font-bold text-teal-700 border-r border-slate-200 valign-middle">${stgDisplay}</td>
                                 <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
                                 <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
