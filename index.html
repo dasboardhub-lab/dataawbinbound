@@ -749,7 +749,7 @@
             setTimeout(() => document.getElementById('settingsModal').classList.add('hidden'), 300);
         };
 
-        window.saveSettingsModal = function() {
+        window.saveSettingsModal = async function() {
             const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
             dests.forEach(dest => {
                 const val = document.getElementById(`setting_dest_${dest}`).value;
@@ -759,9 +759,36 @@
                     delete window.stagingMap[dest];
                 }
             });
-            localStorage.setItem('awbStagingMap', JSON.stringify(window.stagingMap));
+            
+            const mapStr = JSON.stringify(window.stagingMap);
+            localStorage.setItem('awbStagingMap', mapStr);
+            
+            // Simpan ke Supabase agar sinkron di semua perangkat (Zero Config Hack)
+            if (supabaseClient) {
+                const btn = document.querySelector('#settingsModalContent button.bg-slate-900');
+                const oldText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+                btn.disabled = true;
+                
+                await supabaseClient.from('awb_data').upsert({
+                    id: 'SYS_SETTING_STAGING_MAP',
+                    awb_no: 'SYS_SETTINGS',
+                    container_no: '-',
+                    inbound_date: null,
+                    Jam: '-',
+                    Origin: 'SYS',
+                    Destinasi: 'SYS',
+                    destination_staging: mapStr,
+                    Service: 'SYS',
+                    Vendor: 'SYS'
+                }, { onConflict: 'id' });
+                
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            }
+
             window.closeSettingsModal();
-            window.showToast("Pengaturan Staging berhasil disimpan", "success");
+            window.showToast("Pengaturan Staging tersimpan di Cloud", "success");
             
             // Rekalkulasi staging tanpa fetch database
             window.rawData.forEach(d => {
@@ -1216,9 +1243,24 @@
             const svcSet = new Set();
             const destStagingSet = new Set();
             
+            // Ekstrak pengaturan dari Cloud jika ada
+            const settingRow = dataFromDb.find(r => r.id === 'SYS_SETTING_STAGING_MAP' || r.awb_no === 'SYS_SETTINGS');
+            if (settingRow) {
+                const stgVal = settingRow.destination_staging || settingRow.Destination_Staging;
+                if (stgVal) {
+                    try {
+                        window.stagingMap = JSON.parse(stgVal);
+                        localStorage.setItem('awbStagingMap', stgVal);
+                    } catch(e) {}
+                }
+            }
+            
             if(!window.stagingMap) window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
             
             dataFromDb.forEach(row => {
+                // Abaikan baris pengaturan sistem agar tidak masuk tabel dasbor
+                if (row.id === 'SYS_SETTING_STAGING_MAP' || row.awb_no === 'SYS_SETTINGS') return;
+
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
                 const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
                 
