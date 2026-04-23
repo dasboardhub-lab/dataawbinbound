@@ -5,21 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWB Tracking Dashboard | Supabase</title>
     
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23E81C65' d='M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM192 256l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0-96l128 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z'/></svg>">
     
-    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <!-- MENGGUNAKAN STANDAR SCRIPT UNTUK SUPABASE AGAR TIDAK DIBLOKIR DI PREVIEW -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Base Styles - Tema Magenta/Pink khas AWB */
         body { 
             background-color: #F8FAFC; 
             color: #334155; 
@@ -82,7 +78,6 @@
         .input-label { display: block; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; margin-left: 2px; }
         .sticky-filter-wrapper { position: sticky; top: 72px; z-index: 30; background-color: #F8FAFC; margin-left: -1rem; margin-right: -1rem; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px); }
         
-        /* Loader Styles */
         .loader { --path: #2f3545; --dot: #E81C65; --duration: 3s; width: 44px; height: 44px; position: relative; display: inline-block; margin: 0 16px; }
         .loader:before { content: ""; width: 6px; height: 6px; border-radius: 50%; position: absolute; display: block; background: var(--dot); top: 37px; left: 19px; transform: translate(-18px, -18px); animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite; }
         .loader svg { display: block; width: 100%; height: 100%; }
@@ -103,7 +98,6 @@
 </head>
 <body class="flex flex-col min-h-screen selection:bg-pink-100 selection:text-pink-700">
 
-    <!-- LOADING OVERLAY -->
     <div id="loadingOverlay" class="loading-overlay hidden z-[9999]">
         <div class="flex justify-center items-center mb-6">
             <div class="loader"><svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg></div>
@@ -125,10 +119,8 @@
         </div>
     </div>
 
-    <!-- TOAST -->
     <div id="toast-container" class="fixed top-0 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm"></div>
 
-    <!-- MODAL PREVIEW UPLOAD -->
     <div id="previewModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[360px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="previewModalContent">
             <div class="text-center mb-6">
@@ -155,7 +147,6 @@
         </div>
     </div>
 
-    <!-- MODAL SUCCESS UPLOAD -->
     <div id="successModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="successModalContent">
             <div class="text-center mb-6">
@@ -179,7 +170,6 @@
         </div>
     </div>
 
-    <!-- MODAL HAPUS DATA -->
     <div id="deleteModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
             <div class="text-center mb-6">
@@ -216,7 +206,6 @@
         </div>
     </div>
 
-    <!-- MODAL PASSWORD -->
     <div id="passwordModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[320px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="passwordModalContent">
             <div class="text-center mb-6">
@@ -236,7 +225,6 @@
         </div>
     </div>
 
-    <!-- SETTINGS MODAL -->
     <div id="settingsModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[500px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="settingsModalContent">
             <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
@@ -254,7 +242,6 @@
         </div>
     </div>
 
-    <!-- XRT DETAILS MODAL -->
     <div id="xrtModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[400px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="xrtModalContent">
             <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
@@ -276,7 +263,6 @@
         </div>
     </div>
 
-    <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm h-[72px]">
         <div class="max-w-[1600px] mx-auto px-6 h-full flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -298,13 +284,11 @@
                 </div>
                 <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
                 <div class="flex items-center gap-2">
-                    <!-- Tombol Link ke Inbound Data -->
                     <a href="https://inboundhubkalsulamp.vercel.app/" class="flex items-center justify-center h-[38px] px-3 sm:px-4 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-colors shadow-md mr-1 gap-2" title="Buka Dashboard Inbound Data">
                         <i class="fa-solid fa-boxes-packing"></i>
                         <span class="hidden sm:inline">Data Inbound</span>
                     </a>
 
-                    <!-- Tombol Pengaturan Staging -->
                     <button onclick="window.openPasswordModal('settings')" class="bg-white border border-amber-200 text-amber-500 btn-header-icon hover:bg-amber-50 mr-1" title="Pengaturan Staging Valid">
                         <i class="fa-solid fa-gear text-[15px]"></i>
                     </button>
@@ -327,9 +311,7 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-grow w-full max-w-[1600px] mx-auto px-4 py-4">
-        <!-- INITIAL EMPTY STATE -->
         <div id="initialState" class="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in-up">
             <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center border-2 border-dashed border-emerald-200 shadow-xl shadow-emerald-50 mx-auto mb-6">
                 <i class="fa-solid fa-server text-3xl text-emerald-400 animate-pulse"></i>
@@ -338,7 +320,6 @@
             <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik data dari Supabase PostgreSQL Database.</p>
         </div>
 
-        <!-- DASHBOARD CONTENT -->
         <div id="dashboardContent" class="hidden space-y-6">
             <div class="sticky-filter-wrapper">
                 <div class="fresh-card p-5">
@@ -358,7 +339,6 @@
                                 </div>
                             </div>
 
-                            <!-- Status SLA (Multi-Select) -->
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Status SLA</span>
                                 <button onclick="window.toggleMulti('statusMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -368,7 +348,6 @@
                                 <div id="statusMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
                             
-                            <!-- Origin (Multi-Select) -->
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Origin</span>
                                 <button onclick="window.toggleMulti('originMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -378,7 +357,6 @@
                                 <div id="originMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
 
-                            <!-- Destinasi (Multi-Select) -->
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Destinasi</span>
                                 <button onclick="window.toggleMulti('destMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -388,7 +366,6 @@
                                 <div id="destMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
 
-                            <!-- Staging (Multi-Select) -->
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Staging</span>
                                 <button onclick="window.toggleMulti('stagingMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -398,7 +375,6 @@
                                 <div id="stagingMenu" class="hidden absolute top-full right-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
                             </div>
 
-                            <!-- Layanan (Multi-Select) -->
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Layanan</span>
                                 <button onclick="window.toggleMulti('serviceMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -416,7 +392,6 @@
                 </div>
             </div>
 
-            <!-- 2. KPI WIDGETS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                 <div class="fresh-card p-6 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 p-4 opacity-5 group-hover:opacity-10 transition-transform transform group-hover:scale-110 duration-500"><i class="fa-solid fa-barcode text-8xl text-slate-800"></i></div>
@@ -469,7 +444,6 @@
                 </div>
             </div>
 
-            <!-- GRAFIK TREN HARIAN -->
             <div class="fresh-card p-5 mb-5">
                 <div class="px-2 py-2 mb-2 flex justify-between items-center">
                     <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
@@ -486,9 +460,7 @@
                 </div>
             </div>
 
-            <!-- 3. TABEL SLA BY EDD STATUS (DESTINASI/STAGING & LAYANAN) -->
             <div class="grid grid-cols-1 lg:grid-cols-10 gap-5 mb-5">
-                <!-- Tabel Berdasarkan Destinasi & Staging (70%) -->
                 <div class="fresh-card overflow-hidden flex flex-col lg:col-span-7">
                     <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                         <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2" id="slaDestTitle">
@@ -505,7 +477,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Berdasarkan Layanan (Service) (30%) -->
                 <div class="fresh-card overflow-hidden flex flex-col lg:col-span-3">
                     <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                         <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
@@ -519,7 +490,6 @@
                 </div>
             </div>
 
-            <!-- 4. DETAIL DATA AWB -->
             <div class="fresh-card overflow-hidden flex flex-col mb-10">
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white">
                     <h3 class="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-2">
@@ -565,11 +535,9 @@
         </div>
     </main>
 
-    <!-- SCRIPTS MENGGUNAKAN STANDAR TAG (NON-MODULE) AGAR AMAN DI PREVIEW -->
     <script>
         Chart.register(ChartDataLabels);
 
-        // Supabase Initialization
         const SUPABASE_URL = 'https://svmgwupvjybfmatjfafp.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWd3dXB2anliZm1hdGpmYWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1ODc1NDUsImV4cCI6MjA4ODE2MzU0NX0.kP7Y0dy5l61Xi2S8ji9buq8W1R9ZNLyHyBHhTh3qFbw'; 
         let supabaseClient = null;
@@ -590,7 +558,6 @@
         window.rowsPerPage = 150;
         document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
-        // --- FUNGSI MULTI-SELECT FILTER ---
         window.toggleMulti = (id) => {
             const el = document.getElementById(id);
             ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu'].forEach(m => {
@@ -655,7 +622,6 @@
             return [...menu.querySelectorAll('input.item-checkbox:checked')].map(i => i.value);
         };
 
-        // --- SISTEM MODAL (TAMPILAN & LOGIKA HAPUS) ---
         window.openDeleteModal = function() {
             const dateSelect = document.getElementById('deleteDateInput');
             const dates = [...new Set(window.rawData.map(d => {
@@ -716,7 +682,6 @@
             setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
         };
 
-        // --- SISTEM MODAL PENGATURAN STAGING & XRT ---
         window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
 
         window.openSettingsModal = function() {
@@ -763,7 +728,6 @@
             const mapStr = JSON.stringify(window.stagingMap);
             localStorage.setItem('awbStagingMap', mapStr);
             
-            // Simpan ke Supabase agar sinkron di semua perangkat (Zero Config Hack)
             if (supabaseClient) {
                 const btn = document.querySelector('#settingsModalContent button.bg-slate-900');
                 const oldText = btn.innerHTML;
@@ -790,7 +754,6 @@
             window.closeSettingsModal();
             window.showToast("Pengaturan Staging tersimpan di Cloud", "success");
             
-            // Rekalkulasi staging tanpa fetch database
             window.rawData.forEach(d => {
                 if (window.stagingMap[d._dest] && window.stagingMap[d._dest].length > 0) {
                     d._displayStaging = window.stagingMap[d._dest].includes(d._destStaging) ? d._destStaging : 'XRT';
@@ -799,7 +762,6 @@
                 }
             });
             
-            // Update filter list
             const destStagingSet = new Set(window.rawData.map(d => d._displayStaging));
             window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
             
@@ -838,7 +800,6 @@
             setTimeout(() => document.getElementById('xrtModal').classList.add('hidden'), 300);
         };
 
-        // --- SISTEM MODAL PREVIEW & SUCCESS (UPLOAD) ---
         window.openPreviewModal = function(newCount, dupCount) {
             document.getElementById('previewModal').classList.remove('hidden');
             document.getElementById('previewNewCount').textContent = formatNumber(newCount);
@@ -911,11 +872,9 @@
             }
         };
 
-        // --- FUNGSI UTAMA PENGHAPUSAN DATA KE SUPABASE (METODE BARU - ANTI ERROR BAD REQUEST) ---
         window.deleteDataForDate = async function(dateString, destString, vendorString) {
             if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
 
-            // Tampilkan UI Loading
             const overlay = document.getElementById('loadingOverlay');
             const pbBar = document.getElementById('fetchProgressBar');
             const pbPct = document.getElementById('fetchProgressPct');
@@ -930,8 +889,7 @@
             pbText.textContent = `Mengeksekusi perintah hapus di database...`;
 
             try {
-                // SQL Direct Delete
-                let query = supabaseClient.from('awb_data').delete();
+                let query = supabaseClient.from('awb_data').delete().neq('id', 'SYS_SETTING_STAGING_MAP');
                 
                 if (dateString === 'NULL') {
                     query = query.is('inbound_date', null);
@@ -956,9 +914,8 @@
                 await new Promise(r => setTimeout(r, 400));
                 
                 overlay.classList.add('hidden');
-                window.showToast(`Berhasil menghapus data pada tanggal ${dateString}`, "success");
+                window.showToast(`Berhasil menghapus data`, "success");
                 
-                // Segarkan ulang data dari database setelah penghapusan
                 window.fetchDataFromSupabase();
                 
             } catch(e) {
@@ -1034,7 +991,6 @@
             return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
         };
 
-        // Format untuk Export CSV YYYY-MM-DD
         const formatDateForCsv = (d) => {
             if (d instanceof Date && !isNaN(d)) {
                 return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1082,10 +1038,9 @@
                         totalData = count;
                     }
                 } catch(e) {
-                    console.warn("Info: Gagal menghitung total data awal, melompat ke pengambilan data.", e);
+                    console.warn("Info: Gagal menghitung total data awal.", e);
                 }
 
-                // --- TAHAP 1: FETCH DATA 2 MINGGU TERAKHIR + NULL (DI AWAL AGAR CEPAT) ---
                 const fourteenDaysAgo = new Date();
                 fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
                 const dateStr = fourteenDaysAgo.toISOString().split('T')[0];
@@ -1115,7 +1070,6 @@
                                 .range(from, from + step - 1);
                                 
                             if (res.error) {
-                                // Memaklumi error Range Not Satisfiable (PGRST103) atau pesan kosong sebagai tanda data habis
                                 if (res.error.code === 'PGRST103' || !res.error.message || res.error.message === "" || JSON.stringify(res.error) === '{"message":""}') {
                                     data = [];
                                     fetchSuccess = true;
@@ -1148,7 +1102,6 @@
                 pbPct.textContent = `100%`;
                 await new Promise(r => setTimeout(r, 400));
 
-                // LANGSUNG TAMPILKAN DASBOR TAHAP 1 
                 processRawData(recentData);
                 document.getElementById('statusText').textContent = "Connected (Partial)";
                 document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-400";
@@ -1156,7 +1109,6 @@
                 
                 window.showToast("Data 2 minggu terakhir siap. Mengunduh sisa data di latar belakang...", "info");
 
-                // --- TAHAP 2: FETCH SISA DATA LAMA DI LATAR BELAKANG ---
                 let oldData = [];
                 let fromOld = 0;
                 let isFetchingOld = true;
@@ -1178,7 +1130,6 @@
                                 .range(fromOld, fromOld + step - 1);
                                 
                             if (res.error) {
-                                // Memaklumi error Range Not Satisfiable (PGRST103) atau pesan kosong sebagai tanda data habis
                                 if (res.error.code === 'PGRST103' || !res.error.message || res.error.message === "" || JSON.stringify(res.error) === '{"message":""}') {
                                     data = [];
                                     fetchSuccess = true;
@@ -1243,7 +1194,6 @@
             const svcSet = new Set();
             const destStagingSet = new Set();
             
-            // Ekstrak pengaturan dari Cloud jika ada
             const settingRow = dataFromDb.find(r => r.id === 'SYS_SETTING_STAGING_MAP' || r.awb_no === 'SYS_SETTINGS');
             if (settingRow) {
                 const stgVal = settingRow.destination_staging || settingRow.Destination_Staging;
@@ -1258,13 +1208,11 @@
             if(!window.stagingMap) window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
             
             dataFromDb.forEach(row => {
-                // Abaikan baris pengaturan sistem agar tidak masuk tabel dasbor
                 if (row.id === 'SYS_SETTING_STAGING_MAP' || row.awb_no === 'SYS_SETTINGS') return;
 
                 const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
                 const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
                 
-                // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL #N/A atau N#A ---
                 if (destStaging.includes('#N/A') || destStaging.includes('N#A') || destStaging === 'N/A' || dest.includes('#N/A')) return;
 
                 let displayStaging = destStaging;
@@ -1276,7 +1224,6 @@
 
                 const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
                 
-                // MENGGABUNGKAN 'REG' MENJADI 'REGULER'
                 let svc = String(row.Service || row.service || row._service || 'N/A').toUpperCase();
                 if (svc === 'REG') svc = 'REGULER';
 
@@ -1304,14 +1251,12 @@
                 });
             });
 
-            // MULTI-SELECT POPULATOR
             window.populateMulti = (menuId, labelId, opts) => {
                 const menu = document.getElementById(menuId);
                 if(!menu) return;
                 
                 let html = '';
 
-                // Tambahkan Search Bar khusus untuk Staging Menu
                 if (menuId === 'stagingMenu') {
                     html += `
                         <div class="px-2 py-1.5 border-b border-slate-100 sticky top-0 bg-white z-10">
@@ -1338,7 +1283,6 @@
                 window.updateMultiLabel(menuId, labelId);
             };
 
-            // Fungsi pencarian item di dalam dropdown
             window.filterMenuOptions = function(menuId, keyword) {
                 const menu = document.getElementById(menuId);
                 const containers = menu.querySelectorAll('.checkbox-container');
@@ -1360,7 +1304,6 @@
             populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
             populateMulti('statusMenu', 'statusLabel', ['After EDD', 'Last Day', 'Same Day', '>2 Hari', 'Unknown']);
 
-            // Delete Modal khusus Dropdown (tetap select biasa)
             const deleteDestSelect = document.getElementById('deleteDestInput');
             if (deleteDestSelect) {
                 const currentVal = deleteDestSelect.value;
@@ -1574,40 +1517,54 @@
                     }
                 };
             } else {
-                const dAfter = keys.map(k => agg[k].after);
-                const dLast = keys.map(k => agg[k].last);
-                const dSame = keys.map(k => agg[k].same);
-                const dOver = keys.map(k => agg[k].over);
+                const vals = keys.map(k => {
+                    const total = agg[k].total;
+                    const success = agg[k].same + agg[k].over;
+                    return total > 0 ? (success / total) * 100 : 0;
+                });
 
                 chartData = {
                     labels: labels,
-                    datasets: [
-                        { label: '>2 Hari', data: dOver, backgroundColor: '#4F46E5', stack: 'Stack 0', borderRadius: 4 },
-                        { label: 'Same Day', data: dSame, backgroundColor: '#059669', stack: 'Stack 0', borderRadius: 4 },
-                        { label: 'Last Day', data: dLast, backgroundColor: '#D97706', stack: 'Stack 0', borderRadius: 4 },
-                        { label: 'After EDD', data: dAfter, backgroundColor: '#E11D48', stack: 'Stack 0', borderRadius: 4 }
-                    ]
+                    datasets: [{
+                        label: 'SLA Sesuai Target (%)',
+                        data: vals,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        segment: {
+                            borderColor: ctx => ctx.p0.parsed.y < 97.5 || ctx.p1.parsed.y < 97.5 ? '#E11D48' : '#10B981'
+                        },
+                        pointBackgroundColor: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
+                        pointBorderColor: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
+                        pointRadius: 5
+                    }]
                 };
                 chartOptions = {
                     responsive: true,
                     maintainAspectRatio: false,
-                    layout: { padding: { top: 10 } },
+                    layout: { padding: { top: 25 } },
                     scales: {
-                        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, color: '#64748B' } },
-                        y: { stacked: true, display: false, beginAtZero: true, grace: '15%' }
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#64748B' } },
+                        y: { display: false, beginAtZero: true, max: 115 }
                     },
                     plugins: {
-                        legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 10 } } },
-                        tooltip: { enabled: true },
+                        legend: { display: false },
+                        tooltip: { 
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toFixed(1) + '%';
+                                }
+                            }
+                        },
                         datalabels: {
-                            display: function(context) {
-                                return context.dataset.data[context.dataIndex] > 0;
-                            },
-                            align: 'center',
-                            anchor: 'center',
-                            color: '#FFFFFF',
-                            font: { weight: 'bold', size: 9 },
-                            formatter: (v) => formatNumber(v),
+                            display: true,
+                            align: 'top',
+                            anchor: 'end',
+                            color: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: (v) => v.toFixed(1) + '%',
                             clip: false
                         }
                     }
@@ -1615,7 +1572,7 @@
             }
 
             window.chartInstances.trend = new Chart(ctx, {
-                type: window.trendChartMode === 'total' ? 'line' : 'bar',
+                type: 'line',
                 data: chartData,
                 options: chartOptions
             });
@@ -2027,7 +1984,6 @@
                         const destStr = String(getVal(['Destinasi', 'destinasi', 'Destination']) || 'N/A').trim().toUpperCase();
                         const destStagingStr = String(getVal(['destination_staging', 'Destination_Staging', 'DESTINATION_STAGING']) || '-').trim().toUpperCase();
                         
-                        // --- MENGHAPUS (TAKE OUT) DATA YANG MEMILIKI ERROR EXCEL N#A SEBELUM DISIMPAN ---
                         if (destStagingStr.includes('N#A') || destStagingStr.includes('#N/A') || destStagingStr === 'N/A' || destStr.includes('#N/A')) continue;
                         
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
