@@ -379,23 +379,14 @@
                         </div>
                         <div class="w-full xl:flex-1 flex flex-wrap gap-3 justify-end items-end">
                             <div>
-                                <span class="input-label">Tgl Inbound</span>
-                                <div class="flex items-center bg-white rounded-xl border border-slate-200 p-1 shadow-sm h-[38px] justify-between min-w-[220px]">
-                                    <input type="date" id="filterStartDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
+                                <span class="input-label">Waktu Inbound</span>
+                                <div class="flex items-center bg-white rounded-xl border border-slate-200 p-1 shadow-sm h-[38px] justify-between min-w-[290px]">
+                                    <input type="datetime-local" id="filterStartDate" class="text-[10px] font-semibold text-slate-600 px-1 outline-none w-[48%] bg-transparent" onchange="window.applyFilters()">
                                     <span class="text-slate-300 text-[9px] mx-1 font-bold">SD</span>
-                                    <input type="date" id="filterEndDate" class="text-[11px] font-semibold text-slate-600 px-1 outline-none w-[45%] bg-transparent" onchange="window.applyFilters()">
+                                    <input type="datetime-local" id="filterEndDate" class="text-[10px] font-semibold text-slate-600 px-1 outline-none w-[48%] bg-transparent" onchange="window.applyFilters()">
                                 </div>
                             </div>
                             
-                            <div class="relative w-28 shrink-0">
-                                <span class="input-label truncate">Rentang Jam</span>
-                                <button onclick="window.toggleMulti('jamMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
-                                    <span id="jamLabel" class="truncate text-[10px] sm:text-[11px] text-slate-600">Semua</span>
-                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-[#E81C65]"></i>
-                                </button>
-                                <div id="jamMenu" class="hidden absolute top-full right-0 lg:left-0 w-48 bg-white border border-slate-200 shadow-xl rounded-xl mt-1 z-[60] max-h-60 overflow-y-auto p-2 flex flex-col gap-1"></div>
-                            </div>
-
                             <div class="relative w-28 shrink-0">
                                 <span class="input-label truncate">Status SLA</span>
                                 <button onclick="window.toggleMulti('statusMenu')" class="fresh-input w-full text-left flex justify-between items-center bg-white h-[38px] relative z-10 group px-2 sm:px-3">
@@ -618,21 +609,6 @@
             console.error("Supabase Init Error:", e);
         }
 
-        // Helper fungsi kategori jam
-        const categorizeTime = (timeStr) => {
-            if (!timeStr || timeStr === '-' || timeStr === 'N/A') return 'Unknown';
-            const parts = timeStr.split(':');
-            if (parts.length < 1) return 'Unknown';
-            const hour = parseInt(parts[0], 10);
-            if (isNaN(hour)) return 'Unknown';
-            
-            if (hour >= 0 && hour < 5) return '00:00 - 05:00';
-            if (hour >= 5 && hour < 12) return '05:00 - 12:00';
-            if (hour >= 12 && hour < 18) return '12:00 - 18:00';
-            if (hour >= 18 && hour <= 23) return '18:00 - 00:00';
-            return 'Unknown';
-        };
-
         window.rawData = [];
         window.filteredData = [];
         window.currentPage = 1;
@@ -641,7 +617,7 @@
 
         window.toggleMulti = (id) => {
             const el = document.getElementById(id);
-            ['jamMenu', 'statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(m => {
+            ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(m => {
                 if(m !== id) {
                     const otherEl = document.getElementById(m);
                     if(otherEl) otherEl.classList.add('hidden');
@@ -652,7 +628,7 @@
 
         window.addEventListener('click', (e) => {
             if (!e.target.closest('.relative')) {
-                ['jamMenu', 'statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(m => {
+                ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(m => {
                     const el = document.getElementById(m);
                     if(el) el.classList.add('hidden');
                 });
@@ -881,7 +857,6 @@
                             const inboundDt = dateStr !== '-' ? parseIndoDate(dateStr) : null;
                             const eddDt = r["Target EDD"] !== '-' ? parseIndoDate(r["Target EDD"]) : null;
                             const sla = calculateSlaStatus(inboundDt, eddDt);
-                            const jamRange = categorizeTime(timeStr);
                             
                             let destStaging = r["Destinasi Staging"] || '-';
                             let displayStaging = destStaging;
@@ -897,7 +872,6 @@
                                 _container: container, 
                                 _inboundDate: inboundDt,
                                 _inboundTime: timeStr,
-                                _jamRange: jamRange,
                                 _eddDate: eddDt, 
                                 _origin: r["Origin"] || 'N/A', 
                                 _dest: dest, 
@@ -1692,7 +1666,6 @@
                 const inboundTime = row.Jam || row.jam || row.inbound_time || row._inboundTime || '-';
                 const sla = calculateSlaStatus(inboundDt, eddDt);
                 const hari = inboundDt && !isNaN(inboundDt) ? hariArr[inboundDt.getDay()] : 'N/A';
-                const jamRange = categorizeTime(inboundTime);
                 
                 destSet.add(dest);
                 orgSet.add(org);
@@ -1703,7 +1676,6 @@
                     _id: row.id || row._id,
                     _awb: awb, _container: container, _inboundDate: inboundDt,
                     _inboundTime: inboundTime,
-                    _jamRange: jamRange,
                     _eddDate: eddDt, _origin: org, _dest: dest, _destStaging: destStaging, 
                     _displayStaging: displayStaging,
                     _service: svc, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff,
@@ -1758,7 +1730,6 @@
                 });
             };
 
-            populateMulti('jamMenu', 'jamLabel', ['00:00 - 05:00', '05:00 - 12:00', '12:00 - 18:00', '18:00 - 00:00', 'Unknown']);
             populateMulti('destMenu', 'destLabel', [...destSet].sort());
             populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
             populateMulti('originMenu', 'originLabel', [...orgSet].sort());
@@ -1780,13 +1751,17 @@
             // Set default filter ke bulan berjalan (tanggal 1 hingga akhir bulan)
             const now = new Date();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            startOfMonth.setHours(0, 0, 0, 0);
             const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+            endOfMonth.setHours(23, 59, 0, 0);
             
             const formatForInput = (d) => {
                 const yyyy = d.getFullYear();
                 const mm = String(d.getMonth() + 1).padStart(2, '0');
                 const dd = String(d.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
+                const hh = String(d.getHours()).padStart(2, '0');
+                const min = String(d.getMinutes()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
             };
             
             document.getElementById('filterStartDate').value = formatForInput(startOfMonth);
@@ -1798,7 +1773,7 @@
         };
 
         window.resetFilters = function() {
-            ['jamMenu', 'statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(id => {
+            ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(id => {
                 const inputs = document.querySelectorAll(`#${id} input`);
                 inputs.forEach(i => i.checked = true);
                 let labelId = id.replace('Menu', 'Label');
@@ -1810,13 +1785,17 @@
             // Set ulang default ke bulan berjalan saat reset ditekan
             const now = new Date();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            startOfMonth.setHours(0, 0, 0, 0);
             const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            endOfMonth.setHours(23, 59, 0, 0);
             
             const formatForInput = (d) => {
                 const yyyy = d.getFullYear();
                 const mm = String(d.getMonth() + 1).padStart(2, '0');
                 const dd = String(d.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
+                const hh = String(d.getHours()).padStart(2, '0');
+                const min = String(d.getMinutes()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
             };
             
             document.getElementById('filterStartDate').value = formatForInput(startOfMonth);
@@ -1829,7 +1808,6 @@
         window.applyFilters = function() {
             const search = document.getElementById('globalSearch').value.toUpperCase();
             
-            const fJam = window.getSelectedValues('jamMenu');
             const fStatus = window.getSelectedValues('statusMenu');
             const fOrigin = window.getSelectedValues('originMenu');
             const fDest = window.getSelectedValues('destMenu');
@@ -1839,20 +1817,26 @@
 
             const startStr = document.getElementById('filterStartDate').value;
             const endStr = document.getElementById('filterEndDate').value;
-            const sDate = startStr ? new Date(startStr) : null; if(sDate) sDate.setHours(0,0,0,0);
-            const eDate = endStr ? new Date(endStr) : null; if(eDate) eDate.setHours(23,59,59,999);
+            const sDate = startStr ? new Date(startStr) : null;
+            const eDate = endStr ? new Date(endStr) : null;
 
             window.filteredData = window.rawData.filter(d => {
                 let dateOk = true;
                 if (sDate || eDate) {
                     if (d._inboundDate && !isNaN(d._inboundDate)) {
-                        if (sDate && d._inboundDate < sDate) dateOk = false;
-                        if (eDate && d._inboundDate > eDate) dateOk = false;
+                        let rowDateTime = new Date(d._inboundDate.getTime());
+                        if (d._inboundTime && d._inboundTime !== '-' && d._inboundTime !== 'N/A') {
+                            const timeParts = d._inboundTime.split(':');
+                            if(timeParts.length >= 2) {
+                                rowDateTime.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), timeParts[2] ? parseInt(timeParts[2]) : 0);
+                            }
+                        }
+                        if (sDate && rowDateTime < sDate) dateOk = false;
+                        if (eDate && rowDateTime > eDate) dateOk = false;
                     } else { dateOk = true; } 
                 }
                 if (!dateOk) return false;
                 
-                const jamOk = fJam.includes('ALL') || fJam.includes(d._jamRange);
                 const statOk = fStatus.includes('ALL') || fStatus.includes(d._slaStatus);
                 const originOk = fOrigin.includes('ALL') || fOrigin.includes(d._origin);
                 const destOk = fDest.includes('ALL') || fDest.includes(d._dest);
@@ -1860,7 +1844,7 @@
                 const serviceOk = fService.includes('ALL') || fService.includes(d._service);
                 const hariOk = fHari.includes('ALL') || fHari.includes(d._hari);
                 
-                if (!(jamOk && statOk && originOk && destOk && stagingOk && serviceOk && hariOk)) return false;
+                if (!(statOk && originOk && destOk && stagingOk && serviceOk && hariOk)) return false;
 
                 if (search) {
                     const str = `${d._awb} ${d._container} ${d._vendor} ${d._origin} ${d._dest} ${d._displayStaging} ${d._destStaging} ${d._service}`.toUpperCase();
