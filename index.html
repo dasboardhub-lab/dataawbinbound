@@ -170,7 +170,7 @@
         </div>
     </div>
 
-    <!-- MODAL ARSIP DATA (BARU) -->
+    <!-- MODAL ARSIP DATA -->
     <div id="archiveModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[420px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="archiveModalContent">
             <div class="text-center mb-6">
@@ -209,21 +209,32 @@
         </div>
     </div>
 
+    <!-- MODAL HAPUS DATA -->
     <div id="deleteModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[400px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-rose-600 shadow-sm">
                     <i class="fa-solid fa-trash-can text-2xl"></i>
                 </div>
                 <h3 class="text-lg font-bold text-slate-800">Hapus Data</h3>
-                <p class="text-xs text-slate-500 mt-1">Pilih kriteria data yang ingin dihapus</p>
+                <p class="text-xs text-slate-500 mt-1">Pilih kriteria rentang data yang ingin dihapus</p>
             </div>
-            <div class="relative mb-4">
-                <label class="input-label mb-2">Tanggal Inbound</label>
-                <select id="deleteDateInput" class="w-full text-center py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-rose-500 outline-none transition-all text-sm font-bold text-slate-700 cursor-pointer">
-                    <option value="">Pilih Tanggal...</option>
-                </select>
+            
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="relative w-full">
+                    <label class="input-label mb-2">Per Tanggal</label>
+                    <select id="deleteDateInput" class="w-full text-center py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-rose-500 outline-none transition-all text-xs font-bold text-slate-700 cursor-pointer" onchange="document.getElementById('deleteMonthInput').value = '';">
+                        <option value="">Pilih Tanggal...</option>
+                    </select>
+                </div>
+                <div class="relative w-full">
+                    <label class="input-label mb-2">1 Bulan Penuh</label>
+                    <select id="deleteMonthInput" class="w-full text-center py-3 bg-rose-50 border-2 border-rose-100 rounded-xl focus:border-rose-500 outline-none transition-all text-xs font-bold text-rose-700 cursor-pointer" onchange="document.getElementById('deleteDateInput').value = '';">
+                        <option value="">Pilih Bulan...</option>
+                    </select>
+                </div>
             </div>
+            
             <div class="flex gap-3 mb-6">
                 <div class="relative w-full">
                     <label class="input-label mb-2">Destinasi</label>
@@ -238,6 +249,7 @@
                     </select>
                 </div>
             </div>
+            
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="window.closeDeleteModal()" class="py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
                 <button onclick="window.confirmDelete()" class="py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 shadow-lg transition-colors">Lanjutkan</button>
@@ -843,6 +855,24 @@
                     const existingIds = new Set(window.rawData.map(d => d._id));
                     
                     rows.forEach(r => {
+                        // FIX: Normalisasi CSV jika formatnya dirusak oleh Excel (dijadikan 1 kolom)
+                        const keys = Object.keys(r);
+                        if (keys.length === 1 && keys[0].includes(',')) {
+                            const headerStr = keys[0];
+                            const valStr = r[headerStr];
+                            if (typeof valStr === 'string') {
+                                const headerArr = headerStr.split(',');
+                                const valArr = valStr.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').replace(/""/g, '"'));
+                                if (headerArr.length === valArr.length) {
+                                    const newR = {};
+                                    for(let i=0; i<headerArr.length; i++) {
+                                        newR[headerArr[i]] = valArr[i];
+                                    }
+                                    r = newR;
+                                }
+                            }
+                        }
+
                         const awb = r["No AWB"] || r["awb_no"];
                         if (!awb || awb === '-') return;
 
@@ -900,7 +930,20 @@
                     window.populateMulti('originMenu', 'originLabel', [...orgSet].sort());
                     window.populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
                     
-                    window.resetFilters(); 
+                    // FIX: Reset checkbox filter secara manual dan KOSONGKAN filter tanggal
+                    ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(id => {
+                        const inputs = document.querySelectorAll(`#${id} input`);
+                        inputs.forEach(i => i.checked = true);
+                        let labelId = id.replace('Menu', 'Label');
+                        window.updateMultiLabel(id, labelId);
+                    });
+                    document.getElementById('globalSearch').value = '';
+                    
+                    // Hapus rentang tanggal agar data bulan sebelumnya bisa tampil
+                    document.getElementById('filterStartDate').value = '';
+                    document.getElementById('filterEndDate').value = '';
+                    
+                    window.applyFilters(); 
                     
                     overlay.classList.add('hidden');
                     
@@ -929,6 +972,7 @@
         // --- END MANAJER ARSIP ---
 
         window.openDeleteModal = function() {
+            // Setup Hari
             const dateSelect = document.getElementById('deleteDateInput');
             const dates = [...new Set(window.rawData.map(d => {
                 if(d._inboundDate instanceof Date && !isNaN(d._inboundDate)) return formatDateForCsv(d._inboundDate);
@@ -939,11 +983,31 @@
             dates.forEach(d => { if(d !== 'NULL') hDate += `<option value="${d}">${d}</option>`; });
             if(dateSelect) dateSelect.innerHTML = hDate;
 
+            // Setup Bulan
+            const monthSelect = document.getElementById('deleteMonthInput');
+            const months = new Set();
+            window.rawData.forEach(d => {
+                if (d._inboundDate && !isNaN(d._inboundDate)) {
+                    months.add(`${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`);
+                }
+            });
+            let hMonth = '<option value="">Pilih Bulan...</option>';
+            [...months].sort().reverse().forEach(m => {
+                const [y, mo] = m.split('-');
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                hMonth += `<option value="${m}">${monthNames[parseInt(mo)-1]} ${y}</option>`;
+            });
+            if(monthSelect) monthSelect.innerHTML = hMonth;
+
+            // Setup Vendor
             const vendorSelect = document.getElementById('deleteVendorInput');
             const vendors = [...new Set(window.rawData.map(d => d._vendor))].sort();
             let hVen = '<option value="ALL">Semua Vendor</option>';
             vendors.forEach(v => { hVen += `<option value="${v}">${v}</option>`; });
             if(vendorSelect) vendorSelect.innerHTML = hVen;
+
+            document.getElementById('deleteDateInput').value = '';
+            document.getElementById('deleteMonthInput').value = '';
 
             document.getElementById('deleteModal').classList.remove('hidden');
             setTimeout(() => {
@@ -962,7 +1026,8 @@
 
         window.confirmDelete = function() {
              const date = document.getElementById('deleteDateInput').value;
-             if(!date) return window.showToast("Pilih tanggal terlebih dahulu!", "error");
+             const month = document.getElementById('deleteMonthInput').value;
+             if(!date && !month) return window.showToast("Pilih tanggal atau bulan terlebih dahulu!", "error");
              window.closeDeleteModal();
              window.openPasswordModal('delete');
         };
@@ -1179,9 +1244,10 @@
                     window.executeArchiveDelete(data); 
                 } else {
                     const date = document.getElementById('deleteDateInput').value;
+                    const month = document.getElementById('deleteMonthInput').value;
                     const dest = document.getElementById('deleteDestInput').value;
                     const vendor = document.getElementById('deleteVendorInput') ? document.getElementById('deleteVendorInput').value : 'ALL';
-                    if(window.deleteDataForDate) window.deleteDataForDate(date, dest, vendor);
+                    if(window.deleteDataForPeriod) window.deleteDataForPeriod(date, month, dest, vendor);
                 }
             } else {
                 window.showToast("Password Salah!", "error");
@@ -1190,7 +1256,8 @@
             }
         };
 
-        window.deleteDataForDate = async function(dateString, destString, vendorString) {
+        // Menggabungkan Hapus Per Hari & Hapus Per Bulan
+        window.deleteDataForPeriod = async function(dateString, monthString, destString, vendorString) {
             if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
 
             const overlay = document.getElementById('loadingOverlay');
@@ -1209,10 +1276,20 @@
             try {
                 let query = supabaseClient.from('awb_data').delete().neq('id', 'SYS_SETTING_STAGING_MAP');
                 
-                if (dateString === 'NULL') {
-                    query = query.is('inbound_date', null);
-                } else {
-                    query = query.eq('inbound_date', dateString);
+                if (monthString) {
+                    const [y, m] = monthString.split('-');
+                    const startDate = `${y}-${m}-01`;
+                    // Mendapatkan tanggal terakhir di bulan tersebut
+                    const endDate = new Date(parseInt(y), parseInt(m), 0);
+                    const endDateStr = `${y}-${m}-${String(endDate.getDate()).padStart(2, '0')}`;
+                    
+                    query = query.gte('inbound_date', startDate).lte('inbound_date', endDateStr);
+                } else if (dateString) {
+                    if (dateString === 'NULL') {
+                        query = query.is('inbound_date', null);
+                    } else {
+                        query = query.eq('inbound_date', dateString);
+                    }
                 }
                 
                 if (destString !== 'ALL') {
@@ -1232,7 +1309,7 @@
                 await new Promise(r => setTimeout(r, 400));
                 
                 overlay.classList.add('hidden');
-                window.showToast(`Berhasil menghapus data`, "success");
+                window.showToast(`Berhasil menghapus rentang data terpilih`, "success");
                 
                 window.fetchDataFromSupabase();
                 
@@ -2468,6 +2545,24 @@
                     };
 
                     for (let r of rows) {
+                        // FIX: Normalisasi CSV jika formatnya dirusak oleh Excel (dijadikan 1 kolom)
+                        const keys = Object.keys(r);
+                        if (keys.length === 1 && keys[0].includes(',')) {
+                            const headerStr = keys[0];
+                            const valStr = r[headerStr];
+                            if (typeof valStr === 'string') {
+                                const headerArr = headerStr.split(',');
+                                const valArr = valStr.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').replace(/""/g, '"'));
+                                if (headerArr.length === valArr.length) {
+                                    const newR = {};
+                                    for(let i=0; i<headerArr.length; i++) {
+                                        newR[headerArr[i]] = valArr[i];
+                                    }
+                                    r = newR;
+                                }
+                            }
+                        }
+
                         const getVal = (names) => { for(let n of names) { if(r[n] !== undefined) return r[n]; let key = Object.keys(r).find(k => k.toLowerCase().trim() === n.toLowerCase()); if(key) return r[key]; } return null; };
                         const awb = getVal(['awb_no', 'AWB No', 'No Resi', 'AWB']);
                         if(!awb) continue;
