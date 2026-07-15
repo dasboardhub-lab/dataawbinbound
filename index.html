@@ -98,7 +98,6 @@
 </head>
 <body class="flex flex-col min-h-screen selection:bg-pink-100 selection:text-pink-700">
 
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden z-[9999]">
         <div class="flex justify-center items-center mb-6">
             <div class="loader"><svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg></div>
@@ -120,10 +119,8 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toast-container" class="fixed top-0 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-sm"></div>
 
-    <!-- Preview Modal -->
     <div id="previewModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[360px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="previewModalContent">
             <div class="text-center mb-6">
@@ -150,7 +147,6 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div id="successModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="successModalContent">
             <div class="text-center mb-6">
@@ -174,7 +170,7 @@
         </div>
     </div>
 
-    <!-- Archive Modal -->
+    <!-- MODAL ARSIP DATA -->
     <div id="archiveModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[420px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="archiveModalContent">
             <div class="text-center mb-6">
@@ -213,7 +209,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    <!-- MODAL HAPUS DATA -->
     <div id="deleteModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[400px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="deleteModalContent">
             <div class="text-center mb-6">
@@ -266,7 +262,6 @@
         </div>
     </div>
 
-    <!-- Password Modal -->
     <div id="passwordModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[320px] p-8 transform scale-95 transition-all duration-300 border border-white/50" id="passwordModalContent">
             <div class="text-center mb-6">
@@ -286,7 +281,6 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[500px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="settingsModalContent">
             <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
@@ -295,6 +289,7 @@
             </div>
             <p class="text-xs text-slate-500 mb-4 leading-relaxed">Masukkan daftar staging yang benar untuk setiap destinasi. Pisahkan dengan koma. Staging di luar daftar ini akan otomatis dikelompokkan menjadi <b>XRT</b>. Jika dikosongkan, semua staging dianggap valid.</p>
             <div id="settingsList" class="max-h-[50vh] overflow-y-auto custom-scrollbar pr-2 mb-4 flex flex-col gap-3">
+                <!-- Dinamis -->
             </div>
             <div class="flex gap-3 pt-3 border-t border-slate-100">
                 <button onclick="window.closeSettingsModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs font-bold hover:bg-slate-50 transition-colors">Batal</button>
@@ -303,7 +298,6 @@
         </div>
     </div>
 
-    <!-- XRT Modal -->
     <div id="xrtModal" class="fixed inset-0 z-[70] bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[400px] p-6 transform scale-95 transition-all duration-300 border border-white/50" id="xrtModalContent">
             <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
@@ -325,7 +319,6 @@
         </div>
     </div>
 
-    <!-- Layout & Nav -->
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm h-[72px]">
         <div class="max-w-[1600px] mx-auto px-6 h-full flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -347,12 +340,12 @@
                 </div>
                 <div class="h-8 w-[1px] bg-slate-200 hidden md:block"></div>
                 <div class="flex items-center gap-2">
-                    <a href="https://inboundhubkalsulamp.vercel.app/" class="flex items-center justify-center h-[38px] px-3 sm:px-4 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-colors shadow-md mr-1 gap-2 hide-on-archive" title="Buka Dashboard Inbound Data">
+                    <a href="https://inboundhubkalsulamp.vercel.app/" class="flex items-center justify-center h-[38px] px-3 sm:px-4 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-colors shadow-md mr-1 gap-2" title="Buka Dashboard Inbound Data">
                         <i class="fa-solid fa-boxes-packing"></i>
                         <span class="hidden sm:inline">Data Inbound</span>
                     </a>
 
-                    <button onclick="window.openPasswordModal('settings')" class="bg-white border border-amber-200 text-amber-500 btn-header-icon hover:bg-amber-50 mr-1 hide-on-archive" title="Pengaturan Staging Valid">
+                    <button onclick="window.openPasswordModal('settings')" class="bg-white border border-amber-200 text-amber-500 btn-header-icon hover:bg-amber-50 mr-1" title="Pengaturan Staging Valid">
                         <i class="fa-solid fa-gear text-[15px]"></i>
                     </button>
                     
@@ -360,16 +353,16 @@
                         <i class="fa-solid fa-box-archive text-[15px]"></i>
                     </button>
 
-                    <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon hide-on-archive" title="Upload CSV Data AWB Baru">
+                    <button onclick="document.getElementById('csvAwbFile').click()" class="btn-magenta btn-header-icon" title="Upload CSV Data AWB Baru">
                         <i class="fa-solid fa-cloud-arrow-up text-[15px]"></i>
                     </button>
-                    <button onclick="window.fetchDataFromSupabase()" class="bg-white border border-slate-200 text-slate-500 btn-header-icon hover:bg-slate-50 hide-on-archive" title="Refresh Data">
+                    <button onclick="window.fetchDataFromSupabase()" class="bg-white border border-slate-200 text-slate-500 btn-header-icon hover:bg-slate-50" title="Refresh Data">
                         <i class="fa-solid fa-arrows-rotate text-[15px]"></i>
                     </button>
                     
-                    <div class="h-5 w-[2px] bg-slate-200 mx-1 rounded-full hide-on-archive"></div>
+                    <div class="h-5 w-[2px] bg-slate-200 mx-1 rounded-full"></div>
                     
-                    <button onclick="window.openDeleteModal()" class="bg-white border border-rose-200 text-rose-500 btn-header-icon hover:bg-rose-50 hide-on-archive" title="Hapus Data Spesifik">
+                    <button onclick="window.openDeleteModal()" class="bg-white border border-rose-200 text-rose-500 btn-header-icon hover:bg-rose-50" title="Hapus Data Spesifik">
                         <i class="fa-solid fa-trash-can text-[15px]"></i>
                     </button>
                 </div>
@@ -379,23 +372,11 @@
     </header>
 
     <main class="flex-grow w-full max-w-[1600px] mx-auto px-4 py-4">
-        
-        <div id="archiveBanner" class="hidden mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl flex items-center justify-between shadow-sm animate-fade-in-up">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><i class="fa-solid fa-box-archive"></i></div>
-                <div>
-                    <h3 class="text-sm font-bold text-amber-800" id="archiveBannerText">MODE ARSIP AKTIF</h3>
-                    <p class="text-xs text-amber-600 mt-0.5">Anda sedang melihat data dari file arsip CSV. Fitur upload dan hapus dinonaktifkan sementara.</p>
-                </div>
-            </div>
-            <button onclick="window.exitArchiveMode()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors">Tutup Arsip & Kembali</button>
-        </div>
-
         <div id="initialState" class="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in-up">
             <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center border-2 border-dashed border-emerald-200 shadow-xl shadow-emerald-50 mx-auto mb-6">
                 <i class="fa-solid fa-server text-3xl text-emerald-400 animate-pulse"></i>
             </div>
-            <h2 class="text-lg font-bold text-slate-800" id="initialStateTitle">Mengambil Data AWB...</h2>
+            <h2 class="text-lg font-bold text-slate-800">Mengambil Data AWB...</h2>
             <p class="text-xs text-slate-500 mt-2 font-medium max-w-md text-center">Menarik data dari Supabase PostgreSQL Database.</p>
         </div>
 
@@ -588,6 +569,11 @@
                         <button onclick="window.downloadManifestCSV()" class="text-[10px] font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 transition shadow-sm flex items-center gap-1.5">
                             <i class="fa-solid fa-file-csv"></i> Unduh CSV
                         </button>
+                        <div class="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-100">
+                            <button onclick="window.changePage(-1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white text-slate-400 hover:text-[#E81C65] hover:shadow-sm transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                            <span id="pageIndicator" class="px-3 text-[10px] font-mono font-bold text-slate-500">1</span>
+                            <button onclick="window.changePage(1)" class="w-7 h-7 flex items-center justify-center rounded-md bg-white text-slate-400 hover:text-[#E81C65] hover:shadow-sm transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class="overflow-auto custom-scrollbar max-h-[600px]">
@@ -619,7 +605,6 @@
     </main>
 
     <script>
-        // 1. Inisialisasi Chart & Supabase
         Chart.register(ChartDataLabels);
 
         const SUPABASE_URL = 'https://svmgwupvjybfmatjfafp.supabase.co'; 
@@ -636,288 +621,12 @@
             console.error("Supabase Init Error:", e);
         }
 
-        // 2. Global Variables
         window.rawData = [];
         window.filteredData = [];
         window.currentPage = 1;
         window.rowsPerPage = 150;
-        window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
-        window.trendChartMode = 'total';
-        window.slaDestMode = 'destinasi';
-        window.currentAction = '';
-        window.pendingUploadData = [];
-        window.chartInstances = {};
+        document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
-        // Setup Tanggal Hari Ini di Header
-        const headerDateDisplay = document.getElementById('currentDateDisplay');
-        if(headerDateDisplay) {
-            headerDateDisplay.textContent = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-        }
-
-        // 3. Helper Functions
-        window.formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
-
-        window.showToast = function(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            if(!container) return;
-            const toast = document.createElement('div');
-            let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' : 
-                       type === 'error' ? '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>' : 
-                       (type === 'warning' ? '<i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>' : '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>');
-
-            toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3 bg-white rounded-2xl shadow-lg border border-slate-100 min-w-[240px] justify-center mb-2`;
-            toast.innerHTML = `${icon}<span class="text-xs font-bold text-slate-600">${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -20px)'; setTimeout(() => toast.remove(), 300); }, 3500);
-        };
-
-        window.parseIndoDate = (dateStr) => {
-            if(!dateStr) return null;
-            let str = String(dateStr).trim(); 
-            if(!str || str === '-' || str.toLowerCase() === 'null') return null;
-            if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
-                const p = str.substring(0, 10).split('-');
-                return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
-            }
-            if (/[a-zA-Z]/.test(str)) {
-                str = str.replace(/[-\/]/g, ' '); 
-                const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'mei':4,'jun':5,'jul':6,'aug':7,'agu':7,'sep':8,'oct':9,'okt':9,'nov':10,'dec':11,'des':11};
-                const parts = str.toLowerCase().split(/[\s,]+/);
-                if(parts.length >= 3) {
-                    let d = parseInt(parts[0]);
-                    let mStr = parts[1].substring(0,3);
-                    let m = months[mStr] !== undefined ? months[mStr] : 0;
-                    let y = parseInt(parts[2]);
-                    if (y < 100) y += 2000;
-                    if(isNaN(d) || isNaN(y)) return null;
-                    return new Date(y, m, d);
-                }
-            } else {
-                let p = str.includes('/') ? str.split(' ')[0].split('/') : str.split(' ')[0].split('-');
-                if(p.length === 3) {
-                    if (p[0].length === 4) return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
-                    else { 
-                        let y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
-                        return new Date(y, parseInt(p[1])-1, parseInt(p[0]));
-                    }
-                }
-            }
-            return null; 
-        };
-
-        window.formatDateToDisplay = (d) => {
-            if (d instanceof Date && !isNaN(d)) return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-            return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
-        };
-
-        window.formatDateForCsv = (d) => {
-            if (d instanceof Date && !isNaN(d)) return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-            return '-';
-        };
-
-        window.calculateSlaStatus = (inboundDate, eddDate) => {
-            if (!inboundDate || !eddDate || isNaN(inboundDate) || isNaN(eddDate)) return { status: "Unknown", diff: 0 };
-            inboundDate.setHours(0,0,0,0);
-            eddDate.setHours(0,0,0,0);
-            const diffDays = Math.round((eddDate - inboundDate) / (1000 * 60 * 60 * 24));
-            let status = "";
-            if (diffDays < 0) status = "After EDD";
-            else if (diffDays === 0) status = "Last Day";
-            else if (diffDays === 1) status = "Same Day";
-            else if (diffDays >= 2) status = ">2 Hari";
-            return { status, diff: diffDays };
-        };
-
-        // 4. Data Fetching (Tarik SELURUH Data)
-        window.fetchDataFromSupabase = async function() {
-            document.getElementById('initialState').classList.add('hidden');
-            document.getElementById('dashboardContent').classList.add('hidden');
-            
-            const overlay = document.getElementById('loadingOverlay');
-            const pbBar = document.getElementById('fetchProgressBar');
-            const pbText = document.getElementById('fetchProgressDetail');
-            const pbPct = document.getElementById('fetchProgressPct');
-
-            overlay.classList.remove('hidden');
-            document.getElementById('fetchProgressContainer').classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Menarik Seluruh Data...";
-
-            try {
-                if (!supabaseClient) throw new Error("Koneksi Supabase gagal.");
-
-                let totalData = 1;
-                try {
-                    const { count } = await supabaseClient.from('awb_data').select('id', { count: 'estimated', head: true });
-                    if (count) totalData = count;
-                } catch(e) {}
-
-                let allData = [];
-                let isFetching = true;
-                let lastId = null;
-                // PERBAIKAN: Ubah step ke 1000 menyesuaikan max limit bawaan Supabase
-                const step = 1000; 
-
-                while (isFetching) {
-                    let query = supabaseClient.from('awb_data').select('*').order('id').limit(step);
-                    if (lastId) query = query.gt('id', lastId);
-
-                    let fetchSuccess = false;
-                    let data = null;
-
-                    // Retry logic for robustness
-                    for(let attempt = 1; attempt <= 3; attempt++) {
-                        try {
-                            const res = await query;
-                            if (res.error) throw res.error;
-                            data = res.data;
-                            fetchSuccess = true;
-                            break;
-                        } catch(err) {
-                            await new Promise(r => setTimeout(r, 1000 * attempt));
-                        }
-                    }
-                    
-                    if(!fetchSuccess) throw new Error("Koneksi terputus saat menarik data.");
-
-                    if (data && data.length > 0) {
-                        allData = allData.concat(data);
-                        lastId = data[data.length - 1].id;
-                        
-                        let pct = Math.min(Math.round((allData.length / totalData) * 100), 99);
-                        pbBar.style.width = `${pct}%`;
-                        pbPct.textContent = `${pct}%`;
-                        pbText.textContent = `Tarik: ${allData.length.toLocaleString('id-ID')} baris`;
-
-                        // PERBAIKAN: Hanya berhenti jika data yang dikembalikan kurang dari 1000
-                        if (data.length < step) isFetching = false; 
-                    } else {
-                        isFetching = false;
-                    }
-                }
-                
-                pbBar.style.width = `100%`;
-                pbPct.textContent = `100%`;
-                pbText.textContent = `Selesai memuat ${allData.length.toLocaleString('id-ID')} baris!`;
-                await new Promise(r => setTimeout(r, 500));
-
-                window.processRawData(allData);
-                
-                document.getElementById('statusText').textContent = "Connected";
-                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
-                overlay.classList.add('hidden');
-
-            } catch (err) {
-                console.error("Fetch Error:", err);
-                overlay.classList.add('hidden');
-                window.showToast(err.message || "Gagal memuat data dari Supabase.", "error");
-            }
-        };
-
-        // 5. Data Processing
-        window.processRawData = (dataFromDb) => {
-            window.rawData = [];
-            const destSet = new Set();
-            const orgSet = new Set();
-            const svcSet = new Set();
-            const destStagingSet = new Set();
-            
-            const settingRow = dataFromDb.find(r => r.id === 'SYS_SETTING_STAGING_MAP' || r.awb_no === 'SYS_SETTINGS');
-            if (settingRow) {
-                const stgVal = settingRow.destination_staging || settingRow.Destination_Staging;
-                if (stgVal) {
-                    try {
-                        window.stagingMap = JSON.parse(stgVal);
-                        localStorage.setItem('awbStagingMap', stgVal);
-                    } catch(e) {}
-                }
-            }
-            
-            if(!window.stagingMap) window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
-            const hariArr = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-
-            dataFromDb.forEach(row => {
-                if (row.id === 'SYS_SETTING_STAGING_MAP' || row.awb_no === 'SYS_SETTINGS') return;
-
-                const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
-                const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
-                if (destStaging.includes('#N/A') || destStaging.includes('N#A') || destStaging === 'N/A' || dest.includes('#N/A')) return;
-
-                let displayStaging = destStaging;
-                if (window.stagingMap[dest] && window.stagingMap[dest].length > 0) {
-                    if (!window.stagingMap[dest].includes(destStaging)) displayStaging = 'XRT';
-                }
-
-                const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
-                let svc = String(row.Service || row.service || row._service || 'N/A').toUpperCase();
-                if (svc === 'REG') svc = 'REGULER';
-                const vendor = String(row.Vendor || row.vendor || row._vendor || 'N/A').toUpperCase();
-                const awb = String(row.awb_no || row._awb || '').toUpperCase();
-                const container = String(row.container_no || row._container || '-').toUpperCase();
-
-                const inboundDt = row._inboundDate !== undefined ? row._inboundDate : window.parseIndoDate(row.inbound_date);
-                const eddDt = row._eddDate !== undefined ? row._eddDate : window.parseIndoDate(row.expect_delivery_tm || row.edd_date);
-                const inboundTime = row.Jam || row.jam || row.inbound_time || row._inboundTime || '-';
-                const sla = window.calculateSlaStatus(inboundDt, eddDt);
-                const hari = inboundDt && !isNaN(inboundDt) ? hariArr[inboundDt.getDay()] : 'N/A';
-                
-                destSet.add(dest);
-                orgSet.add(org);
-                svcSet.add(svc);
-                destStagingSet.add(displayStaging);
-
-                window.rawData.push({
-                    _id: row.id || row._id,
-                    _awb: awb, _container: container, _inboundDate: inboundDt,
-                    _inboundTime: inboundTime,
-                    _eddDate: eddDt, _origin: org, _dest: dest, _destStaging: destStaging, 
-                    _displayStaging: displayStaging,
-                    _service: svc, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff,
-                    _hari: hari
-                });
-            });
-
-            window.populateMulti('destMenu', 'destLabel', [...destSet].sort());
-            window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
-            window.populateMulti('originMenu', 'originLabel', [...orgSet].sort());
-            window.populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
-            window.populateMulti('statusMenu', 'statusLabel', ['After EDD', 'Last Day', 'Same Day', '>2 Hari', 'Unknown']);
-            
-            const hariSet = new Set(window.rawData.map(d => d._hari));
-            const sortedHari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu', 'N/A'].filter(h => hariSet.has(h));
-            window.populateMulti('hariMenu', 'hariLabel', sortedHari);
-
-            const deleteDestSelect = document.getElementById('deleteDestInput');
-            if (deleteDestSelect) {
-                const currentVal = deleteDestSelect.value;
-                deleteDestSelect.innerHTML = '<option value="ALL">Semua Destinasi</option>';
-                [...destSet].sort().forEach(val => { deleteDestSelect.innerHTML += `<option value="${val}">${val}</option>`; });
-                if ([...destSet].includes(currentVal)) deleteDestSelect.value = currentVal;
-            }
-
-            const now = new Date();
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            startOfMonth.setHours(0, 0, 0, 0);
-            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
-            endOfMonth.setHours(23, 59, 0, 0);
-            
-            const formatForInput = (d) => {
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                const hh = String(d.getHours()).padStart(2, '0');
-                const min = String(d.getMinutes()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-            };
-            
-            document.getElementById('filterStartDate').value = formatForInput(startOfMonth);
-            document.getElementById('filterEndDate').value = formatForInput(endOfMonth);
-
-            document.getElementById('initialState').classList.add('hidden');
-            document.getElementById('dashboardContent').classList.remove('hidden');
-            window.applyFilters();
-        };
-
-        // 6. UI Dropdowns & Filters Logic
         window.toggleMulti = (id) => {
             const el = document.getElementById(id);
             ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(m => {
@@ -947,8 +656,8 @@
                 items.forEach(i => i.checked = checkbox.checked);
             } else {
                 const allChecked = [...items].every(i => i.checked);
-                if(allChk) allChk.checked = allChecked;
-                if (!checkbox.checked && allChk) allChk.checked = false;
+                allChk.checked = allChecked;
+                if (!checkbox.checked) allChk.checked = false;
             }
             window.updateMultiLabel(menuId, labelId);
             window.applyFilters();
@@ -960,7 +669,6 @@
             const items = menu.querySelectorAll('input.item-checkbox');
             const checked = [...items].filter(i => i.checked);
             const label = document.getElementById(labelId);
-            if(!label) return;
             
             if (checked.length === 0) {
                 label.textContent = "Pilih...";
@@ -983,45 +691,1162 @@
             return [...menu.querySelectorAll('input.item-checkbox:checked')].map(i => i.value);
         };
 
-        window.filterMenuOptions = function(menuId, keyword) {
-            const menu = document.getElementById(menuId);
-            if(!menu) return;
-            const containers = menu.querySelectorAll('.checkbox-container');
-            const lowerKeyword = keyword.toLowerCase();
-
-            containers.forEach(container => {
-                const labelTextEl = container.querySelector('.label-text');
-                if(!labelTextEl) return;
-                const text = labelTextEl.innerText.toLowerCase();
-                if (text.includes(lowerKeyword) || text === 'semua') {
-                    container.style.display = 'flex';
+        // --- MANAJER ARSIP ---
+        window.openArchiveModal = function() {
+            const months = new Set();
+            let hasNull = false;
+            
+            window.rawData.forEach(d => {
+                if (d._inboundDate && !isNaN(d._inboundDate)) {
+                    months.add(`${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`);
                 } else {
-                    container.style.display = 'none';
+                    hasNull = true;
+                }
+            });
+
+            const select = document.getElementById('archiveMonthInput');
+            select.innerHTML = '<option value="">Pilih Bulan...</option>';
+            
+            [...months].sort().reverse().forEach(m => {
+                const [y, mo] = m.split('-');
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                select.innerHTML += `<option value="${m}">${monthNames[parseInt(mo)-1]} ${y}</option>`;
+            });
+            
+            if(hasNull) select.innerHTML += '<option value="NULL">Data Tanpa Tanggal (Kosong)</option>';
+            
+            document.getElementById('archiveDeleteCheckbox').checked = false;
+
+            document.getElementById('archiveModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('archiveModal').classList.remove('opacity-0');
+                document.getElementById('archiveModalContent').classList.remove('scale-95');
+                document.getElementById('archiveModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeArchiveModal = function() {
+            document.getElementById('archiveModal').classList.add('opacity-0');
+            document.getElementById('archiveModalContent').classList.remove('scale-100');
+            document.getElementById('archiveModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('archiveModal').classList.add('hidden'), 300);
+        };
+
+        window.processArchiveExport = function() {
+            const monthVal = document.getElementById('archiveMonthInput').value;
+            const isDelete = document.getElementById('archiveDeleteCheckbox').checked;
+
+            if (!monthVal) return window.showToast('Silakan pilih bulan arsip terlebih dahulu', 'warning');
+
+            const dataToExport = window.rawData.filter(d => {
+                if (monthVal === 'NULL') return !d._inboundDate || isNaN(d._inboundDate);
+                if (!d._inboundDate || isNaN(d._inboundDate)) return false;
+                const m = `${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`;
+                return m === monthVal;
+            });
+
+            if (dataToExport.length === 0) return window.showToast('Tidak ada data yang ditemukan di bulan ini', 'warning');
+
+            if (isDelete) {
+                window.archiveDataToProcess = { data: dataToExport, monthVal };
+                window.closeArchiveModal();
+                window.openPasswordModal('archive_export');
+            } else {
+                window.executeArchiveExportAndDownload(dataToExport, monthVal);
+            }
+        };
+
+        window.executeArchiveExportAndDownload = function(data, monthVal) {
+            const headers = ["No AWB", "No Container", "Tanggal Inbound", "Jam Inbound", "Target EDD", "Origin", "Destinasi", "Destinasi Staging", "Layanan", "Vendor"];
+            
+            const csvRows = data.map(d => {
+                return [
+                    d._awb || '-', d._container || '-', formatDateForCsv(d._inboundDate),
+                    d._inboundTime || '-', formatDateForCsv(d._eddDate),
+                    d._origin || '-', d._dest || '-', d._destStaging || '-',
+                    d._service || '-', d._vendor || '-'
+                ].map(val => `"${val}"`).join(','); 
+            });
+
+            const csvContent = [headers.join(','), ...csvRows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Arsip_AWB_${monthVal}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            window.showToast(`Berhasil mengunduh ${formatNumber(data.length)} baris arsip (${monthVal})`, "success");
+        };
+
+        window.executeArchiveDelete = async function(dataToDelete) {
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbPct = document.getElementById('fetchProgressPct');
+            const pbText = document.getElementById('fetchProgressDetail');
+
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Membersihkan Data Arsip...";
+
+            try {
+                const allIds = dataToDelete.map(d => d._id);
+                const totalToProcess = allIds.length;
+                let totalDeleted = 0;
+                const DELETE_SIZE = 100;
+
+                for (let i = 0; i < allIds.length; i += DELETE_SIZE) {
+                    const idsChunk = allIds.slice(i, i + DELETE_SIZE);
+                    let delSuccess = false;
+
+                    for (let attempt = 1; attempt <= 3; attempt++) {
+                        try {
+                            const { error } = await supabaseClient.from('awb_data').delete().in('id', idsChunk);
+                            if (error) throw error;
+                            delSuccess = true;
+                            break;
+                        } catch (err) {
+                            await new Promise(r => setTimeout(r, 1000 * attempt));
+                        }
+                    }
+
+                    if (!delSuccess) throw new Error("Gagal menghapus chunk arsip");
+
+                    totalDeleted += idsChunk.length;
+                    
+                    let pct = Math.min(Math.round((totalDeleted / totalToProcess) * 100), 99);
+                    if (pct < 10) pct = 10;
+                    pbBar.style.width = `${pct}%`;
+                    pbPct.textContent = `${pct}%`;
+                    pbText.textContent = `Menghapus: ${totalDeleted.toLocaleString('id-ID')} / ${totalToProcess.toLocaleString('id-ID')}`;
+                    
+                    await new Promise(r => setTimeout(r, 150));
+                }
+
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+
+                overlay.classList.add('hidden');
+                window.showToast("Data arsip berhasil dihapus dari database", "success");
+                window.fetchDataFromSupabase();
+                
+            } catch(e) {
+                console.error("Archive Delete Error:", e);
+                overlay.classList.add('hidden');
+                window.showToast("Gagal membersihkan sebagian data.", "error");
+            }
+        };
+
+        window.importArchiveTemporary = function(file) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Memuat Arsip Sementara...";
+            document.getElementById('fetchProgressContainer').classList.add('hidden');
+
+            Papa.parse(file, {
+                header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    const rows = results.data;
+                    let addedCount = 0;
+                    const existingIds = new Set(window.rawData.map(d => d._id));
+                    
+                    rows.forEach(r => {
+                        // FIX: Normalisasi CSV jika formatnya dirusak oleh Excel (dijadikan 1 kolom)
+                        const keys = Object.keys(r);
+                        if (keys.length === 1 && keys[0].includes(',')) {
+                            const headerStr = keys[0];
+                            const valStr = r[headerStr];
+                            if (typeof valStr === 'string') {
+                                const headerArr = headerStr.split(',');
+                                const valArr = valStr.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').replace(/""/g, '"'));
+                                if (headerArr.length === valArr.length) {
+                                    const newR = {};
+                                    for(let i=0; i<headerArr.length; i++) {
+                                        newR[headerArr[i]] = valArr[i];
+                                    }
+                                    r = newR;
+                                }
+                            }
+                        }
+
+                        const awb = r["No AWB"] || r["awb_no"];
+                        if (!awb || awb === '-') return;
+
+                        const container = r["No Container"] || '-';
+                        const dateStr = r["Tanggal Inbound"] || '-';
+                        const timeStr = r["Jam Inbound"] || '-';
+                        const dest = r["Destinasi"] || 'N/A';
+                        
+                        let rowId = `${awb}_${container}_${dateStr}_${timeStr}_${dest}`.replace(/[^a-zA-Z0-9]/g, '_');
+                        
+                        if (!existingIds.has(rowId)) {
+                            const inboundDt = dateStr !== '-' ? parseIndoDate(dateStr) : null;
+                            const eddDt = r["Target EDD"] !== '-' ? parseIndoDate(r["Target EDD"]) : null;
+                            const sla = calculateSlaStatus(inboundDt, eddDt);
+                            
+                            let destStaging = r["Destinasi Staging"] || '-';
+                            let displayStaging = destStaging;
+                            if (window.stagingMap[dest] && window.stagingMap[dest].length > 0) {
+                                if (!window.stagingMap[dest].includes(destStaging)) {
+                                    displayStaging = 'XRT';
+                                }
+                            }
+                            
+                            window.rawData.push({
+                                _id: rowId,
+                                _awb: awb, 
+                                _container: container, 
+                                _inboundDate: inboundDt,
+                                _inboundTime: timeStr,
+                                _eddDate: eddDt, 
+                                _origin: r["Origin"] || 'N/A', 
+                                _dest: dest, 
+                                _destStaging: destStaging, 
+                                _displayStaging: displayStaging,
+                                _service: r["Layanan"] || 'N/A', 
+                                _vendor: r["Vendor"] || 'N/A', 
+                                _slaStatus: sla.status, 
+                                _slaDiff: sla.diff
+                            });
+                            existingIds.add(rowId);
+                            addedCount++;
+                        }
+                    });
+
+                    // Update UI Filter Dropdown
+                    const destSet = new Set(); const orgSet = new Set();
+                    const svcSet = new Set(); const destStagingSet = new Set();
+                    window.rawData.forEach(d => {
+                        destSet.add(d._dest); orgSet.add(d._origin);
+                        svcSet.add(d._service); destStagingSet.add(d._displayStaging);
+                    });
+                    
+                    window.populateMulti('destMenu', 'destLabel', [...destSet].sort());
+                    window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
+                    window.populateMulti('originMenu', 'originLabel', [...orgSet].sort());
+                    window.populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
+                    
+                    // FIX: Reset checkbox filter secara manual dan KOSONGKAN filter tanggal
+                    ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(id => {
+                        const inputs = document.querySelectorAll(`#${id} input`);
+                        inputs.forEach(i => i.checked = true);
+                        let labelId = id.replace('Menu', 'Label');
+                        window.updateMultiLabel(id, labelId);
+                    });
+                    document.getElementById('globalSearch').value = '';
+                    
+                    // Hapus rentang tanggal agar data bulan sebelumnya bisa tampil
+                    document.getElementById('filterStartDate').value = '';
+                    document.getElementById('filterEndDate').value = '';
+                    
+                    window.applyFilters(); 
+                    
+                    overlay.classList.add('hidden');
+                    
+                    if (addedCount > 0) {
+                        window.showToast(`Berhasil memuat ${formatNumber(addedCount)} baris arsip (Mode Sementara).`, "success");
+                        
+                        const statusText = document.getElementById('statusText');
+                        statusText.textContent = "Mode Arsip (Memori)";
+                        statusText.classList.remove('text-slate-500');
+                        statusText.classList.add('text-amber-600');
+                        document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse";
+                        
+                        const kpiTotalLabel = document.querySelector('#kpiGrandTotal').parentElement;
+                        if(!kpiTotalLabel.innerHTML.includes('Memori')) {
+                            kpiTotalLabel.innerHTML = `Total di Memori: <span id="kpiGrandTotal" class="font-bold text-amber-700">0</span> Baris (Campuran Arsip)`;
+                            kpiTotalLabel.classList.remove('bg-slate-100', 'text-slate-500');
+                            kpiTotalLabel.classList.add('bg-amber-100', 'text-amber-700', 'border', 'border-amber-200');
+                        }
+                        document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
+                    } else {
+                        window.showToast("Data arsip sudah tampil di layar saat ini.", "info");
+                    }
                 }
             });
         };
+        // --- END MANAJER ARSIP ---
 
-        window.populateMulti = (menuId, labelId, opts) => {
-            const menu = document.getElementById(menuId);
-            if(!menu) return;
-            let html = '';
-            if (menuId === 'stagingMenu') {
-                html += `<div class="px-2 py-1.5 border-b border-slate-100 sticky top-0 bg-white z-10">
-                            <input type="text" placeholder="Cari Staging..." class="w-full text-xs px-2 py-1.5 bg-slate-50 border border-slate-200 rounded outline-none focus:border-[#E81C65] transition-colors" onkeyup="window.filterMenuOptions('${menuId}', this.value)">
-                        </div>`;
+        window.openDeleteModal = function() {
+            // Setup Hari
+            const dateSelect = document.getElementById('deleteDateInput');
+            const dates = [...new Set(window.rawData.map(d => {
+                if(d._inboundDate instanceof Date && !isNaN(d._inboundDate)) return formatDateForCsv(d._inboundDate);
+                return 'NULL';
+            }))].sort().reverse();
+            let hDate = '<option value="">Pilih Tanggal...</option>';
+            if(dates.includes('NULL')) hDate += '<option value="NULL">Data Tanpa Tanggal (Kosong/Error)</option>';
+            dates.forEach(d => { if(d !== 'NULL') hDate += `<option value="${d}">${d}</option>`; });
+            if(dateSelect) dateSelect.innerHTML = hDate;
+
+            // Setup Bulan
+            const monthSelect = document.getElementById('deleteMonthInput');
+            const months = new Set();
+            window.rawData.forEach(d => {
+                if (d._inboundDate && !isNaN(d._inboundDate)) {
+                    months.add(`${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`);
+                }
+            });
+            let hMonth = '<option value="">Pilih Bulan...</option>';
+            [...months].sort().reverse().forEach(m => {
+                const [y, mo] = m.split('-');
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                hMonth += `<option value="${m}">${monthNames[parseInt(mo)-1]} ${y}</option>`;
+            });
+            if(monthSelect) monthSelect.innerHTML = hMonth;
+
+            // Setup Vendor
+            const vendorSelect = document.getElementById('deleteVendorInput');
+            const vendors = [...new Set(window.rawData.map(d => d._vendor))].sort();
+            let hVen = '<option value="ALL">Semua Vendor</option>';
+            vendors.forEach(v => { hVen += `<option value="${v}">${v}</option>`; });
+            if(vendorSelect) vendorSelect.innerHTML = hVen;
+
+            document.getElementById('deleteDateInput').value = '';
+            document.getElementById('deleteMonthInput').value = '';
+
+            document.getElementById('deleteModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('deleteModal').classList.remove('opacity-0');
+                document.getElementById('deleteModalContent').classList.remove('scale-95');
+                document.getElementById('deleteModalContent').classList.add('scale-100');
+            }, 10);
+        };
+        
+        window.closeDeleteModal = function() {
+            document.getElementById('deleteModal').classList.add('opacity-0');
+            document.getElementById('deleteModalContent').classList.remove('scale-100');
+            document.getElementById('deleteModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('deleteModal').classList.add('hidden'), 300);
+        };
+
+        window.confirmDelete = function() {
+             const date = document.getElementById('deleteDateInput').value;
+             const month = document.getElementById('deleteMonthInput').value;
+             if(!date && !month) return window.showToast("Pilih tanggal atau bulan terlebih dahulu!", "error");
+             window.closeDeleteModal();
+             window.openPasswordModal('delete');
+        };
+
+        window.confirmDeleteAll = function() {
+            window.closeDeleteModal();
+            window.openPasswordModal('deleteAll');
+        };
+
+        window.currentAction = '';
+
+        window.openPasswordModal = function(action) {
+            window.currentAction = action || 'delete';
+            document.getElementById('passwordModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('passwordModal').classList.remove('opacity-0');
+                document.getElementById('passwordModalContent').classList.remove('scale-95');
+                document.getElementById('passwordModalContent').classList.add('scale-100');
+            }, 10);
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+        };
+
+        window.closePasswordModal = function() {
+            document.getElementById('passwordModal').classList.add('opacity-0');
+            document.getElementById('passwordModalContent').classList.remove('scale-100');
+            document.getElementById('passwordModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
+        };
+
+        window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
+
+        window.openSettingsModal = function() {
+            const list = document.getElementById('settingsList');
+            list.innerHTML = '';
+            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
+            
+            dests.forEach(dest => {
+                const val = window.stagingMap[dest] ? window.stagingMap[dest].join(', ') : '';
+                list.innerHTML += `
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded w-fit border border-slate-200">${dest}</label>
+                        <input type="text" id="setting_dest_${dest}" value="${val}" class="fresh-input w-full text-xs font-mono" placeholder="Kosongkan jika semua staging dianggap valid. Cth: WWNS0, MNDX9">
+                    </div>
+                `;
+            });
+            
+            document.getElementById('settingsModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('settingsModal').classList.remove('opacity-0');
+                document.getElementById('settingsModalContent').classList.remove('scale-95');
+                document.getElementById('settingsModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeSettingsModal = function() {
+            document.getElementById('settingsModal').classList.add('opacity-0');
+            document.getElementById('settingsModalContent').classList.remove('scale-100');
+            document.getElementById('settingsModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('settingsModal').classList.add('hidden'), 300);
+        };
+
+        window.saveSettingsModal = async function() {
+            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
+            dests.forEach(dest => {
+                const val = document.getElementById(`setting_dest_${dest}`).value;
+                if(val.trim()) {
+                    window.stagingMap[dest] = val.split(',').map(s => s.trim().toUpperCase()).filter(s => s);
+                } else {
+                    delete window.stagingMap[dest];
+                }
+            });
+            
+            const mapStr = JSON.stringify(window.stagingMap);
+            localStorage.setItem('awbStagingMap', mapStr);
+            
+            if (supabaseClient) {
+                const btn = document.querySelector('#settingsModalContent button.bg-slate-900');
+                const oldText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+                btn.disabled = true;
+                
+                await supabaseClient.from('awb_data').upsert({
+                    id: 'SYS_SETTING_STAGING_MAP',
+                    awb_no: 'SYS_SETTINGS',
+                    container_no: '-',
+                    inbound_date: null,
+                    Jam: '-',
+                    Origin: 'SYS',
+                    Destinasi: 'SYS',
+                    destination_staging: mapStr,
+                    Service: 'SYS',
+                    Vendor: 'SYS'
+                }, { onConflict: 'id' });
+                
+                btn.innerHTML = oldText;
+                btn.disabled = false;
             }
-            html += `<label class="flex items-center gap-2 px-2 py-1.5 hover:bg-pink-50 rounded cursor-pointer transition-colors border-b border-slate-100 mb-1 checkbox-container">
+
+            window.closeSettingsModal();
+            window.showToast("Pengaturan Staging tersimpan di Cloud", "success");
+            
+            window.rawData.forEach(d => {
+                if (window.stagingMap[d._dest] && window.stagingMap[d._dest].length > 0) {
+                    d._displayStaging = window.stagingMap[d._dest].includes(d._destStaging) ? d._destStaging : 'XRT';
+                } else {
+                    d._displayStaging = d._destStaging;
+                }
+            });
+            
+            const destStagingSet = new Set(window.rawData.map(d => d._displayStaging));
+            window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
+            
+            window.applyFilters();
+        };
+
+        window.showXrtDetails = function(dest) {
+            const xrtData = window.filteredData.filter(d => d._dest === dest && d._displayStaging === 'XRT');
+            const agg = {};
+            xrtData.forEach(d => {
+                agg[d._destStaging] = (agg[d._destStaging] || 0) + 1;
+            });
+            
+            let h = '';
+            Object.keys(agg).sort((a,b) => agg[b] - agg[a]).forEach(k => {
+                h += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3 font-bold text-slate-700">${k}</td><td class="p-3 text-center font-mono text-slate-600">${agg[k]}</td></tr>`;
+            });
+            
+            if (Object.keys(agg).length === 0) h = `<tr><td colspan="2" class="p-4 text-center text-slate-400">Tidak ada data</td></tr>`;
+            
+            document.getElementById('xrtTableBody').innerHTML = h;
+            document.getElementById('xrtDestName').textContent = dest;
+            
+            document.getElementById('xrtModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('xrtModal').classList.remove('opacity-0');
+                document.getElementById('xrtModalContent').classList.remove('scale-95');
+                document.getElementById('xrtModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeXrtModal = function() {
+            document.getElementById('xrtModal').classList.add('opacity-0');
+            document.getElementById('xrtModalContent').classList.remove('scale-100');
+            document.getElementById('xrtModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('xrtModal').classList.add('hidden'), 300);
+        };
+
+        window.openPreviewModal = function(newCount, dupCount) {
+            document.getElementById('previewModal').classList.remove('hidden');
+            document.getElementById('previewNewCount').textContent = formatNumber(newCount);
+            document.getElementById('previewDupCount').textContent = formatNumber(dupCount);
+            setTimeout(() => {
+                document.getElementById('previewModal').classList.remove('opacity-0');
+                document.getElementById('previewModalContent').classList.remove('scale-95');
+                document.getElementById('previewModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closePreviewModal = function() {
+            document.getElementById('previewModal').classList.add('opacity-0');
+            document.getElementById('previewModalContent').classList.remove('scale-100');
+            document.getElementById('previewModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('previewModal').classList.add('hidden'), 300);
+            document.getElementById('csvAwbFile').value = ''; 
+            document.getElementById('archiveFileInput').value = ''; 
+        };
+
+        window.openSuccessModal = function(successCount, failCount) {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('finalSuccessCount').textContent = formatNumber(successCount);
+            document.getElementById('finalFailCount').textContent = formatNumber(failCount);
+            
+            const iconBox = document.getElementById('successModalIcon');
+            if (failCount > 0 && successCount === 0) {
+                iconBox.className = "w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-rose-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Upload Gagal";
+            } else if (failCount > 0) {
+                iconBox.className = "w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Selesai Sebagian";
+            } else {
+                iconBox.className = "w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm";
+                iconBox.innerHTML = '<i class="fa-solid fa-check-double text-2xl"></i>';
+                document.getElementById('successModalTitle').textContent = "Upload Selesai!";
+            }
+
+            setTimeout(() => {
+                document.getElementById('successModal').classList.remove('opacity-0');
+                document.getElementById('successModalContent').classList.remove('scale-95');
+                document.getElementById('successModalContent').classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeSuccessModal = function() {
+            document.getElementById('successModal').classList.add('opacity-0');
+            document.getElementById('successModalContent').classList.remove('scale-100');
+            document.getElementById('successModalContent').classList.add('scale-95');
+            setTimeout(() => document.getElementById('successModal').classList.add('hidden'), 300);
+        };
+
+        window.submitPassword = function() {
+            const pwd = document.getElementById('passwordInput').value;
+            if (pwd === "TAB123") {
+                window.closePasswordModal();
+                if (window.currentAction === 'settings') {
+                    window.openSettingsModal();
+                } else if (window.currentAction === 'deleteAll') {
+                    if (window.deleteAllData) window.deleteAllData();
+                } else if (window.currentAction === 'archive_export') {
+                    const { data, monthVal } = window.archiveDataToProcess;
+                    window.executeArchiveExportAndDownload(data, monthVal);
+                    window.executeArchiveDelete(data); 
+                } else {
+                    const date = document.getElementById('deleteDateInput').value;
+                    const month = document.getElementById('deleteMonthInput').value;
+                    const dest = document.getElementById('deleteDestInput').value;
+                    const vendor = document.getElementById('deleteVendorInput') ? document.getElementById('deleteVendorInput').value : 'ALL';
+                    if(window.deleteDataForPeriod) window.deleteDataForPeriod(date, month, dest, vendor);
+                }
+            } else {
+                window.showToast("Password Salah!", "error");
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        };
+
+        // Menggabungkan Hapus Per Hari & Hapus Per Bulan
+        window.deleteDataForPeriod = async function(dateString, monthString, destString, vendorString) {
+            if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
+
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbPct = document.getElementById('fetchProgressPct');
+            const pbText = document.getElementById('fetchProgressDetail');
+            
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Menghapus Data...";
+            
+            pbBar.style.width = `50%`;
+            pbPct.textContent = `50%`;
+            pbText.textContent = `Mengeksekusi perintah hapus di database...`;
+
+            try {
+                let query = supabaseClient.from('awb_data').delete().neq('id', 'SYS_SETTING_STAGING_MAP');
+                
+                if (monthString) {
+                    const [y, m] = monthString.split('-');
+                    const startDate = `${y}-${m}-01`;
+                    // Mendapatkan tanggal terakhir di bulan tersebut
+                    const endDate = new Date(parseInt(y), parseInt(m), 0);
+                    const endDateStr = `${y}-${m}-${String(endDate.getDate()).padStart(2, '0')}`;
+                    
+                    query = query.gte('inbound_date', startDate).lte('inbound_date', endDateStr);
+                } else if (dateString) {
+                    if (dateString === 'NULL') {
+                        query = query.is('inbound_date', null);
+                    } else {
+                        query = query.eq('inbound_date', dateString);
+                    }
+                }
+                
+                if (destString !== 'ALL') {
+                    query = query.eq('Destinasi', destString);
+                }
+
+                if (vendorString && vendorString !== 'ALL') {
+                    query = query.eq('Vendor', vendorString);
+                }
+
+                const { error } = await query;
+                
+                if (error) throw error;
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+                
+                overlay.classList.add('hidden');
+                window.showToast(`Berhasil menghapus rentang data terpilih`, "success");
+                
+                window.fetchDataFromSupabase();
+                
+            } catch(e) {
+                console.error("Delete Error:", e);
+                overlay.classList.add('hidden');
+                window.showToast("Gagal menghapus data dari Supabase.", "error");
+            }
+        };
+
+        window.deleteAllData = async function() {
+            if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
+
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbPct = document.getElementById('fetchProgressPct');
+            const pbText = document.getElementById('fetchProgressDetail');
+            
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Mereset Seluruh Data...";
+            
+            pbBar.style.width = `10%`;
+            pbPct.textContent = `10%`;
+            pbText.textContent = `Menghitung total data yang akan dihapus...`;
+
+            try {
+                const { count } = await supabaseClient.from('awb_data')
+                    .select('id', { count: 'exact', head: true })
+                    .neq('id', 'SYS_SETTING_STAGING_MAP');
+                    
+                const totalToProcess = count || 1;
+                let totalDeleted = 0;
+                let hasMore = true;
+                const FETCH_SIZE = 1000;
+                const DELETE_SIZE = 100;
+
+                while (hasMore) {
+                    let batchData = null;
+                    let fetchSuccess = false;
+                    
+                    for (let attempt = 1; attempt <= 3; attempt++) {
+                        try {
+                            const { data, error } = await supabaseClient
+                                .from('awb_data')
+                                .select('id')
+                                .neq('id', 'SYS_SETTING_STAGING_MAP')
+                                .limit(FETCH_SIZE);
+
+                            if (error) throw error;
+                            batchData = data;
+                            fetchSuccess = true;
+                            break;
+                        } catch (err) {
+                            console.warn(`Gagal menarik batch (percobaan ${attempt}):`, err);
+                            await new Promise(r => setTimeout(r, 1000 * attempt));
+                        }
+                    }
+
+                    if (!fetchSuccess) throw new Error("Gagal menarik data batch setelah 3 percobaan.");
+
+                    if (!batchData || batchData.length === 0) {
+                        hasMore = false;
+                        break;
+                    }
+
+                    const allIds = batchData.map(r => r.id);
+
+                    for (let i = 0; i < allIds.length; i += DELETE_SIZE) {
+                        const idsChunk = allIds.slice(i, i + DELETE_SIZE);
+                        let delSuccess = false;
+
+                        for (let attempt = 1; attempt <= 3; attempt++) {
+                            try {
+                                const { error } = await supabaseClient
+                                    .from('awb_data')
+                                    .delete()
+                                    .in('id', idsChunk);
+
+                                if (error) throw error;
+                                delSuccess = true;
+                                break;
+                            } catch (err) {
+                                console.warn(`Gagal menghapus chunk (percobaan ${attempt}):`, err);
+                                await new Promise(r => setTimeout(r, 1000 * attempt));
+                            }
+                        }
+
+                        if (!delSuccess) throw new Error("Gagal menghapus data batch setelah 3 percobaan.");
+
+                        totalDeleted += idsChunk.length;
+
+                        let pct = Math.min(Math.round((totalDeleted / totalToProcess) * 100), 99);
+                        if (pct < 10) pct = 10;
+                        pbBar.style.width = `${pct}%`;
+                        pbPct.textContent = `${pct}%`;
+                        pbText.textContent = `Menghapus: ${totalDeleted.toLocaleString('id-ID')} baris...`;
+
+                        await new Promise(r => setTimeout(r, 150));
+                    }
+                }
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                pbText.textContent = `Pembersihan selesai!`;
+                await new Promise(r => setTimeout(r, 600));
+                
+                overlay.classList.add('hidden');
+                window.showToast(`Berhasil mereset ${totalDeleted.toLocaleString('id-ID')} baris data!`, "success");
+                
+                window.fetchDataFromSupabase(); 
+                
+            } catch(e) {
+                console.error("Delete All Error:", e);
+                overlay.classList.add('hidden');
+                window.showToast("Gagal menghapus seluruh data (Time Out/Error Jaringan).", "error");
+            }
+        };
+
+        window.showToast = function(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' : 
+                       type === 'error' ? '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>' : 
+                       (type === 'warning' ? '<i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>' : '<i class="fa-solid fa-circle-info text-blue-500 text-lg"></i>');
+
+            toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3 bg-white rounded-2xl shadow-lg border border-slate-100 min-w-[240px] justify-center mb-2`;
+            toast.innerHTML = `${icon}<span class="text-xs font-bold text-slate-600">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -20px)'; setTimeout(() => toast.remove(), 300); }, 3500);
+        };
+
+        const formatNumber = (num) => num ? num.toLocaleString('id-ID') : '0';
+        
+        const parseIndoDate = (dateStr) => {
+            if(!dateStr) return null;
+            let str = String(dateStr).trim(); 
+            if(!str || str === '-' || str.toLowerCase() === 'null') return null;
+
+            if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+                const p = str.substring(0, 10).split('-');
+                return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+            }
+
+            if (/[a-zA-Z]/.test(str)) {
+                str = str.replace(/[-\/]/g, ' '); 
+                const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'mei':4,'jun':5,'jul':6,'aug':7,'agu':7,'sep':8,'oct':9,'okt':9,'nov':10,'dec':11,'des':11};
+                const parts = str.toLowerCase().split(/[\s,]+/);
+                if(parts.length >= 3) {
+                    let d = parseInt(parts[0]);
+                    let mStr = parts[1].substring(0,3);
+                    let m = months[mStr] !== undefined ? months[mStr] : 0;
+                    let y = parseInt(parts[2]);
+                    if (y < 100) y += 2000;
+                    if(isNaN(d) || isNaN(y)) return null;
+                    return new Date(y, m, d);
+                } else if(parts.length === 2) {
+                    let d = parseInt(parts[0]);
+                    let mStr = parts[1].substring(0,3);
+                    let m = months[mStr] !== undefined ? months[mStr] : 0;
+                    let y = new Date().getFullYear();
+                    if(isNaN(d)) return null;
+                    return new Date(y, m, d);
+                }
+            } else {
+                let p = str.includes('/') ? str.split(' ')[0].split('/') : str.split(' ')[0].split('-');
+                if(p.length === 3) {
+                    if (p[0].length === 4) { 
+                        return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+                    } else { 
+                        let y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
+                        return new Date(y, parseInt(p[1])-1, parseInt(p[0]));
+                    }
+                }
+            }
+            return null; 
+        };
+
+        const formatDateToDisplay = (d) => {
+            if (d instanceof Date && !isNaN(d)) {
+                return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+            }
+            return '<span class="text-rose-500 font-bold bg-rose-50 px-1 py-0.5 rounded border border-rose-200">KOSONG</span>'; 
+        };
+
+        const formatDateForCsv = (d) => {
+            if (d instanceof Date && !isNaN(d)) {
+                return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            }
+            return '-';
+        };
+
+        const calculateSlaStatus = (inboundDate, eddDate) => {
+            if (!inboundDate || !eddDate || isNaN(inboundDate) || isNaN(eddDate)) {
+                return { status: "Unknown", diff: 0 };
+            }
+            inboundDate.setHours(0,0,0,0);
+            eddDate.setHours(0,0,0,0);
+            const diffDays = Math.round((eddDate - inboundDate) / (1000 * 60 * 60 * 24));
+            let status = "";
+            if (diffDays < 0) status = "After EDD";
+            else if (diffDays === 0) status = "Last Day";
+            else if (diffDays === 1) status = "Same Day";
+            else if (diffDays >= 2) status = ">2 Hari";
+            return { status, diff: diffDays };
+        };
+
+        window.fetchDataFromSupabase = async function() {
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.add('hidden');
+            const overlay = document.getElementById('loadingOverlay');
+            const pbBar = document.getElementById('fetchProgressBar');
+            const pbText = document.getElementById('fetchProgressDetail');
+            const pbPct = document.getElementById('fetchProgressPct');
+
+            overlay.classList.remove('hidden');
+            document.getElementById('fetchProgressContainer').classList.remove('hidden');
+
+            try {
+                if (!supabaseClient) {
+                    overlay.classList.add('hidden');
+                    window.showToast("Koneksi Supabase gagal.", "error");
+                    return;
+                }
+
+                let totalData = 0;
+                try {
+                    const { count, error: countError } = await supabaseClient.from('awb_data').select('*', { count: 'exact', head: true });
+                    if (!countError && count) {
+                        totalData = count;
+                    }
+                } catch(e) {
+                    console.warn("Info: Gagal menghitung total data awal.", e);
+                }
+
+                // Ubah penarikan awal menjadi 7 hari ke belakang agar dasbor langsung terbuka secara instan
+                const initialFetchDate = new Date();
+                initialFetchDate.setDate(initialFetchDate.getDate() - 7);
+                const dateStr = initialFetchDate.toISOString().split('T')[0];
+
+                let recentData = [];
+                let from = 0;
+                const step = 1000; // Kembalikan ke 1000 untuk menyelaraskan dengan batas default API Supabase
+                let isFetchingRecent = true;
+
+                document.getElementById('loadingText').textContent = "Memuat Data Terbaru...";
+
+                while (isFetchingRecent) {
+                    let pct = totalData > 0 ? Math.min(Math.round((recentData.length / totalData) * 100), 50) : 0;
+                    pbBar.style.width = `${pct}%`;
+                    pbText.textContent = `Menarik ${recentData.length.toLocaleString('id-ID')} Data Terbaru`;
+                    pbPct.textContent = `${pct}%`;
+
+                    let data = null;
+                    let fetchSuccess = false;
+                    let lastErr = null;
+                    
+                    for(let attempt=1; attempt<=3; attempt++) {
+                        try {
+                            const res = await supabaseClient.from('awb_data')
+                                .select('*')
+                                .or(`inbound_date.gte.${dateStr},inbound_date.is.null`)
+                                .range(from, from + step - 1);
+                                
+                            if (res.error) {
+                                if (res.error.code === 'PGRST103' || !res.error.message || res.error.message === "" || JSON.stringify(res.error) === '{"message":""}') {
+                                    data = [];
+                                    fetchSuccess = true;
+                                    break;
+                                }
+                                throw res.error;
+                            }
+                            
+                            data = res.data;
+                            fetchSuccess = true;
+                            break;
+                        } catch(err) {
+                            lastErr = err;
+                            await new Promise(r => setTimeout(r, 1000 * attempt));
+                        }
+                    }
+                    
+                    if(!fetchSuccess) throw lastErr;
+
+                    if (data && data.length > 0) {
+                        recentData = recentData.concat(data);
+                        from += data.length; // Gunakan panjang data aktual agar tidak ada gap (lubang data)
+                        if (data.length < 1000) isFetchingRecent = false; // Jika kurang dari 1000 (batas API), berarti sudah habis
+                    } else { isFetchingRecent = false; }
+
+                    await new Promise(r => setTimeout(r, 150));
+                }
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+
+                processRawData(recentData);
+                document.getElementById('statusText').textContent = "Connected (Partial)";
+                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-400";
+                overlay.classList.add('hidden');
+                
+                window.showToast("Data kilat (7 hr terakhir) siap. Mengunduh sisa riwayat di latar belakang...", "info");
+
+                let oldData = [];
+                let fromOld = 0;
+                let isFetchingOld = true;
+                
+                const bgIndicator = document.createElement('div');
+                bgIndicator.id = "bgFetchIndicator";
+                bgIndicator.className = "fixed bottom-6 right-6 bg-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-200 text-xs font-bold text-slate-600 z-[99] flex items-center gap-4 animate-fade-in-up";
+                bgIndicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-indigo-500 text-xl"></i> <div><p class="text-slate-800 text-sm">Menyinkronkan Riwayat...</p><p id="bgFetchText" class="text-[11px] text-slate-400 font-medium">Mengunduh: 0 baris</p></div>`;
+                document.body.appendChild(bgIndicator);
+
+                while (isFetchingOld) {
+                    let data = null;
+                    let fetchSuccess = false;
+                    for(let attempt=1; attempt<=3; attempt++) {
+                        try {
+                            const res = await supabaseClient.from('awb_data')
+                                .select('*')
+                                .lt('inbound_date', dateStr)
+                                .range(fromOld, fromOld + step - 1);
+                                
+                            if (res.error) {
+                                if (res.error.code === 'PGRST103' || !res.error.message || res.error.message === "" || JSON.stringify(res.error) === '{"message":""}') {
+                                    data = [];
+                                    fetchSuccess = true;
+                                    break;
+                                }
+                                throw res.error;
+                            }
+                            
+                            data = res.data;
+                            fetchSuccess = true;
+                            break;
+                        } catch(err) {
+                            await new Promise(r => setTimeout(r, 2000 * attempt));
+                        }
+                    }
+
+                    if(!fetchSuccess) {
+                        console.warn("Background fetch gagal ditarik penuh.");
+                        break; 
+                    }
+
+                    if (data && data.length > 0) {
+                        oldData = oldData.concat(data);
+                        fromOld += data.length; // Gunakan panjang data aktual
+                        const elText = document.getElementById('bgFetchText');
+                        if (elText) elText.textContent = `Mengunduh: ${oldData.length.toLocaleString('id-ID')} baris`;
+                        if (data.length < 1000) isFetchingOld = false;
+                    } else { isFetchingOld = false; }
+
+                    await new Promise(r => setTimeout(r, 400)); 
+                }
+
+                if (oldData.length > 0) {
+                    const allData = recentData.concat(oldData);
+                    processRawData(allData); 
+                }
+
+                document.getElementById('statusText').textContent = "Connected";
+                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                
+                const finalBg = document.getElementById('bgFetchIndicator');
+                if (finalBg) {
+                    finalBg.innerHTML = `<i class="fa-solid fa-check-circle text-emerald-500 text-xl"></i> <div class="text-slate-800 text-sm">Semua riwayat siap!</div>`;
+                    setTimeout(() => {
+                        finalBg.style.opacity = '0';
+                        finalBg.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => finalBg.remove(), 500);
+                    }, 3000);
+                }
+
+            } catch (err) {
+                console.error("Supabase Error:", err);
+                overlay.classList.add('hidden');
+                window.showToast("Gagal memuat data dari Supabase.", "error");
+            }
+        };
+
+        const processRawData = (dataFromDb, isDummy = false) => {
+            window.rawData = [];
+            const destSet = new Set();
+            const orgSet = new Set();
+            const svcSet = new Set();
+            const destStagingSet = new Set();
+            
+            const settingRow = dataFromDb.find(r => r.id === 'SYS_SETTING_STAGING_MAP' || r.awb_no === 'SYS_SETTINGS');
+            if (settingRow) {
+                const stgVal = settingRow.destination_staging || settingRow.Destination_Staging;
+                if (stgVal) {
+                    try {
+                        window.stagingMap = JSON.parse(stgVal);
+                        localStorage.setItem('awbStagingMap', stgVal);
+                    } catch(e) {}
+                }
+            }
+            
+            if(!window.stagingMap) window.stagingMap = JSON.parse(localStorage.getItem('awbStagingMap')) || { "MANADO": ["WWNS0", "MNDX9"] };
+            
+            const hariArr = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+            dataFromDb.forEach(row => {
+                if (row.id === 'SYS_SETTING_STAGING_MAP' || row.awb_no === 'SYS_SETTINGS') return;
+
+                const dest = String(row.Destinasi || row.destinasi || row._dest || 'N/A').toUpperCase();
+                const destStaging = String(row.destination_staging || row.Destination_Staging || row._destStaging || '-').toUpperCase();
+                
+                if (destStaging.includes('#N/A') || destStaging.includes('N#A') || destStaging === 'N/A' || dest.includes('#N/A')) return;
+
+                let displayStaging = destStaging;
+                if (window.stagingMap[dest] && window.stagingMap[dest].length > 0) {
+                    if (!window.stagingMap[dest].includes(destStaging)) {
+                        displayStaging = 'XRT';
+                    }
+                }
+
+                const org = String(row.Origin || row.origin || row._origin || 'N/A').toUpperCase();
+                
+                let svc = String(row.Service || row.service || row._service || 'N/A').toUpperCase();
+                if (svc === 'REG') svc = 'REGULER';
+
+                const vendor = String(row.Vendor || row.vendor || row._vendor || 'N/A').toUpperCase();
+                const awb = String(row.awb_no || row._awb || '').toUpperCase();
+                const container = String(row.container_no || row._container || '-').toUpperCase();
+
+                const inboundDt = row._inboundDate !== undefined ? row._inboundDate : parseIndoDate(row.inbound_date);
+                const eddDt = row._eddDate !== undefined ? row._eddDate : parseIndoDate(row.expect_delivery_tm || row.edd_date);
+                const inboundTime = row.Jam || row.jam || row.inbound_time || row._inboundTime || '-';
+                const sla = calculateSlaStatus(inboundDt, eddDt);
+                const hari = inboundDt && !isNaN(inboundDt) ? hariArr[inboundDt.getDay()] : 'N/A';
+                
+                destSet.add(dest);
+                orgSet.add(org);
+                svcSet.add(svc);
+                destStagingSet.add(displayStaging);
+
+                window.rawData.push({
+                    _id: row.id || row._id,
+                    _awb: awb, _container: container, _inboundDate: inboundDt,
+                    _inboundTime: inboundTime,
+                    _eddDate: eddDt, _origin: org, _dest: dest, _destStaging: destStaging, 
+                    _displayStaging: displayStaging,
+                    _service: svc, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff,
+                    _hari: hari
+                });
+            });
+
+            window.populateMulti = (menuId, labelId, opts) => {
+                const menu = document.getElementById(menuId);
+                if(!menu) return;
+                
+                let html = '';
+
+                if (menuId === 'stagingMenu') {
+                    html += `
+                        <div class="px-2 py-1.5 border-b border-slate-100 sticky top-0 bg-white z-10">
+                            <input type="text" placeholder="Cari Staging..." class="w-full text-xs px-2 py-1.5 bg-slate-50 border border-slate-200 rounded outline-none focus:border-[#E81C65] transition-colors" onkeyup="window.filterMenuOptions('${menuId}', this.value)">
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <label class="flex items-center gap-2 px-2 py-1.5 hover:bg-pink-50 rounded cursor-pointer transition-colors border-b border-slate-100 mb-1 checkbox-container">
                         <input type="checkbox" value="ALL" class="accent-[#E81C65] w-3.5 h-3.5" onchange="window.handleMultiChange('${menuId}', '${labelId}', this)" checked>
                         <span class="text-xs font-bold text-slate-700 label-text">Semua</span>
-                    </label>`;
-            opts.forEach(o => {
-                html += `<label class="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded cursor-pointer transition-colors checkbox-container">
+                    </label>
+                `;
+                
+                opts.forEach(o => {
+                    html += `
+                    <label class="flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded cursor-pointer transition-colors checkbox-container">
                         <input type="checkbox" value="${o}" class="accent-[#E81C65] w-3.5 h-3.5 item-checkbox" onchange="window.handleMultiChange('${menuId}', '${labelId}', this)" checked>
                         <span class="text-xs text-slate-600 label-text">${o}</span>
                     </label>`;
-            });
-            menu.innerHTML = html;
-            window.updateMultiLabel(menuId, labelId);
+                });
+                menu.innerHTML = html;
+                window.updateMultiLabel(menuId, labelId);
+            };
+
+            window.filterMenuOptions = function(menuId, keyword) {
+                const menu = document.getElementById(menuId);
+                const containers = menu.querySelectorAll('.checkbox-container');
+                const lowerKeyword = keyword.toLowerCase();
+
+                containers.forEach(container => {
+                    const text = container.querySelector('.label-text').innerText.toLowerCase();
+                    if (text.includes(lowerKeyword) || text === 'semua') {
+                        container.style.display = 'flex';
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+            };
+
+            populateMulti('destMenu', 'destLabel', [...destSet].sort());
+            populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
+            populateMulti('originMenu', 'originLabel', [...orgSet].sort());
+            populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
+            populateMulti('statusMenu', 'statusLabel', ['After EDD', 'Last Day', 'Same Day', '>2 Hari', 'Unknown']);
+            
+            const hariSet = new Set(window.rawData.map(d => d._hari));
+            const sortedHari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu', 'N/A'].filter(h => hariSet.has(h));
+            populateMulti('hariMenu', 'hariLabel', sortedHari);
+
+            const deleteDestSelect = document.getElementById('deleteDestInput');
+            if (deleteDestSelect) {
+                const currentVal = deleteDestSelect.value;
+                deleteDestSelect.innerHTML = '<option value="ALL">Semua Destinasi</option>';
+                [...destSet].sort().forEach(val => { deleteDestSelect.innerHTML += `<option value="${val}">${val}</option>`; });
+                if ([...destSet].includes(currentVal)) deleteDestSelect.value = currentVal;
+            }
+
+            // Set default filter ke bulan berjalan (tanggal 1 hingga akhir bulan)
+            const now = new Date();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            startOfMonth.setHours(0, 0, 0, 0);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+            endOfMonth.setHours(23, 59, 0, 0);
+            
+            const formatForInput = (d) => {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                const hh = String(d.getHours()).padStart(2, '0');
+                const min = String(d.getMinutes()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+            };
+            
+            document.getElementById('filterStartDate').value = formatForInput(startOfMonth);
+            document.getElementById('filterEndDate').value = formatForInput(endOfMonth);
+
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+            window.applyFilters();
         };
 
         window.resetFilters = function() {
@@ -1031,8 +1856,10 @@
                 let labelId = id.replace('Menu', 'Label');
                 window.updateMultiLabel(id, labelId);
             });
+            
             document.getElementById('globalSearch').value = '';
             
+            // Set ulang default ke bulan berjalan saat reset ditekan
             const now = new Date();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
             startOfMonth.setHours(0, 0, 0, 0);
@@ -1057,12 +1884,14 @@
 
         window.applyFilters = function() {
             const search = document.getElementById('globalSearch').value.toUpperCase();
+            
             const fStatus = window.getSelectedValues('statusMenu');
             const fOrigin = window.getSelectedValues('originMenu');
             const fDest = window.getSelectedValues('destMenu');
             const fStaging = window.getSelectedValues('stagingMenu');
             const fService = window.getSelectedValues('serviceMenu');
             const fHari = window.getSelectedValues('hariMenu');
+
             const startStr = document.getElementById('filterStartDate').value;
             const endStr = document.getElementById('filterEndDate').value;
             const sDate = startStr ? new Date(startStr) : null;
@@ -1075,7 +1904,9 @@
                         let rowDateTime = new Date(d._inboundDate.getTime());
                         if (d._inboundTime && d._inboundTime !== '-' && d._inboundTime !== 'N/A') {
                             const timeParts = d._inboundTime.split(':');
-                            if(timeParts.length >= 2) rowDateTime.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), timeParts[2] ? parseInt(timeParts[2]) : 0);
+                            if(timeParts.length >= 2) {
+                                rowDateTime.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), timeParts[2] ? parseInt(timeParts[2]) : 0);
+                            }
                         }
                         if (sDate && rowDateTime < sDate) dateOk = false;
                         if (eDate && rowDateTime > eDate) dateOk = false;
@@ -1109,18 +1940,17 @@
             window.updateDashboard();
         };
 
-        // 7. Rendering Functions
         window.updateDashboard = function() {
             const data = window.filteredData;
             const total = data.length;
-            document.getElementById('kpiTotalAwb').innerText = window.formatNumber(total);
-            document.getElementById('kpiGrandTotal').innerText = window.formatNumber(window.rawData.length);
+            document.getElementById('kpiTotalAwb').innerText = formatNumber(total);
+            document.getElementById('kpiGrandTotal').innerText = formatNumber(window.rawData.length);
 
             const invalidDatesCount = window.filteredData.filter(d => !d._inboundDate || isNaN(d._inboundDate)).length;
             const invalidEl = document.getElementById('kpiInvalidDate');
             if(invalidDatesCount > 0) {
                 invalidEl.classList.remove('hidden');
-                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Termasuk ${window.formatNumber(invalidDatesCount)} data tanpa tanggal`;
+                invalidEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Termasuk ${formatNumber(invalidDatesCount)} data tanpa tanggal`;
             } else { invalidEl.classList.add('hidden'); }
 
             let onTimeCount = 0, lateCount = 0, sumSlaDiff = 0, validSlaCount = 0;
@@ -1134,15 +1964,17 @@
             });
 
             document.getElementById('kpiOnTimePct').innerText = total > 0 ? ((onTimeCount/total)*100).toFixed(1) + '%' : '0%';
-            document.getElementById('kpiOnTimeCount').innerText = window.formatNumber(onTimeCount);
+            document.getElementById('kpiOnTimeCount').innerText = formatNumber(onTimeCount);
             document.getElementById('kpiLatePct').innerText = total > 0 ? ((lateCount/total)*100).toFixed(1) + '%' : '0%';
-            document.getElementById('kpiLateCount').innerText = window.formatNumber(lateCount);
+            document.getElementById('kpiLateCount').innerText = formatNumber(lateCount);
             document.getElementById('kpiAvgSla').innerText = validSlaCount > 0 ? (sumSlaDiff/validSlaCount).toFixed(1).replace('.', ',') : "0";
 
             window.renderTrendChart();
             window.renderSlaTable();
             window.renderDetailTable();
         };
+
+        window.trendChartMode = 'total';
 
         window.setTrendChartMode = function(mode) {
             window.trendChartMode = mode;
@@ -1170,7 +2002,7 @@
             const agg = {};
             window.filteredData.forEach(d => {
                 if (d._inboundDate && !isNaN(d._inboundDate)) {
-                    const k = window.formatDateForCsv(d._inboundDate);
+                    const k = formatDateForCsv(d._inboundDate);
                     if (!agg[k]) agg[k] = { total: 0, after: 0, last: 0, same: 0, over: 0 };
                     agg[k].total += 1;
                     if (d._slaStatus === 'After EDD') agg[k].after += 1;
@@ -1220,7 +2052,7 @@
                             anchor: 'end',
                             color: '#E81C65',
                             font: { weight: 'bold', size: 10 },
-                            formatter: (v) => window.formatNumber(v),
+                            formatter: (v) => formatNumber(v),
                             clip: false
                         }
                     }
@@ -1241,7 +2073,9 @@
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4,
-                        segment: { borderColor: ctx => ctx.p0.parsed.y < 97.5 || ctx.p1.parsed.y < 97.5 ? '#E11D48' : '#10B981' },
+                        segment: {
+                            borderColor: ctx => ctx.p0.parsed.y < 97.5 || ctx.p1.parsed.y < 97.5 ? '#E11D48' : '#10B981'
+                        },
                         pointBackgroundColor: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
                         pointBorderColor: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
                         pointRadius: 5
@@ -1257,12 +2091,22 @@
                     },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: true, callbacks: { label: function(context) { return context.parsed.y.toFixed(1) + '%'; } } },
+                        tooltip: { 
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toFixed(1) + '%';
+                                }
+                            }
+                        },
                         datalabels: {
-                            display: true, align: 'top', anchor: 'end',
+                            display: true,
+                            align: 'top',
+                            anchor: 'end',
                             color: ctx => ctx.dataset.data[ctx.dataIndex] < 97.5 ? '#E11D48' : '#10B981',
                             font: { weight: 'bold', size: 10 },
-                            formatter: (v) => v.toFixed(1) + '%', clip: false
+                            formatter: (v) => v.toFixed(1) + '%',
+                            clip: false
                         }
                     }
                 };
@@ -1274,6 +2118,8 @@
                 options: chartOptions
             });
         };
+
+        window.slaDestMode = 'destinasi';
 
         window.setSlaDestMode = function(mode) {
             window.slaDestMode = mode;
@@ -1299,7 +2145,13 @@
         window.renderSlaTable = function() {
             const aggDest = {};
             const aggDestStaging = {};
-            const aggSvc = { 'After EDD': { total: 0 }, 'Last Day': { total: 0 }, 'Same Day': { total: 0 }, '>2 Hari': { total: 0 }, 'total': { total: 0 } };
+            const aggSvc = {
+                'After EDD': { total: 0 },
+                'Last Day': { total: 0 },
+                'Same Day': { total: 0 },
+                '>2 Hari': { total: 0 },
+                'total': { total: 0 }
+            };
             const servicesSet = new Set();
             let gAfter=0, gLast=0, gSame=0, gOver=0, gTot=0;
             
@@ -1319,12 +2171,27 @@
                 if (aggSvc['>2 Hari'][svc] === undefined) aggSvc['>2 Hari'][svc] = 0;
                 if (aggSvc['total'][svc] === undefined) aggSvc['total'][svc] = 0;
                 
-                if (d._slaStatus === 'After EDD') { aggDest[dst].after++; aggDestStaging[stgKey].after++; aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; }
-                else if (d._slaStatus === 'Last Day') { aggDest[dst].last++; aggDestStaging[stgKey].last++; aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; }
-                else if (d._slaStatus === 'Same Day') { aggDest[dst].same++; aggDestStaging[stgKey].same++; aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; }
-                else if (d._slaStatus === '>2 Hari') { aggDest[dst].over++; aggDestStaging[stgKey].over++; aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; }
+                if (d._slaStatus === 'After EDD') { 
+                    aggDest[dst].after++; aggDestStaging[stgKey].after++; 
+                    aggSvc['After EDD'][svc]++; aggSvc['After EDD'].total++; gAfter++; 
+                }
+                else if (d._slaStatus === 'Last Day') { 
+                    aggDest[dst].last++; aggDestStaging[stgKey].last++; 
+                    aggSvc['Last Day'][svc]++; aggSvc['Last Day'].total++; gLast++; 
+                }
+                else if (d._slaStatus === 'Same Day') { 
+                    aggDest[dst].same++; aggDestStaging[stgKey].same++; 
+                    aggSvc['Same Day'][svc]++; aggSvc['Same Day'].total++; gSame++; 
+                }
+                else if (d._slaStatus === '>2 Hari') { 
+                    aggDest[dst].over++; aggDestStaging[stgKey].over++; 
+                    aggSvc['>2 Hari'][svc]++; aggSvc['>2 Hari'].total++; gOver++; 
+                }
                 
-                aggDest[dst].tot++; aggDestStaging[stgKey].tot++; aggSvc['total'][svc]++; gTot++;
+                aggDest[dst].tot++; 
+                aggDestStaging[stgKey].tot++;
+                aggSvc['total'][svc]++;
+                gTot++;
             });
 
             const renderTableHtml = (aggData, titleColumn) => {
@@ -1340,18 +2207,20 @@
                     </tr>
                 </thead><tbody>`;
 
-                if (gTot === 0) return h + `<tr><td colspan="7" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                if (gTot === 0) {
+                    return h + `<tr><td colspan="7" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                }
 
                 Object.keys(aggData).sort((a,b) => aggData[b].tot - aggData[a].tot).forEach(k => {
                     const d = aggData[k];
                     const slamaxPct = d.tot > 0 ? ((d.same + d.over) / d.tot * 100).toFixed(1) : 0;
                     h += `<tr class="hover:bg-slate-50 border-b border-slate-100">
                         <td class="font-bold text-slate-700 border-r border-slate-200 valign-middle">${k}</td>
-                        <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.after)}</td>
-                        <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.last)}</td>
-                        <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.same)}</td>
-                        <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.over)}</td>
-                        <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5 border-r border-slate-200">${window.formatNumber(d.tot)}</td>
+                        <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
+                        <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
+                        <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
+                        <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
+                        <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5 border-r border-slate-200">${formatNumber(d.tot)}</td>
                         <td class="text-center font-bold bg-emerald-50 text-emerald-700 font-mono py-1.5">${slamaxPct}%</td>
                     </tr>`;
                 });
@@ -1361,44 +2230,94 @@
                 h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
                     <tr>
                         <td class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
-                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${window.formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
-                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${window.formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
-                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${window.formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
-                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${window.formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
-                        <td class="text-center py-2 bg-slate-100 border-r border-slate-200"><div class="font-black text-slate-900 text-sm font-mono">${window.formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
+                        <td class="text-center py-2 bg-slate-100 border-r border-slate-200"><div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
                         <td class="text-center py-2 bg-emerald-100"><div class="font-black text-emerald-800 text-sm font-mono">${gSlamaxPct}%</div></td>
                     </tr>
                 </tfoot>`;
+                
                 return h;
             };
 
             const tableDest = document.getElementById('slaEddTable');
             if (tableDest) {
-                if (window.slaDestMode === 'destinasi') tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
-                else {
+                if (window.slaDestMode === 'destinasi') {
+                    tableDest.innerHTML = renderTableHtml(aggDest, "Destinasi");
+                } else {
                     let h = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
-                        <tr><th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th><th class="text-left text-slate-600 font-bold border-r border-slate-200">Dest. Staging</th><th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD</th><th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day</th><th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day</th><th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari</th><th class="text-center font-extrabold bg-slate-100 text-slate-800 border-r border-slate-200">Total AWB</th><th class="text-center font-extrabold bg-emerald-100 text-emerald-800">SLAMAX</th></tr>
+                        <tr>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Destinasi</th>
+                            <th class="text-left text-slate-600 font-bold border-r border-slate-200">Dest. Staging</th>
+                            <th class="text-center text-rose-600 bg-rose-50/50 border-r border-slate-200">After EDD</th>
+                            <th class="text-center text-amber-600 bg-amber-50/50 border-r border-slate-200">Last Day</th>
+                            <th class="text-center text-emerald-600 bg-emerald-50/50 border-r border-slate-200">Same Day</th>
+                            <th class="text-center text-indigo-600 bg-indigo-50/50 border-r border-slate-200">>2 Hari</th>
+                            <th class="text-center font-extrabold bg-slate-100 text-slate-800 border-r border-slate-200">Total AWB</th>
+                            <th class="text-center font-extrabold bg-emerald-100 text-emerald-800">SLAMAX</th>
+                        </tr>
                     </thead><tbody>`;
-                    if (gTot === 0) { h += `<tr><td colspan="8" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`; }
-                    else {
+
+                    if (gTot === 0) {
+                        h += `<tr><td colspan="8" class="text-center py-8 text-slate-400 font-medium">Tidak ada data terhitung SLA</td></tr></tbody>`;
+                    } else {
                         const sortedKeys = Object.keys(aggDestStaging).sort((a,b) => {
-                            if (aggDestStaging[a].dest === aggDestStaging[b].dest) return aggDestStaging[b].tot - aggDestStaging[a].tot;
+                            if (aggDestStaging[a].dest === aggDestStaging[b].dest) {
+                                return aggDestStaging[b].tot - aggDestStaging[a].tot;
+                            }
                             return aggDestStaging[a].dest.localeCompare(aggDestStaging[b].dest);
                         });
+
                         const destGroup = {};
-                        sortedKeys.forEach(k => { destGroup[aggDestStaging[k].dest] = (destGroup[aggDestStaging[k].dest] || 0) + 1; });
+                        sortedKeys.forEach(k => {
+                            const dest = aggDestStaging[k].dest;
+                            if (!destGroup[dest]) destGroup[dest] = 0;
+                            destGroup[dest]++;
+                        });
 
                         let currentDest = null;
+
                         sortedKeys.forEach(k => {
                             const d = aggDestStaging[k];
                             const slamaxPct = d.tot > 0 ? ((d.same + d.over) / d.tot * 100).toFixed(1) : 0;
-                            let stgDisplay = d.stg === 'XRT' ? `<span class="cursor-pointer text-rose-500 font-extrabold underline hover:text-rose-700 transition-colors" onclick="window.showXrtDetails('${d.dest}')">XRT <i class="fa-solid fa-circle-info text-[9px] ml-0.5"></i></span>` : d.stg;
+                            let stgDisplay = d.stg;
+                            if(d.stg === 'XRT') {
+                                stgDisplay = `<span class="cursor-pointer text-rose-500 font-extrabold underline hover:text-rose-700 transition-colors" onclick="window.showXrtDetails('${d.dest}')">XRT <i class="fa-solid fa-circle-info text-[9px] ml-0.5"></i></span>`;
+                            }
+                            
                             h += `<tr class="hover:bg-slate-50 border-b border-slate-100">`;
-                            if (currentDest !== d.dest) { h += `<td class="font-bold text-slate-700 border-r border-slate-200 valign-middle bg-white" rowspan="${destGroup[d.dest]}">${d.dest}</td>`; currentDest = d.dest; }
-                            h += `<td class="font-bold text-teal-700 border-r border-slate-200 valign-middle">${stgDisplay}</td><td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.after)}</td><td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.last)}</td><td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.same)}</td><td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${window.formatNumber(d.over)}</td><td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5 border-r border-slate-200">${window.formatNumber(d.tot)}</td><td class="text-center font-bold bg-emerald-50 text-emerald-700 font-mono py-1.5">${slamaxPct}%</td></tr>`;
+                            
+                            if (currentDest !== d.dest) {
+                                h += `<td class="font-bold text-slate-700 border-r border-slate-200 valign-middle bg-white" rowspan="${destGroup[d.dest]}">${d.dest}</td>`;
+                                currentDest = d.dest;
+                            }
+                            
+                            h += `
+                                <td class="font-bold text-teal-700 border-r border-slate-200 valign-middle">${stgDisplay}</td>
+                                <td class="text-center text-rose-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.after)}</td>
+                                <td class="text-center text-amber-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.last)}</td>
+                                <td class="text-center text-emerald-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.same)}</td>
+                                <td class="text-center text-indigo-600 font-mono py-1.5 border-r border-slate-100">${formatNumber(d.over)}</td>
+                                <td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5 border-r border-slate-200">${formatNumber(d.tot)}</td>
+                                <td class="text-center font-bold bg-emerald-50 text-emerald-700 font-mono py-1.5">${slamaxPct}%</td>
+                            </tr>`;
                         });
+
                         const gSlamaxPct = gTot > 0 ? ((gSame + gOver) / gTot * 100).toFixed(1) : 0;
-                        h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300"><tr><td colspan="2" class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td><td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${window.formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td><td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${window.formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td><td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${window.formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td><td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${window.formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td><td class="text-center py-2 bg-slate-100 border-r border-slate-200"><div class="font-black text-slate-900 text-sm font-mono">${window.formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td><td class="text-center py-2 bg-emerald-100"><div class="font-black text-emerald-800 text-sm font-mono">${gSlamaxPct}%</div></td></tr></tfoot>`;
+
+                        h += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
+                            <tr>
+                                <td colspan="2" class="font-black text-slate-800 uppercase text-xs py-3 border-r border-slate-200 valign-middle">TOTAL NASIONAL</td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-rose-600 text-sm font-mono">${formatNumber(gAfter)}</div><div class="text-[10px] font-bold text-slate-400">${((gAfter/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-amber-600 text-sm font-mono">${formatNumber(gLast)}</div><div class="text-[10px] font-bold text-slate-400">${((gLast/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-emerald-600 text-sm font-mono">${formatNumber(gSame)}</div><div class="text-[10px] font-bold text-slate-400">${((gSame/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 border-r border-slate-200"><div class="font-black text-indigo-600 text-sm font-mono">${formatNumber(gOver)}</div><div class="text-[10px] font-bold text-slate-400">${((gOver/gTot)*100).toFixed(1)}%</div></td>
+                                <td class="text-center py-2 bg-slate-100 border-r border-slate-200"><div class="font-black text-slate-900 text-sm font-mono">${formatNumber(gTot)}</div><div class="text-[10px] font-bold text-slate-500">100%</div></td>
+                                <td class="text-center py-2 bg-emerald-100"><div class="font-black text-emerald-800 text-sm font-mono">${gSlamaxPct}%</div></td>
+                            </tr>
+                        </tfoot>`;
                     }
                     tableDest.innerHTML = h;
                 }
@@ -1407,161 +2326,226 @@
             const tableSvc = document.getElementById('slaServiceTable');
             if (tableSvc) {
                 const services = ['ECO', 'REGULER'];
-                let hSvc = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200"><tr><th class="text-left text-slate-600 font-bold border-r border-slate-200">SLA</th>`;
-                services.forEach(s => hSvc += `<th class="text-center text-slate-600 bg-slate-50 border-r border-slate-200 px-2">${s}</th>`);
+                let hSvc = `<thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200">
+                    <tr>
+                        <th class="text-left text-slate-600 font-bold border-r border-slate-200">SLA</th>`;
+                services.forEach(s => {
+                    hSvc += `<th class="text-center text-slate-600 bg-slate-50 border-r border-slate-200 px-2">${s}</th>`;
+                });
                 hSvc += `<th class="text-center font-extrabold bg-slate-100 text-slate-800 px-2">Total</th></tr></thead><tbody>`;
 
-                if (gTot === 0) hSvc += `<tr><td colspan="${services.length + 2}" class="text-center py-8 text-slate-400 font-medium">Tidak ada data</td></tr></tbody>`;
-                else {
-                    const slaKeys = [{ key:'After EDD', label:'After EDD', colorClass:'text-rose-600' }, { key:'Last Day', label:'Last Day', colorClass:'text-amber-600' }, { key:'Same Day', label:'Same Day', colorClass:'text-emerald-600' }, { key:'>2 Hari', label:'>2 Hari', colorClass:'text-indigo-600' }];
+                if (gTot === 0) {
+                     hSvc += `<tr><td colspan="${services.length + 2}" class="text-center py-8 text-slate-400 font-medium">Tidak ada data</td></tr></tbody>`;
+                } else {
+                    const slaKeys = [
+                        { key: 'After EDD', label: 'After EDD', colorClass: 'text-rose-600' },
+                        { key: 'Last Day', label: 'Last Day', colorClass: 'text-amber-600' },
+                        { key: 'Same Day', label: 'Same Day', colorClass: 'text-emerald-600' },
+                        { key: '>2 Hari', label: '>2 Hari', colorClass: 'text-indigo-600' }
+                    ];
+
                     slaKeys.forEach(sla => {
-                        hSvc += `<tr class="hover:bg-slate-50 border-b border-slate-100"><td class="font-bold ${sla.colorClass} border-r border-slate-200 valign-middle whitespace-nowrap">${sla.label}</td>`;
+                        hSvc += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                            <td class="font-bold ${sla.colorClass} border-r border-slate-200 valign-middle whitespace-nowrap">${sla.label}</td>`;
+                        
                         let rowTot = 0;
                         services.forEach(s => {
-                            const val = aggSvc[sla.key][s] || 0; rowTot += val;
-                            hSvc += `<td class="text-center font-mono py-1.5 border-r border-slate-100 ${val>0?'text-slate-700':'text-slate-300'}">${val > 0 ? window.formatNumber(val) : '-'}</td>`;
+                            const val = aggSvc[sla.key][s] || 0;
+                            rowTot += val;
+                            hSvc += `<td class="text-center font-mono py-1.5 border-r border-slate-100 ${val>0?'text-slate-700':'text-slate-300'}">${val > 0 ? formatNumber(val) : '-'}</td>`;
                         });
-                        hSvc += `<td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${window.formatNumber(rowTot)}</td></tr>`;
+                        hSvc += `<td class="text-center font-bold bg-slate-50 font-mono text-slate-800 py-1.5">${formatNumber(rowTot)}</td></tr>`;
                     });
 
-                    hSvc += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300"><tr><td class="font-black text-slate-800 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle">TOTAL</td>`;
-                    let grandSvcTot = 0; services.forEach(s => grandSvcTot += (aggSvc['total'][s] || 0));
+                    hSvc += `</tbody><tfoot class="sticky bottom-0 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t-2 border-slate-300">
+                        <tr>
+                            <td class="font-black text-slate-800 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle">TOTAL</td>`;
+                    
+                    let grandSvcTot = 0;
                     services.forEach(s => {
-                        const svcTot = aggSvc['total'][s] || 0; const pct = grandSvcTot > 0 ? ((svcTot/grandSvcTot)*100).toFixed(1) : 0;
-                        hSvc += `<td class="text-center py-2 border-r border-slate-200"><div class="font-black text-slate-700 text-[11px] font-mono">${window.formatNumber(svcTot)}</div><div class="text-[9px] font-bold text-slate-400">${pct}%</div></td>`;
+                        grandSvcTot += (aggSvc['total'][s] || 0);
                     });
-                    hSvc += `<td class="text-center py-2 bg-slate-100"><div class="font-black text-slate-900 text-[11px] font-mono">${window.formatNumber(grandSvcTot)}</div><div class="text-[9px] font-bold text-slate-500">100%</div></td></tr><tr><td class="font-black text-emerald-700 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle bg-emerald-50/50">SLAMAX</td>`;
+
                     services.forEach(s => {
-                        const svcTot = aggSvc['total'][s] || 0; const sameAndOver = (aggSvc['Same Day'][s] || 0) + (aggSvc['>2 Hari'][s] || 0);
+                        const svcTot = aggSvc['total'][s] || 0;
+                        const pct = grandSvcTot > 0 ? ((svcTot/grandSvcTot)*100).toFixed(1) : 0;
+                        hSvc += `<td class="text-center py-2 border-r border-slate-200">
+                            <div class="font-black text-slate-700 text-[11px] font-mono">${formatNumber(svcTot)}</div>
+                            <div class="text-[9px] font-bold text-slate-400">${pct}%</div>
+                        </td>`;
+                    });
+                    hSvc += `<td class="text-center py-2 bg-slate-100">
+                            <div class="font-black text-slate-900 text-[11px] font-mono">${formatNumber(grandSvcTot)}</div>
+                            <div class="text-[9px] font-bold text-slate-500">100%</div>
+                        </td></tr>`;
+                        
+                    hSvc += `<tr>
+                        <td class="font-black text-emerald-700 uppercase text-[10px] py-3 border-r border-slate-200 valign-middle bg-emerald-50/50">SLAMAX</td>`;
+                        
+                    services.forEach(s => {
+                        const svcTot = aggSvc['total'][s] || 0;
+                        const sameAndOver = (aggSvc['Same Day'][s] || 0) + (aggSvc['>2 Hari'][s] || 0);
                         const slamaxPct = svcTot > 0 ? ((sameAndOver / svcTot) * 100).toFixed(1) : 0;
-                        hSvc += `<td class="text-center py-2 border-r border-slate-200 bg-emerald-50/20"><div class="font-black text-emerald-700 text-[11px] font-mono">${slamaxPct}%</div></td>`;
+                        hSvc += `<td class="text-center py-2 border-r border-slate-200 bg-emerald-50/20">
+                            <div class="font-black text-emerald-700 text-[11px] font-mono">${slamaxPct}%</div>
+                        </td>`;
                     });
-                    const grandSlamaxPct = gTot > 0 ? (((gSame + gOver) / gTot) * 100).toFixed(1) : 0;
-                    hSvc += `<td class="text-center py-2 bg-emerald-100"><div class="font-black text-emerald-800 text-[11px] font-mono">${grandSlamaxPct}%</div></td></tr></tfoot>`;
+                    
+                    const grandSameAndOver = gSame + gOver;
+                    const grandSlamaxPct = gTot > 0 ? ((grandSameAndOver / gTot) * 100).toFixed(1) : 0;
+                    
+                    hSvc += `<td class="text-center py-2 bg-emerald-100">
+                            <div class="font-black text-emerald-800 text-[11px] font-mono">${grandSlamaxPct}%</div>
+                        </td></tr></tfoot>`;
                 }
                 tableSvc.innerHTML = hSvc;
             }
         };
 
-        window.renderDetailTable = function() {
-            const data = window.filteredData;
-            const tbody = document.getElementById('detailTableBody');
-            
-            // Tampilkan status loading jika data terlalu besar agar layar tidak freeze
-            if (data.length > 500) {
-                tbody.innerHTML = `<tr><td colspan="12" class="text-center py-6 text-slate-500 font-bold"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Merender ${data.length.toLocaleString('id-ID')} baris data...</td></tr>`;
-            }
-
-            // Gunakan setTimeout agar browser tidak macet saat merender ribuan elemen HTML
-            setTimeout(() => {
-                let html = '';
-                data.forEach((d, i) => {
-                    let badgeClass = "bg-slate-100 text-slate-500";
-                    if(d._slaStatus === 'After EDD') badgeClass = "bg-rose-100 text-rose-700 border border-rose-200";
-                    else if(d._slaStatus === 'Last Day') badgeClass = "bg-amber-100 text-amber-700 border border-amber-200";
-                    else if(d._slaStatus === 'Same Day') badgeClass = "bg-emerald-100 text-emerald-700 border border-emerald-200";
-                    else if(d._slaStatus === '>2 Hari') badgeClass = "bg-indigo-100 text-indigo-700 border border-indigo-200";
-
-                    const stagingText = d._displayStaging === 'XRT' ? `<span class="text-rose-500 font-bold">XRT</span> <br><span class="text-[9px] text-slate-400 leading-none">(${d._destStaging})</span>` : d._displayStaging;
-
-                    html += `<tr class="hover:bg-slate-50 border-b border-slate-100">
-                        <td class="text-slate-400 text-xs">${i + 1}</td>
-                        <td class="font-mono font-bold text-[#E81C65] tracking-wide">${d._awb}</td>
-                        <td class="font-mono text-xs text-slate-600 border-r border-slate-100 group-col">${d._container}</td>
-                        <td class="text-center font-semibold border-r border-slate-100 bg-slate-50 group-col">${window.formatDateToDisplay(d._inboundDate)}</td>
-                        <td class="text-center font-mono text-xs border-r border-slate-100 bg-slate-50 group-col">${d._inboundTime}</td>
-                        <td class="text-center font-bold text-emerald-700 border-r border-slate-100 bg-emerald-50/20 group-col">${window.formatDateToDisplay(d._eddDate)}</td>
-                        <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._origin}</td>
-                        <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
-                        <td class="font-bold text-teal-700 border-r border-slate-100 bg-teal-50 group-col">${stagingText}</td>
-                        <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
-                        <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
-                        <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
-                    </tr>`;
-                });
-                tbody.innerHTML = html;
-                document.getElementById('showingCount').innerText = data.length.toLocaleString('id-ID');
-            }, 10);
+        window.changePage = function(delta) {
+            const maxPage = Math.ceil(window.filteredData.length / window.rowsPerPage) || 1;
+            let np = window.currentPage + delta;
+            if(np < 1) np = 1; if(np > maxPage) np = maxPage;
+            window.currentPage = np; window.renderDetailTable();
         };
 
-        // 8. Upload CSV (Chunks)
-        window.uploadToSupabase = function(file) {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Membaca & Mengunggah Data...";
+        window.renderDetailTable = function() {
+            const start = (window.currentPage - 1) * window.rowsPerPage;
+            const data = window.filteredData.slice(start, start + window.rowsPerPage);
+            const tbody = document.getElementById('detailTableBody');
+            let html = '';
+            data.forEach((d, i) => {
+                let badgeClass = "bg-slate-100 text-slate-500";
+                if(d._slaStatus === 'After EDD') badgeClass = "bg-rose-100 text-rose-700 border border-rose-200";
+                else if(d._slaStatus === 'Last Day') badgeClass = "bg-amber-100 text-amber-700 border border-amber-200";
+                else if(d._slaStatus === 'Same Day') badgeClass = "bg-emerald-100 text-emerald-700 border border-emerald-200";
+                else if(d._slaStatus === '>2 Hari') badgeClass = "bg-indigo-100 text-indigo-700 border border-indigo-200";
 
-            if(!supabaseClient) {
-                overlay.classList.add('hidden');
-                window.showToast("Maaf, Supabase tidak terhubung.", "error");
+                const stagingText = d._displayStaging === 'XRT' ? `<span class="text-rose-500 font-bold">XRT</span> <br><span class="text-[9px] text-slate-400 leading-none">(${d._destStaging})</span>` : d._displayStaging;
+
+                html += `<tr class="hover:bg-slate-50 border-b border-slate-100">
+                    <td class="text-slate-400 text-xs">${start + i + 1}</td>
+                    <td class="font-mono font-bold text-[#E81C65] tracking-wide">${d._awb}</td>
+                    <td class="font-mono text-xs text-slate-600 border-r border-slate-100 group-col">${d._container}</td>
+                    <td class="text-center font-semibold border-r border-slate-100 bg-slate-50 group-col">${formatDateToDisplay(d._inboundDate)}</td>
+                    <td class="text-center font-mono text-xs border-r border-slate-100 bg-slate-50 group-col">${d._inboundTime}</td>
+                    <td class="text-center font-bold text-emerald-700 border-r border-slate-100 bg-emerald-50/20 group-col">${formatDateToDisplay(d._eddDate)}</td>
+                    <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._origin}</td>
+                    <td class="font-bold text-slate-700 border-r border-slate-100 group-col">${d._dest}</td>
+                    <td class="font-bold text-teal-700 border-r border-slate-100 bg-teal-50 group-col">${stagingText}</td>
+                    <td class="text-xs font-bold text-slate-600 border-r border-slate-100 group-col">${d._service}</td>
+                    <td class="text-xs text-slate-500 border-r border-slate-100 group-col">${d._vendor}</td>
+                    <td class="text-center border-l border-slate-200"><span class="text-[9px] font-bold px-2 py-1 rounded-md ${badgeClass} uppercase tracking-wider block w-full text-center">${d._slaStatus}</span></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            document.getElementById('pageIndicator').innerText = window.currentPage;
+            document.getElementById('showingCount').innerText = `${data.length === 0 ? 0 : start + 1} - ${start + data.length} dari ${window.filteredData.length}`;
+        };
+
+        window.downloadManifestCSV = function() {
+            if (!window.filteredData || window.filteredData.length === 0) {
+                window.showToast("Tidak ada data untuk diunduh", "info");
                 return;
             }
 
-            const pbBar = document.getElementById('fetchProgressBar');
-            const pbPct = document.getElementById('fetchProgressPct');
-            const pbText = document.getElementById('fetchProgressDetail');
-            document.getElementById('fetchProgressContainer').classList.remove('hidden');
-            pbBar.style.width = '0%';
-            pbPct.textContent = '0%';
+            const headers = [
+                "No AWB", "No Container", "Tanggal Inbound", "Jam Inbound", "Target EDD", 
+                "Origin", "Destinasi", "Destinasi Staging", "Layanan", "Vendor", "Status SLA"
+            ];
 
-            let successCount = 0;
-            let skipCount = 0;
-            let totalParsed = 0;
+            const csvRows = window.filteredData.map(d => {
+                return [
+                    d._awb || '-',
+                    d._container || '-',
+                    formatDateForCsv(d._inboundDate),
+                    d._inboundTime || '-',
+                    formatDateForCsv(d._eddDate),
+                    d._origin || '-',
+                    d._dest || '-',
+                    d._destStaging || '-',
+                    d._service || '-',
+                    d._vendor || '-',
+                    d._slaStatus || '-'
+                ].map(val => `"${val}"`).join(','); 
+            });
+
+            const csvContent = [headers.join(','), ...csvRows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             
-            const existingIds = new Set(); 
-            window.rawData.forEach(d => existingIds.add(d._id));
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Laporan_AWB_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            window.showToast("Mendownload CSV...", "success");
+        };
 
-            const toSqlDate = (str) => {
-                if(!str) return null;
-                let s = String(str).trim();
-                if(!s || s === '-' || s.toLowerCase() === 'null') return null;
-                if (/^\d{5}$/.test(s)) {
-                    let d = new Date(Math.round((parseInt(s,10) - 25569) * 86400 * 1000));
-                    return isNaN(d.getTime()) ? null : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                }
-                if (s.includes(':')) s = s.split(' ').filter(p => !p.includes(':')).join(' ');
-                if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
-                s = s.replace(/[-\/.]/g, ' ');
-                const parts = s.split(/[\s,]+/);
-                if (parts.length >= 3) {
-                    let d, m, y;
-                    if (/[a-zA-Z]/.test(s)) {
-                        const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
-                        d = parseInt(parts[0], 10); m = months[parts[1].substring(0,3).toLowerCase()] || 1; y = parseInt(parts[2], 10);
-                    } else {
-                        if (parts[0].length === 4) { y = parseInt(parts[0], 10); m = parseInt(parts[1], 10); d = parseInt(parts[2], 10); }
-                        else { y = parseInt(parts[2], 10); m = parseInt(parts[1], 10); d = parseInt(parts[0], 10); if (m > 12 && d <= 12) { let t = m; m = d; d = t; } }
-                    }
-                    if (y < 100) y += 2000;
-                    if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
-                    return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                }
-                return null;
-            };
+        window.pendingUploadData = [];
 
-            const toSqlTime = (str) => {
-                if (!str) return null;
-                const raw = String(str).trim();
-                const match = raw.match(/([01]?[0-9]|2[0-3])[:;]([0-5][0-9])(?:[:;]([0-5][0-9]))?/);
-                if (match) {
-                    const h = match[1].padStart(2, '0');
-                    const m = match[2].padStart(2, '0');
-                    const s = match[3] ? match[3].padStart(2, '0') : '00';
-                    return `${h}:${m}:${s}`;
-                }
-                return null; 
-            };
+        window.uploadToSupabase = function(file) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+            document.getElementById('loadingText').textContent = "Menganalisis CSV Lokal...";
 
-            let buffer = [];
-            const BATCH_SIZE = 1000;
+            if(!supabaseClient) {
+                overlay.classList.add('hidden');
+                window.showToast("Maaf, Supabase tidak dapat terhubung.", "error");
+                return;
+            }
 
             Papa.parse(file, {
-                header: true, 
-                skipEmptyLines: true,
-                chunk: async function(results, parser) {
-                    parser.pause(); 
-                    totalParsed += results.data.length;
+                header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    const rows = results.data;
+                    const parsedData = [];
+                    
+                    const toSqlDate = (str) => {
+                        if(!str) return null;
+                        let s = String(str).trim();
+                        if(!s || s === '-' || s.toLowerCase() === 'null') return null;
+                        if (/^\d{5}$/.test(s)) {
+                            let d = new Date(Math.round((parseInt(s,10) - 25569) * 86400 * 1000));
+                            return isNaN(d.getTime()) ? null : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                        }
+                        if (s.includes(':')) s = s.split(' ').filter(p => !p.includes(':')).join(' ');
+                        if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.substring(0, 10);
+                        s = s.replace(/[-\/.]/g, ' ');
+                        const parts = s.split(/[\s,]+/);
+                        if (parts.length >= 3) {
+                            let d, m, y;
+                            if (/[a-zA-Z]/.test(s)) {
+                                const months = {'jan':1,'feb':2,'mar':3,'apr':4,'may':5,'mei':5,'jun':6,'jul':7,'aug':8,'agu':8,'sep':9,'oct':10,'okt':10,'nov':11,'dec':12,'des':12};
+                                d = parseInt(parts[0], 10); m = months[parts[1].substring(0,3).toLowerCase()] || 1; y = parseInt(parts[2], 10);
+                            } else {
+                                if (parts[0].length === 4) { y = parseInt(parts[0], 10); m = parseInt(parts[1], 10); d = parseInt(parts[2], 10); }
+                                else { y = parseInt(parts[2], 10); m = parseInt(parts[1], 10); d = parseInt(parts[0], 10); if (m > 12 && d <= 12) { let t = m; m = d; d = t; } }
+                            }
+                            if (y < 100) y += 2000;
+                            if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
+                            return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                        }
+                        return null;
+                    };
 
-                    for (let r of results.data) {
+                    const toSqlTime = (str) => {
+                        if (!str) return null;
+                        const raw = String(str).trim();
+                        const match = raw.match(/([01]?[0-9]|2[0-3])[:;]([0-5][0-9])(?:[:;]([0-5][0-9]))?/);
+                        if (match) {
+                            const h = match[1].padStart(2, '0');
+                            const m = match[2].padStart(2, '0');
+                            const s = match[3] ? match[3].padStart(2, '0') : '00';
+                            return `${h}:${m}:${s}`;
+                        }
+                        return null; 
+                    };
+
+                    for (let r of rows) {
+                        // FIX: Normalisasi CSV jika formatnya dirusak oleh Excel (dijadikan 1 kolom)
                         const keys = Object.keys(r);
                         if (keys.length === 1 && keys[0].includes(',')) {
                             const headerStr = keys[0];
@@ -1571,7 +2555,9 @@
                                 const valArr = valStr.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').replace(/""/g, '"'));
                                 if (headerArr.length === valArr.length) {
                                     const newR = {};
-                                    for(let i=0; i<headerArr.length; i++) newR[headerArr[i]] = valArr[i];
+                                    for(let i=0; i<headerArr.length; i++) {
+                                        newR[headerArr[i]] = valArr[i];
+                                    }
                                     r = newR;
                                 }
                             }
@@ -1593,626 +2579,120 @@
                         let svcInput = String(getVal(['Service', 'service', 'SERVICE', 'Layanan']) || 'N/A').trim().toUpperCase();
                         if (svcInput === 'REG') svcInput = 'REGULER';
                         
-                        let originInput = String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase();
-                        let vendorInput = String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase();
-                        
-                        let rowId = `${awbStr}_${containerStr}_${dateStr}_${timeStr}_${destStr}_${destStagingStr}_${svcInput}_${originInput}_${vendorInput}`.replace(/[^a-zA-Z0-9]/g, '_');
+                        let rowId = `${awbStr}_${containerStr}_${dateStr}_${timeStr}_${destStr}`.replace(/[^a-zA-Z0-9]/g, '_');
 
-                        if (existingIds.has(rowId)) {
-                            skipCount++;
-                        } else {
-                            existingIds.add(rowId);
-                            buffer.push({
-                                id: rowId,
-                                awb_no: awbStr, container_no: containerStr, inbound_date: dateStr, Jam: timeStr, 
-                                expect_delivery_tm: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
-                                Origin: originInput, Destinasi: destStr, destination_staging: destStagingStr,
-                                Service: svcInput, Vendor: vendorInput
-                            });
-                        }
+                        parsedData.push({
+                            id: rowId,
+                            awb_no: awbStr,
+                            container_no: containerStr,
+                            inbound_date: dateStr,
+                            Jam: timeStr, 
+                            expect_delivery_tm: toSqlDate(getVal(['expect_delivery_tm', 'Target EDD', 'EDD'])),
+                            Origin: String(getVal(['Origin', 'origin', 'ORIGIN']) || 'N/A').trim().toUpperCase(),
+                            Destinasi: destStr,
+                            destination_staging: destStagingStr,
+                            Service: svcInput,
+                            Vendor: String(getVal(['Vendor', 'vendor', 'VENDOR']) || 'N/A').trim().toUpperCase()
+                        });
                     }
 
-                    if (buffer.length >= BATCH_SIZE) {
-                        document.getElementById('loadingText').textContent = "Menyimpan ke Cloud...";
-                        let upsertSuccess = false;
-                        for(let attempt=1; attempt<=3; attempt++) {
-                            try {
-                                const { error } = await supabaseClient.from('awb_data').upsert(buffer, { onConflict: 'id' });
-                                if (error) throw error;
-                                upsertSuccess = true;
-                                break;
-                            } catch(err) {
-                                await new Promise(r => setTimeout(r, 1000 * attempt));
-                            }
-                        }
-                        if(upsertSuccess) successCount += buffer.length;
-                        buffer = []; // clear
-                    }
-
-                    pbText.textContent = `Terkirim: ${successCount.toLocaleString('id-ID')} | Lewati: ${skipCount.toLocaleString('id-ID')} | Baca: ${totalParsed.toLocaleString('id-ID')}`;
-                    pbPct.textContent = 'Proses';
-                    pbBar.style.width = '100%';
-
-                    parser.resume(); // Lanjut parsing chunk berikutnya
-                },
-                complete: async function() {
-                    // Sisa buffer
-                    if (buffer.length > 0) {
-                        let upsertSuccess = false;
-                        for(let attempt=1; attempt<=3; attempt++) {
-                            try {
-                                const { error } = await supabaseClient.from('awb_data').upsert(buffer, { onConflict: 'id' });
-                                if (error) throw error;
-                                upsertSuccess = true;
-                                break;
-                            } catch(err) {
-                                await new Promise(r => setTimeout(r, 1000 * attempt));
-                            }
-                        }
-                        if(upsertSuccess) successCount += buffer.length;
-                    }
-
-                    overlay.classList.add('hidden');
-                    document.getElementById('csvAwbFile').value = ''; 
+                    const existingIds = new Set(); window.rawData.forEach(d => existingIds.add(d._id));
+                    const uniqueMap = new Map(); 
+                    let skipCount = 0;
                     
-                    window.openSuccessModal(successCount, skipCount);
-                    if (successCount > 0) window.fetchDataFromSupabase();
-                },
-                error: function() {
-                    overlay.classList.add('hidden');
-                    window.showToast("Gagal membaca file CSV.", "error");
-                }
-            });
-        };
-
-        // 9. Modal Management
-        window.openPasswordModal = function(action) {
-            window.currentAction = action || 'delete';
-            document.getElementById('passwordModal').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('passwordModal').classList.remove('opacity-0');
-                document.getElementById('passwordModalContent').classList.remove('scale-95');
-                document.getElementById('passwordModalContent').classList.add('scale-100');
-            }, 10);
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordInput').focus();
-        };
-
-        window.closePasswordModal = function() {
-            document.getElementById('passwordModal').classList.add('opacity-0');
-            document.getElementById('passwordModalContent').classList.remove('scale-100');
-            document.getElementById('passwordModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('passwordModal').classList.add('hidden'), 300);
-        };
-
-        window.openSettingsModal = function() {
-            const list = document.getElementById('settingsList');
-            list.innerHTML = '';
-            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
-            dests.forEach(dest => {
-                const val = window.stagingMap[dest] ? window.stagingMap[dest].join(', ') : '';
-                list.innerHTML += `<div class="flex flex-col gap-1"><label class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded w-fit border border-slate-200">${dest}</label><input type="text" id="setting_dest_${dest}" value="${val}" class="fresh-input w-full text-xs font-mono" placeholder="Kosongkan jika semua staging dianggap valid. Cth: WWNS0, MNDX9"></div>`;
-            });
-            document.getElementById('settingsModal').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('settingsModal').classList.remove('opacity-0');
-                document.getElementById('settingsModalContent').classList.remove('scale-95');
-                document.getElementById('settingsModalContent').classList.add('scale-100');
-            }, 10);
-        };
-
-        window.closeSettingsModal = function() {
-            document.getElementById('settingsModal').classList.add('opacity-0');
-            document.getElementById('settingsModalContent').classList.remove('scale-100');
-            document.getElementById('settingsModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('settingsModal').classList.add('hidden'), 300);
-        };
-
-        window.saveSettingsModal = async function() {
-            const dests = [...new Set(window.rawData.map(d => d._dest))].sort();
-            dests.forEach(dest => {
-                const val = document.getElementById(`setting_dest_${dest}`).value;
-                if(val.trim()) window.stagingMap[dest] = val.split(',').map(s => s.trim().toUpperCase()).filter(s => s);
-                else delete window.stagingMap[dest];
-            });
-            const mapStr = JSON.stringify(window.stagingMap);
-            localStorage.setItem('awbStagingMap', mapStr);
-            
-            if (supabaseClient && !window.isArchiveMode) {
-                const btn = document.querySelector('#settingsModalContent button.bg-slate-900');
-                const oldText = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-                btn.disabled = true;
-                await supabaseClient.from('awb_data').upsert({ id: 'SYS_SETTING_STAGING_MAP', awb_no: 'SYS_SETTINGS', container_no: '-', inbound_date: null, Jam: '-', Origin: 'SYS', Destinasi: 'SYS', destination_staging: mapStr, Service: 'SYS', Vendor: 'SYS' }, { onConflict: 'id' });
-                btn.innerHTML = oldText;
-                btn.disabled = false;
-            }
-            window.closeSettingsModal();
-            window.showToast("Pengaturan Staging tersimpan", "success");
-            window.fetchDataFromSupabase();
-        };
-
-        window.showXrtDetails = function(dest) {
-            const xrtData = window.filteredData.filter(d => d._dest === dest && d._displayStaging === 'XRT');
-            const agg = {};
-            xrtData.forEach(d => { agg[d._destStaging] = (agg[d._destStaging] || 0) + 1; });
-            let h = '';
-            Object.keys(agg).sort((a,b) => agg[b] - agg[a]).forEach(k => {
-                h += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3 font-bold text-slate-700">${k}</td><td class="p-3 text-center font-mono text-slate-600">${agg[k]}</td></tr>`;
-            });
-            if (Object.keys(agg).length === 0) h = `<tr><td colspan="2" class="p-4 text-center text-slate-400">Tidak ada data</td></tr>`;
-            document.getElementById('xrtTableBody').innerHTML = h;
-            document.getElementById('xrtDestName').textContent = dest;
-            document.getElementById('xrtModal').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('xrtModal').classList.remove('opacity-0'); document.getElementById('xrtModalContent').classList.remove('scale-95'); document.getElementById('xrtModalContent').classList.add('scale-100'); }, 10);
-        };
-
-        window.closeXrtModal = function() {
-            document.getElementById('xrtModal').classList.add('opacity-0');
-            document.getElementById('xrtModalContent').classList.remove('scale-100');
-            document.getElementById('xrtModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('xrtModal').classList.add('hidden'), 300);
-        };
-
-        window.openPreviewModal = function(newCount, dupCount) {
-            document.getElementById('previewModal').classList.remove('hidden');
-            document.getElementById('previewNewCount').textContent = window.formatNumber(newCount);
-            document.getElementById('previewDupCount').textContent = window.formatNumber(dupCount);
-            setTimeout(() => { document.getElementById('previewModal').classList.remove('opacity-0'); document.getElementById('previewModalContent').classList.remove('scale-95'); document.getElementById('previewModalContent').classList.add('scale-100'); }, 10);
-        };
-
-        window.closePreviewModal = function() {
-            document.getElementById('previewModal').classList.add('opacity-0');
-            document.getElementById('previewModalContent').classList.remove('scale-100');
-            document.getElementById('previewModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('previewModal').classList.add('hidden'), 300);
-            document.getElementById('csvAwbFile').value = ''; document.getElementById('archiveFileInput').value = ''; 
-        };
-
-        window.openSuccessModal = function(successCount, failCount) {
-            document.getElementById('successModal').classList.remove('hidden');
-            document.getElementById('finalSuccessCount').textContent = window.formatNumber(successCount);
-            document.getElementById('finalFailCount').textContent = window.formatNumber(failCount);
-            const iconBox = document.getElementById('successModalIcon');
-            if (failCount > 0 && successCount === 0) { iconBox.className = "w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-rose-600 shadow-sm"; iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-2xl"></i>'; document.getElementById('successModalTitle').textContent = "Upload Gagal"; } 
-            else if (failCount > 0) { iconBox.className = "w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-600 shadow-sm"; iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation text-2xl"></i>'; document.getElementById('successModalTitle').textContent = "Selesai Sebagian"; } 
-            else { iconBox.className = "w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm"; iconBox.innerHTML = '<i class="fa-solid fa-check-double text-2xl"></i>'; document.getElementById('successModalTitle').textContent = "Upload Selesai!"; }
-            setTimeout(() => { document.getElementById('successModal').classList.remove('opacity-0'); document.getElementById('successModalContent').classList.remove('scale-95'); document.getElementById('successModalContent').classList.add('scale-100'); }, 10);
-        };
-
-        window.closeSuccessModal = function() {
-            document.getElementById('successModal').classList.add('opacity-0');
-            document.getElementById('successModalContent').classList.remove('scale-100');
-            document.getElementById('successModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('successModal').classList.add('hidden'), 300);
-        };
-
-        window.openArchiveModal = function() {
-            const months = new Set();
-            let hasNull = false;
-            window.rawData.forEach(d => { if (d._inboundDate && !isNaN(d._inboundDate)) months.add(`${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`); else hasNull = true; });
-            const select = document.getElementById('archiveMonthInput');
-            select.innerHTML = '<option value="">Pilih Bulan...</option>';
-            [...months].sort().reverse().forEach(m => { const [y, mo] = m.split('-'); const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']; select.innerHTML += `<option value="${m}">${monthNames[parseInt(mo)-1]} ${y}</option>`; });
-            if(hasNull) select.innerHTML += '<option value="NULL">Data Tanpa Tanggal (Kosong)</option>';
-            document.getElementById('archiveDeleteCheckbox').checked = false;
-            document.getElementById('archiveModal').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('archiveModal').classList.remove('opacity-0'); document.getElementById('archiveModalContent').classList.remove('scale-95'); document.getElementById('archiveModalContent').classList.add('scale-100'); }, 10);
-        };
-
-        window.closeArchiveModal = function() {
-            document.getElementById('archiveModal').classList.add('opacity-0');
-            document.getElementById('archiveModalContent').classList.remove('scale-100');
-            document.getElementById('archiveModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('archiveModal').classList.add('hidden'), 300);
-        };
-
-        window.processArchiveExport = function() {
-            const monthVal = document.getElementById('archiveMonthInput').value;
-            const isDelete = document.getElementById('archiveDeleteCheckbox').checked;
-            if (!monthVal) return window.showToast('Silakan pilih bulan arsip terlebih dahulu', 'warning');
-            const dataToExport = window.rawData.filter(d => {
-                if (monthVal === 'NULL') return !d._inboundDate || isNaN(d._inboundDate);
-                if (!d._inboundDate || isNaN(d._inboundDate)) return false;
-                const m = `${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`;
-                return m === monthVal;
-            });
-            if (dataToExport.length === 0) return window.showToast('Tidak ada data yang ditemukan di bulan ini', 'warning');
-            if (isDelete) { window.archiveDataToProcess = { data: dataToExport, monthVal }; window.closeArchiveModal(); window.openPasswordModal('archive_export'); } 
-            else { window.executeArchiveExportAndDownload(dataToExport, monthVal); }
-        };
-
-        window.executeArchiveExportAndDownload = function(data, monthVal) {
-            const headers = ["No AWB", "No Container", "Tanggal Inbound", "Jam Inbound", "Target EDD", "Origin", "Destinasi", "Destinasi Staging", "Layanan", "Vendor"];
-            const csvRows = data.map(d => {
-                return [ d._awb || '-', d._container || '-', window.formatDateForCsv(d._inboundDate), d._inboundTime || '-', window.formatDateForCsv(d._eddDate), d._origin || '-', d._dest || '-', d._destStaging || '-', d._service || '-', d._vendor || '-' ].map(val => `"${val}"`).join(','); 
-            });
-            const csvContent = [headers.join(','), ...csvRows].join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Arsip_AWB_${monthVal}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.showToast(`Berhasil mengunduh ${window.formatNumber(data.length)} baris arsip (${monthVal})`, "success");
-        };
-
-        window.executeArchiveDelete = async function(dataToDelete) {
-            const overlay = document.getElementById('loadingOverlay');
-            const pbBar = document.getElementById('fetchProgressBar');
-            const pbPct = document.getElementById('fetchProgressPct');
-            const pbText = document.getElementById('fetchProgressDetail');
-            overlay.classList.remove('hidden');
-            document.getElementById('fetchProgressContainer').classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Membersihkan Data Arsip...";
-            try {
-                const allIds = dataToDelete.map(d => d._id);
-                const totalToProcess = allIds.length;
-                let totalDeleted = 0;
-                const DELETE_SIZE = 1000;
-                for (let i = 0; i < allIds.length; i += DELETE_SIZE) {
-                    const idsChunk = allIds.slice(i, i + DELETE_SIZE);
-                    let delSuccess = false;
-                    for (let attempt = 1; attempt <= 3; attempt++) {
-                        try {
-                            const { error } = await supabaseClient.from('awb_data').delete().in('id', idsChunk);
-                            if (error) throw error;
-                            delSuccess = true; break;
-                        } catch (err) { await new Promise(r => setTimeout(r, 1000 * attempt)); }
-                    }
-                    if (!delSuccess) throw new Error("Gagal menghapus chunk arsip");
-                    totalDeleted += idsChunk.length;
-                    let pct = Math.min(Math.round((totalDeleted / totalToProcess) * 100), 99);
-                    if (pct < 10) pct = 10;
-                    pbBar.style.width = `${pct}%`; pbPct.textContent = `${pct}%`;
-                    pbText.textContent = `Menghapus: ${totalDeleted.toLocaleString('id-ID')} / ${totalToProcess.toLocaleString('id-ID')}`;
-                }
-                pbBar.style.width = `100%`; pbPct.textContent = `100%`;
-                await new Promise(r => setTimeout(r, 400));
-                overlay.classList.add('hidden');
-                window.showToast("Data arsip berhasil dihapus dari database", "success");
-                window.fetchDataFromSupabase();
-            } catch(e) {
-                console.error("Archive Delete Error:", e);
-                overlay.classList.add('hidden');
-                window.showToast("Gagal membersihkan sebagian data.", "error");
-            }
-        };
-
-        window.importArchiveTemporary = function(file) {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Memuat Arsip Sementara...";
-            document.getElementById('fetchProgressContainer').classList.add('hidden');
-            Papa.parse(file, {
-                header: true, skipEmptyLines: true,
-                complete: function(results) {
-                    const rows = results.data;
-                    let addedCount = 0;
-                    const existingIds = new Set();
-                    window.rawData = [];
-                    rows.forEach(r => {
-                        const keys = Object.keys(r);
-                        if (keys.length === 1 && keys[0].includes(',')) {
-                            const headerStr = keys[0]; const valStr = r[headerStr];
-                            if (typeof valStr === 'string') {
-                                const headerArr = headerStr.split(',');
-                                const valArr = valStr.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').replace(/""/g, '"'));
-                                if (headerArr.length === valArr.length) {
-                                    const newR = {};
-                                    for(let i=0; i<headerArr.length; i++) newR[headerArr[i]] = valArr[i];
-                                    r = newR;
-                                }
-                            }
-                        }
-                        const awb = r["No AWB"] || r["awb_no"];
-                        if (!awb || awb === '-') return;
-                        const container = r["No Container"] || '-';
-                        const dateStr = r["Tanggal Inbound"] || '-';
-                        const timeStr = r["Jam Inbound"] || '-';
-                        const dest = r["Destinasi"] || 'N/A';
-                        const vendor = r["Vendor"] || 'N/A';
-                        const origin = r["Origin"] || 'N/A';
-                        const service = r["Layanan"] || 'N/A';
-                        const destStaging = r["Destinasi Staging"] || '-';
-                        let rowId = `${awb}_${container}_${dateStr}_${timeStr}_${dest}_${destStaging}_${service}_${origin}_${vendor}`.replace(/[^a-zA-Z0-9]/g, '_');
-                        if (!existingIds.has(rowId)) {
-                            const inboundDt = dateStr !== '-' ? window.parseIndoDate(dateStr) : null;
-                            const eddDt = r["Target EDD"] !== '-' ? window.parseIndoDate(r["Target EDD"]) : null;
-                            const sla = window.calculateSlaStatus(inboundDt, eddDt);
-                            let displayStaging = destStaging;
-                            if (window.stagingMap[dest] && window.stagingMap[dest].length > 0) {
-                                if (!window.stagingMap[dest].includes(destStaging)) displayStaging = 'XRT';
-                            }
-                            window.rawData.push({
-                                _id: rowId, _awb: awb, _container: container, _inboundDate: inboundDt, _inboundTime: timeStr, _eddDate: eddDt, _origin: origin, _dest: dest, _destStaging: destStaging, _displayStaging: displayStaging, _service: service, _vendor: vendor, _slaStatus: sla.status, _slaDiff: sla.diff, _hari: inboundDt && !isNaN(inboundDt) ? ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][inboundDt.getDay()] : 'N/A'
-                            });
-                            existingIds.add(rowId); addedCount++;
+                    parsedData.forEach(row => {
+                        if (existingIds.has(row.id)) {
+                            skipCount++; 
+                        } else if (!uniqueMap.has(row.id)) { 
+                            uniqueMap.set(row.id, row); 
+                        } else { 
+                            skipCount++; 
                         }
                     });
-                    const destSet = new Set(); const orgSet = new Set(); const svcSet = new Set(); const destStagingSet = new Set();
-                    window.rawData.forEach(d => { destSet.add(d._dest); orgSet.add(d._origin); svcSet.add(d._service); destStagingSet.add(d._displayStaging); });
-                    window.populateMulti('destMenu', 'destLabel', [...destSet].sort());
-                    window.populateMulti('stagingMenu', 'stagingLabel', [...destStagingSet].sort());
-                    window.populateMulti('originMenu', 'originLabel', [...orgSet].sort());
-                    window.populateMulti('serviceMenu', 'serviceLabel', [...svcSet].sort());
-                    ['statusMenu', 'originMenu', 'destMenu', 'stagingMenu', 'serviceMenu', 'hariMenu'].forEach(id => {
-                        const inputs = document.querySelectorAll(`#${id} input`);
-                        inputs.forEach(i => i.checked = true);
-                        let labelId = id.replace('Menu', 'Label');
-                        window.updateMultiLabel(id, labelId);
-                    });
-                    document.getElementById('globalSearch').value = '';
-                    document.getElementById('filterStartDate').value = '';
-                    document.getElementById('filterEndDate').value = '';
-                    window.isArchiveMode = true;
-                    window.toggleArchiveUI(true);
-                    document.getElementById('initialState').classList.add('hidden');
-                    document.getElementById('dashboardContent').classList.remove('hidden');
-                    window.applyFilters(); 
+                    
+                    window.pendingUploadData = Array.from(uniqueMap.values());
+                    
                     overlay.classList.add('hidden');
-                    if (addedCount > 0) window.showToast(`Berhasil memuat ${window.formatNumber(addedCount)} baris arsip.`, "success");
-                    else window.showToast("Data arsip kosong atau format tidak sesuai.", "warning");
-                }
-            });
-        };
 
-        window.toggleArchiveUI = function(isArchive) {
-            const banner = document.getElementById('archiveBanner');
-            const controls = document.querySelectorAll('.hide-on-archive');
-            if (isArchive) {
-                banner.classList.remove('hidden');
-                controls.forEach(c => c.classList.add('hidden'));
-                document.getElementById('statusText').textContent = 'Mode Arsip Aktif';
-                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse";
-            } else {
-                banner.classList.add('hidden');
-                controls.forEach(c => c.classList.remove('hidden'));
-                document.getElementById('statusText').textContent = 'Connected (Supabase)';
-                document.getElementById('connectionStatus').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
-            }
-        };
-
-        window.exitArchiveMode = function() {
-            window.isArchiveMode = false;
-            window.toggleArchiveUI(false);
-            window.showToast("Keluar dari Mode Arsip", "info");
-            window.fetchDataFromSupabase();
-        };
-
-        window.openDeleteModal = function() {
-            const dateSelect = document.getElementById('deleteDateInput');
-            const dates = [...new Set(window.rawData.map(d => {
-                if(d._inboundDate instanceof Date && !isNaN(d._inboundDate)) return window.formatDateForCsv(d._inboundDate);
-                return 'NULL';
-            }))].sort().reverse();
-            let hDate = '<option value="">Pilih Tanggal...</option>';
-            if(dates.includes('NULL')) hDate += '<option value="NULL">Data Tanpa Tanggal (Kosong/Error)</option>';
-            dates.forEach(d => { if(d !== 'NULL') hDate += `<option value="${d}">${d}</option>`; });
-            if(dateSelect) dateSelect.innerHTML = hDate;
-
-            const monthSelect = document.getElementById('deleteMonthInput');
-            const months = new Set();
-            window.rawData.forEach(d => {
-                if (d._inboundDate && !isNaN(d._inboundDate)) months.add(`${d._inboundDate.getFullYear()}-${String(d._inboundDate.getMonth()+1).padStart(2,'0')}`);
-            });
-            let hMonth = '<option value="">Pilih Bulan...</option>';
-            [...months].sort().reverse().forEach(m => {
-                const [y, mo] = m.split('-'); const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-                hMonth += `<option value="${m}">${monthNames[parseInt(mo)-1]} ${y}</option>`;
-            });
-            if(monthSelect) monthSelect.innerHTML = hMonth;
-
-            const vendorSelect = document.getElementById('deleteVendorInput');
-            const vendors = [...new Set(window.rawData.map(d => d._vendor))].sort();
-            let hVen = '<option value="ALL">Semua Vendor</option>';
-            vendors.forEach(v => { hVen += `<option value="${v}">${v}</option>`; });
-            if(vendorSelect) vendorSelect.innerHTML = hVen;
-
-            document.getElementById('deleteDateInput').value = '';
-            document.getElementById('deleteMonthInput').value = '';
-            document.getElementById('deleteModal').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('deleteModal').classList.remove('opacity-0'); document.getElementById('deleteModalContent').classList.remove('scale-95'); document.getElementById('deleteModalContent').classList.add('scale-100'); }, 10);
-        };
-        
-        window.closeDeleteModal = function() {
-            document.getElementById('deleteModal').classList.add('opacity-0');
-            document.getElementById('deleteModalContent').classList.remove('scale-100');
-            document.getElementById('deleteModalContent').classList.add('scale-95');
-            setTimeout(() => document.getElementById('deleteModal').classList.add('hidden'), 300);
-        };
-
-        window.confirmDelete = function() {
-             const date = document.getElementById('deleteDateInput').value;
-             const month = document.getElementById('deleteMonthInput').value;
-             if(!date && !month) return window.showToast("Pilih tanggal atau bulan terlebih dahulu!", "error");
-             window.closeDeleteModal();
-             window.openPasswordModal('delete');
-        };
-
-        window.confirmDeleteAll = function() {
-            window.closeDeleteModal();
-            window.openPasswordModal('deleteAll');
-        };
-
-        window.submitPassword = function() {
-            const pwd = document.getElementById('passwordInput').value;
-            if (pwd === "TAB123") {
-                window.closePasswordModal();
-                if (window.currentAction === 'settings') {
-                    window.openSettingsModal();
-                } else if (window.currentAction === 'deleteAll') {
-                    if (window.deleteAllData) window.deleteAllData();
-                } else if (window.currentAction === 'archive_export') {
-                    const { data, monthVal } = window.archiveDataToProcess;
-                    window.executeArchiveExportAndDownload(data, monthVal);
-                    window.executeArchiveDelete(data); 
-                } else {
-                    const date = document.getElementById('deleteDateInput').value;
-                    const month = document.getElementById('deleteMonthInput').value;
-                    const dest = document.getElementById('deleteDestInput').value;
-                    const vendor = document.getElementById('deleteVendorInput') ? document.getElementById('deleteVendorInput').value : 'ALL';
-                    if(window.deleteDataForPeriod) window.deleteDataForPeriod(date, month, dest, vendor);
-                }
-            } else {
-                window.showToast("Password Salah!", "error");
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            }
-        };
-
-        window.deleteDataForPeriod = async function(dateString, monthString, destString, vendorString) {
-            if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
-
-            const overlay = document.getElementById('loadingOverlay');
-            const pbBar = document.getElementById('fetchProgressBar');
-            const pbPct = document.getElementById('fetchProgressPct');
-            const pbText = document.getElementById('fetchProgressDetail');
-            
-            overlay.classList.remove('hidden');
-            document.getElementById('fetchProgressContainer').classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Menghitung Data...";
-            pbBar.style.width = `10%`;
-            pbPct.textContent = `10%`;
-            
-            let targetDate = null;
-            let targetYear = null;
-            let targetMonth = null;
-
-            if (dateString && dateString !== 'NULL') {
-                targetDate = new Date(dateString);
-                targetDate.setHours(0,0,0,0);
-            }
-            if (monthString) {
-                const [y, m] = monthString.split('-');
-                targetYear = parseInt(y, 10);
-                targetMonth = parseInt(m, 10) - 1;
-            }
-
-            const toDelete = window.rawData.filter(d => {
-                let matchTime = true;
-                if (monthString) {
-                    if(!d._inboundDate || isNaN(d._inboundDate)) matchTime = false;
-                    else matchTime = d._inboundDate.getFullYear() === targetYear && d._inboundDate.getMonth() === targetMonth;
-                } else if (dateString) {
-                    if (dateString === 'NULL') {
-                        matchTime = !d._inboundDate || isNaN(d._inboundDate);
+                    if (window.pendingUploadData.length === 0 && skipCount > 0) {
+                        window.showToast("Semua data duplikat.", "info");
+                        document.getElementById('csvAwbFile').value = '';
                     } else {
-                        if(!d._inboundDate || isNaN(d._inboundDate)) matchTime = false;
-                        else matchTime = d._inboundDate.getTime() === targetDate.getTime();
+                        window.openPreviewModal(window.pendingUploadData.length, skipCount);
                     }
                 }
-                const matchDest = destString === 'ALL' || d._dest === destString;
-                const matchVendor = vendorString === 'ALL' || d._vendor === vendorString;
-                return matchTime && matchDest && matchVendor;
             });
-
-            if (toDelete.length === 0) {
-                overlay.classList.add('hidden');
-                return window.showToast("Tidak ada data yang cocok untuk dihapus", "info");
-            }
-
-            const idsToDelete = toDelete.map(d => d._id);
-            const totalToProcess = idsToDelete.length;
-            let totalDeleted = 0;
-            const DELETE_SIZE = 1000;
-            document.getElementById('loadingText').textContent = "Menghapus Data...";
-
-            try {
-                for (let i = 0; i < idsToDelete.length; i += DELETE_SIZE) {
-                    const idsChunk = idsToDelete.slice(i, i + DELETE_SIZE);
-                    let delSuccess = false;
-                    for (let attempt = 1; attempt <= 3; attempt++) {
-                        try {
-                            const { error } = await supabaseClient.from('awb_data').delete().in('id', idsChunk);
-                            if (error) throw error;
-                            delSuccess = true; break;
-                        } catch (err) { await new Promise(r => setTimeout(r, 1000 * attempt)); }
-                    }
-                    if (!delSuccess) throw new Error("Gagal menghapus chunk");
-                    totalDeleted += idsChunk.length;
-                    let pct = Math.min(Math.round((totalDeleted / totalToProcess) * 100), 99);
-                    pbBar.style.width = `${pct}%`; pbPct.textContent = `${pct}%`;
-                    pbText.textContent = `Menghapus: ${totalDeleted.toLocaleString('id-ID')} / ${totalToProcess.toLocaleString('id-ID')}`;
-                }
-                pbBar.style.width = `100%`; pbPct.textContent = `100%`;
-                await new Promise(r => setTimeout(r, 400));
-                overlay.classList.add('hidden');
-                window.showToast(`Berhasil menghapus ${window.formatNumber(totalDeleted)} baris data`, "success");
-                window.fetchDataFromSupabase();
-            } catch(e) {
-                console.error("Delete Error:", e);
-                overlay.classList.add('hidden');
-                window.showToast("Gagal menghapus sebagian data.", "error");
-            }
         };
 
-        window.deleteAllData = async function() {
-            if(!supabaseClient) return window.showToast("Koneksi Supabase gagal.", "error");
+        window.confirmUpload = async function() {
+            window.closePreviewModal();
+
+            if (window.pendingUploadData.length === 0) return;
+
             const overlay = document.getElementById('loadingOverlay');
             const pbBar = document.getElementById('fetchProgressBar');
             const pbPct = document.getElementById('fetchProgressPct');
             const pbText = document.getElementById('fetchProgressDetail');
-            
+
             overlay.classList.remove('hidden');
             document.getElementById('fetchProgressContainer').classList.remove('hidden');
-            document.getElementById('loadingText').textContent = "Mereset Seluruh Data...";
             
-            pbBar.style.width = `10%`; pbPct.textContent = `10%`;
-            pbText.textContent = `Mempersiapkan penghapusan...`;
-
+            const CHUNK_SIZE = 500; 
+            let successCount = 0;
+            let failCount = 0;
+            const totalToUpload = window.pendingUploadData.length;
+            
             try {
-                let totalDeleted = 0;
-                let hasMore = true;
-                const FETCH_SIZE = 5000;
-                const DELETE_SIZE = 1000;
+                for (let i = 0; i < window.pendingUploadData.length; i += CHUNK_SIZE) {
+                    const chunk = window.pendingUploadData.slice(i, i + CHUNK_SIZE);
+                    
+                    let pct = Math.min(Math.round((i / totalToUpload) * 100), 100);
+                    pbBar.style.width = `${pct}%`;
+                    pbPct.textContent = `${pct}%`;
+                    document.getElementById('loadingText').textContent = `Menyimpan ke Cloud...`;
+                    pbText.textContent = `Batch ${Math.ceil(i/CHUNK_SIZE)+1} dari ${Math.ceil(totalToUpload/CHUNK_SIZE)}`;
 
-                while (hasMore) {
-                    let batchData = null;
-                    let fetchSuccess = false;
-                    for (let attempt = 1; attempt <= 3; attempt++) {
+                    let upsertSuccess = false;
+                    for(let attempt=1; attempt<=3; attempt++) {
                         try {
-                            const { data, error } = await supabaseClient.from('awb_data').select('id').limit(FETCH_SIZE);
+                            const { error } = await supabaseClient.from('awb_data').upsert(chunk, { onConflict: 'id' });
                             if (error) throw error;
-                            batchData = data; fetchSuccess = true; break;
-                        } catch (err) { await new Promise(r => setTimeout(r, 1000 * attempt)); }
-                    }
-
-                    if (!fetchSuccess) throw new Error("Gagal menarik data batch.");
-                    const ids = batchData.map(r => r.id).filter(id => id !== 'SYS_SETTING_STAGING_MAP');
-                    if (ids.length === 0) { hasMore = false; break; }
-
-                    for (let i = 0; i < ids.length; i += DELETE_SIZE) {
-                        const idsChunk = ids.slice(i, i + DELETE_SIZE);
-                        let delSuccess = false;
-                        for (let attempt = 1; attempt <= 3; attempt++) {
-                            try {
-                                const { error } = await supabaseClient.from('awb_data').delete().in('id', idsChunk);
-                                if (error) throw error;
-                                delSuccess = true; break;
-                            } catch (err) { await new Promise(r => setTimeout(r, 1000 * attempt)); }
+                            upsertSuccess = true;
+                            break;
+                        } catch(err) {
+                            await new Promise(r => setTimeout(r, 1500 * attempt));
                         }
-                        if (!delSuccess) throw new Error("Gagal menghapus data batch.");
-                        totalDeleted += idsChunk.length;
-                        pbText.textContent = `Menghapus: ${window.formatNumber(totalDeleted)} baris...`;
                     }
+
+                    if(upsertSuccess) {
+                        successCount += chunk.length;
+                    } else {
+                        failCount += chunk.length;
+                    }
+                    
+                    await new Promise(r => setTimeout(r, 200)); 
                 }
-                pbBar.style.width = `100%`; pbPct.textContent = `100%`;
-                pbText.textContent = `Pembersihan selesai!`;
-                await new Promise(r => setTimeout(r, 600));
+                
+                pbBar.style.width = `100%`;
+                pbPct.textContent = `100%`;
+                await new Promise(r => setTimeout(r, 400));
+
                 overlay.classList.add('hidden');
-                window.showToast(`Berhasil mereset ${window.formatNumber(totalDeleted)} baris data!`, "success");
-                window.fetchDataFromSupabase(); 
-            } catch(e) {
-                console.error("Delete All Error:", e);
+                document.getElementById('csvAwbFile').value = ''; 
+                
+                window.openSuccessModal(successCount, failCount);
+
+                if (successCount > 0) {
+                    window.fetchDataFromSupabase();
+                }
+
+            } catch (err) {
+                console.error("Upload Execute Error:", err);
                 overlay.classList.add('hidden');
-                window.showToast("Gagal menghapus seluruh data.", "error");
+                window.showToast("Terjadi interupsi jaringan fatal.", "error");
             }
         };
 
-        // Initialize Call
         document.getElementById('csvAwbFile').addEventListener('change', (e) => { if(e.target.files.length > 0) window.uploadToSupabase(e.target.files[0]); });
         window.fetchDataFromSupabase();
     </script>
